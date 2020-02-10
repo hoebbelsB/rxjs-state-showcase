@@ -1,11 +1,34 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "version": 1, 
+  "version": 1,
   "newProjectRoot": "projects",
   "projects": {
     "rxjs-state-showcase": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss",
+          "style": "scss",
+          "changeDetection": "OnPush",
+          "spec": false
+        },
+        "@schematics/angular:directive": {
+          "spec": false,
+          "skipTests": true
+        },
+        "@schematics/angular:pipe": {
+          "spec": false,
+          "skipTests": true
+        },
+        "@schematics/angular:service": {
+          "spec": false,
+          "skipTests": true
+        },
+        "@schematics/angular:module": {
+          "routing": true,
+          "commonModule": true
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -24,11 +47,28 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
+              "src/styles.scss"
             ],
             "scripts": []
           },
           "configurations": {
+            "zonefull": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.zonefull.ts"
+                }
+              ]
+            },
+            "zoneless": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.zoneless.ts"
+                }
+              ]
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -65,6 +105,12 @@
             "browserTarget": "rxjs-state-showcase:build"
           },
           "configurations": {
+            "zonefull": {
+              "browserTarget": "rxjs-state-showcase:build:zonefull"
+            },
+            "zoneless": {
+              "browserTarget": "rxjs-state-showcase:build:zoneless"
+            },
             "production": {
               "browserTarget": "rxjs-state-showcase:build:production"
             }
@@ -88,7 +134,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
+              "src/styles.scss"
             ],
             "scripts": []
           }
@@ -119,6 +166,50 @@
           }
         }
       }
-    }},
-  "defaultProject": "rxjs-state-showcase"
+    },
+    "component": {
+      "projectType": "library",
+      "root": "projects/component",
+      "sourceRoot": "projects/component/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/component/tsconfig.lib.json",
+            "project": "projects/component/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/component/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/component/src/test.ts",
+            "tsConfig": "projects/component/tsconfig.spec.json",
+            "karmaConfig": "projects/component/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/component/tsconfig.lib.json",
+              "projects/component/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "rxjs-state-showcase",
+  "cli": {
+    "analytics": "825915e7-45bd-42a9-b799-ee2e4fd5a4db"
+  }
 }

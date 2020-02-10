@@ -21,6 +21,7 @@
       "app",
       "kebab-case"
     ],
+    "no-trailing-whitespace": false,
     "import-blacklist": [
       true,
       "rxjs/Rx"

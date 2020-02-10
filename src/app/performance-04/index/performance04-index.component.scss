@@ -1,0 +1,14 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  padding-right: 1rem;
+  table {
+    width: 100%;
+    flex-grow: 1;
+  }
+  .row-active {
+    background-color: rgba(0, 0, 0, .5);
+  }
+}
