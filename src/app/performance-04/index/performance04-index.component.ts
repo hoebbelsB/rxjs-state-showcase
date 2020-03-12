@@ -11,9 +11,10 @@ import {
     pluck,
     shareReplay,
     startWith,
-    takeUntil,
+    takeUntil, tap,
     withLatestFrom
 } from 'rxjs/operators';
+import { stateful } from '../../state/operators';
 import { State } from '../../state/state';
 import { Performance04DataService, Person } from '../performance-04-data.service';
 
@@ -37,34 +38,24 @@ export interface Performance04State {
 export class Performance04IndexComponent extends State<Performance04State> implements OnInit {
 
     displayedColumns: string[] = ['select', 'name', 'age', 'balance', 'picture', 'eyeColor', 'company', 'phone', 'address'];
-    readonly viewState$: Observable<Performance04State> = this.state$;
-    readonly data$ = this.state$.pipe(
-        pluck('data'),
-        distinctUntilChanged(),
-        shareReplay({
-            refCount: true,
-            bufferSize: 1
-        })
-    );
-    readonly filter$ = this.state$.pipe(pluck('filter'), distinctUntilChanged());
+    readonly viewState$: Observable<Performance04State> = this.select();
+    readonly data$ = this.select('data');
+    readonly filter$ = this.select('filter');
     readonly filteredData$ = combineLatest([
         this.data$,
         this.filter$
     ])
-        .pipe(map(([data, f]) => this.filterData(data, f)), distinctUntilChanged(), shareReplay({
-            refCount: true,
-            bufferSize: 1
-        }));
+        .pipe(map(([data, f]) => this.filterData(data, f)), stateful());
 
     selection = new SelectionModel<Person>(true, []);
-    readonly allSelected$ = this.state$.pipe(pluck('allSelected'), distinctUntilChanged());
+    readonly allSelected$ = this.select('allSelected');
 
     masterToggle = new Subject<MatCheckboxChange>();
 
     changeDetections = 0;
     detectedChanges = () => {
         return ++this.changeDetections;
-    };
+    }
 
     constructor(
         private dataService: Performance04DataService,
@@ -86,7 +77,7 @@ export class Performance04IndexComponent extends State<Performance04State> imple
                 .pipe(
                     map(([selected, data]) => {
                         const anySelected = selected.length > 0;
-                        const allSelected = anySelected && selected.length === 0;
+                        const allSelected = anySelected && selected.length === data.length;
                         const rowSelectionState = {};
                         if (selected.length > 0) {
                             selected.forEach(p => rowSelectionState[p._id] = true);
@@ -95,7 +86,7 @@ export class Performance04IndexComponent extends State<Performance04State> imple
                         data.forEach(p => {
                             checkboxLabels[p._id] = this.checkboxLabel(p, allSelected, !!rowSelectionState[p._id]);
                         });
-                        const masterCheckboxLabel = `${ allSelected ? 'select' : 'deselect' } all`;
+                        const masterCheckboxLabel = `${ !allSelected ? 'select' : 'deselect' } all`;
                         return {
                             anySelected,
                             allSelected,
@@ -112,7 +103,6 @@ export class Performance04IndexComponent extends State<Performance04State> imple
         this.hold(
             this.masterToggle
                 .pipe(
-                    filter((event: MatCheckboxChange) => event.source.checked),
                     withLatestFrom(
                         combineLatest([
                             this.allSelected$,
@@ -124,7 +114,7 @@ export class Performance04IndexComponent extends State<Performance04State> imple
                 if (allSelected) {
                     this.selection.clear();
                 } else {
-                    data.forEach(d => this.selection.select(d));
+                    this.selection.select(...data);
                 }
             }
         );

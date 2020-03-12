@@ -4,21 +4,32 @@ import {
   ɵdetectChanges as detectChanges,
   ɵmarkDirty as markDirty,
 } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
 
-import { isIvy } from './ivy-check';
-import { isZoneLess } from './zone-check';
+import { isIvy } from './is-ivy';
+import { hasZone } from './has-zone';
 
 export function getChangeDetectionHandler(
   ngZone: NgZone,
   cdRef: ChangeDetectorRef
 ): <T>(component?: T) => void {
-  // @TODO test it properly!!!
-  if (isIvy(AsyncPipe)) {
-    return isZoneLess(ngZone) ? detectChanges : markDirty;
+  if (isIvy()) {
+    return hasZone(ngZone) ? markDirty : detectChanges;
   } else {
-    return isZoneLess(ngZone)
-      ? cdRef.detectChanges.bind(cdRef)
-      : cdRef.markForCheck.bind(cdRef);
+    return hasZone(ngZone)
+      ? cdRef.markForCheck.bind(cdRef)
+      : cdRef.detectChanges.bind(cdRef);
+  }
+}
+
+export function getDetectChanges(
+  ngZone: NgZone,
+  cdRef: ChangeDetectorRef
+): <T>(component?: T) => void {
+  if (isIvy()) {
+    return !hasZone(ngZone) ? detectChanges : markDirty;
+  } else {
+    return hasZone(ngZone)
+      ? cdRef.markForCheck.bind(cdRef)
+      : cdRef.detectChanges.bind(cdRef);
   }
 }

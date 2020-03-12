@@ -31,6 +31,13 @@ const routes: Routes = [
         canActivateChild: []
     },
     {
+        path: 'animation',
+        loadChildren: () => import('./animation/animation.module')
+            .then(mod => mod.AnimationModule),
+        canActivate: [],
+        canActivateChild: []
+    },
+    {
         path: '**',
         redirectTo: 'performance-01'
     }

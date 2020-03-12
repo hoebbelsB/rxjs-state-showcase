@@ -15,24 +15,21 @@ import {
   PartialObserver,
   pipe,
   ReplaySubject,
-  Subject,
 } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
   map,
+  startWith,
   tap,
   withLatestFrom,
 } from 'rxjs/operators';
 import {
   CdAware,
-  CoalescingConfig,
-  processCdAwareObservables,
-  remainHigherOrder,
-  STATE_DEFAULT,
+  // This will later on replaced by a new NgRxLetConfig interface
+  CoalescingConfig as NgRxLetConfig,
+  RemainHigherOrder,
 } from '../core';
-
-export interface NgRxLetConfig extends CoalescingConfig {}
 
 export interface LetContext {
   // to enable `let` syntax we have to use $implicit (var; let v = var)
@@ -42,7 +39,7 @@ export interface LetContext {
   // set context var complete to true (var$; let v = $error)
   $error?: Error | undefined;
   // set context var complete to true (var$; let v = $complete)
-  $complete?: true | undefined;
+  $complete?: boolean | undefined;
 }
 
 function getLetContextObj(): LetContext {
@@ -58,30 +55,22 @@ function getLetContextObj(): LetContext {
   selector: '[ngrxLet]',
 })
 export class LetDirective extends CdAware implements OnInit, OnDestroy {
-  private ViewContext = getLetContextObj();
-  configSubject = new ReplaySubject<NgRxLetConfig>();
-  config$ = this.configSubject.pipe(
+  private readonly ViewContext = getLetContextObj();
+  private readonly configSubject = new ReplaySubject<NgRxLetConfig>();
+  private readonly config$ = this.configSubject.pipe(
     filter(v => v !== undefined),
-    distinctUntilChanged()
-  );
-
-  protected observablesSubject = new Subject<Observable<any>>();
-  protected observables$ = this.observablesSubject.pipe(
-    processCdAwareObservables(
-      this.getResetContextBehaviour(),
-      this.getUpdateContextBehaviour(),
-      this.getConfigurableBehaviour()
-    )
+    distinctUntilChanged(),
+    startWith({ optimized: true })
   );
 
   @Input()
-  set ngrxLet(obs: Observable<any>) {
-    this.observablesSubject.next(obs);
+  set ngrxLet(potentialObservable: Observable<any>) {
+    this.observablesSubject.next(potentialObservable);
   }
 
   @Input()
   set ngrxLetConfig(config: NgRxLetConfig) {
-    this.configSubject.next(config);
+    this.configSubject.next(config || { optimized: true });
   }
 
   constructor(
@@ -91,8 +80,7 @@ export class LetDirective extends CdAware implements OnInit, OnDestroy {
     private readonly viewContainerRef: ViewContainerRef
   ) {
     super(cdRef, ngZone);
-    this.initCdAware();
-    this.cdAwareSubscription = this.observables$.subscribe();
+    this.subscription.add(this.observables$.subscribe());
   }
 
   ngOnInit() {
@@ -109,11 +97,11 @@ export class LetDirective extends CdAware implements OnInit, OnDestroy {
 
   getResetContextObserver(): NextObserver<any> {
     return {
-      next: newObservable$ => {
-        this.ViewContext.$implicit = STATE_DEFAULT;
-        this.ViewContext.ngrxLet = STATE_DEFAULT;
-        this.ViewContext.$error = STATE_DEFAULT;
-        this.ViewContext.$complete = STATE_DEFAULT;
+      next: _ => {
+        this.ViewContext.$implicit = undefined;
+        this.ViewContext.ngrxLet = undefined;
+        this.ViewContext.$error = undefined;
+        this.ViewContext.$complete = undefined;
       },
     };
   }
@@ -129,13 +117,17 @@ export class LetDirective extends CdAware implements OnInit, OnDestroy {
     };
   }
 
-  getConfigurableBehaviour<T>(): remainHigherOrder<T> {
+  getConfigurableBehaviour<T>(): RemainHigherOrder<T> {
     return pipe(
       withLatestFrom(this.config$),
       map(([value$, config]: [Observable<any>, NgRxLetConfig]) => {
+        // As discussed with Brandon we keep it here because in the beta we implement configuration behavior here
         return !config.optimized
-          ? value$.pipe(tap(v => this.work()))
-          : value$.pipe(this.observeChanges());
+          ? value$.pipe(tap(() => this.work()))
+          : value$.pipe(
+              // @TODO add coalesce operator here
+              tap(() => this.work())
+            );
       })
     );
   }

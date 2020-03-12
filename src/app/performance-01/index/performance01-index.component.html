@@ -23,51 +23,47 @@
     </mat-select>
   </mat-form-field>
 </mat-toolbar>
-<table mat-table [dataSource]="filteredData" class="mat-elevation-z8">
-  <!-- Checkbox Column -->
-  <ng-container matColumnDef="select">
-    <th mat-header-cell *matHeaderCellDef>
-      <mat-checkbox (change)="$event ? masterToggle() : null"
-                    [checked]="selection.hasValue() && isAllSelected()"
-                    [indeterminate]="selection.hasValue() && !isAllSelected()"
-                    [aria-label]="checkboxLabel()">
-      </mat-checkbox>
-    </th>
-    <td mat-cell *matCellDef="let row">
-      <mat-checkbox (click)="$event.stopPropagation()"
-                    *ngIf="isRowHovered(row) || selection.isSelected(row) || !selection.isEmpty()"
-                    (change)="$event ? selection.toggle(row) : null"
-                    [checked]="selection.isSelected(row)"
-                    [aria-label]="checkboxLabel(row)">
-      </mat-checkbox>
-    </td>
-  </ng-container>
-  <mat-text-column name="position"></mat-text-column>
-  <mat-text-column name="name"></mat-text-column>
-  <mat-text-column name="age"></mat-text-column>
-  <mat-text-column name="balance"></mat-text-column>
-  <ng-container matColumnDef="picture">
-    <th mat-header-cell *matHeaderCellDef> Picture </th>
-    <td mat-cell *matCellDef="let person">
-      <img [src]="person.picture" [alt]="person.name" />
-    </td>
-  </ng-container>
-  <mat-text-column name="eyeColor"></mat-text-column>
-  <mat-text-column name="company"></mat-text-column>
-  <mat-text-column name="phone"></mat-text-column>
-  <mat-text-column name="address"></mat-text-column>
-  <ng-container matColumnDef="actions">
-    <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell *matCellDef="let person">
-      <button mat-icon-button
-              (click)="onRowDeleteClick($event, person)"><mat-icon>delete</mat-icon></button>
-    </td>
-  </ng-container>
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-      (mouseenter)="rowHovered(row)"
-      (mouseleave)="rowBlurred(row)"
-      [class.row-active]="isRowHovered(row)"
-      (click)="selection.toggle(row)">
-  </tr>
-</table>
+<div class="table-wrapper mat-elevation-z8">
+  <table mat-table [dataSource]="filteredData">
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      [aria-label]="checkboxLabel()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      *ngIf="isRowHovered(row) || selection.isSelected(row) || !selection.isEmpty()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)"
+                      [aria-label]="checkboxLabel(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+    <mat-text-column name="position"></mat-text-column>
+    <mat-text-column name="name"></mat-text-column>
+    <mat-text-column name="age"></mat-text-column>
+    <mat-text-column name="balance"></mat-text-column>
+    <ng-container matColumnDef="picture">
+      <th mat-header-cell *matHeaderCellDef> Picture </th>
+      <td mat-cell *matCellDef="let person">
+        <img [src]="person.picture" [alt]="person.name" />
+      </td>
+    </ng-container>
+    <mat-text-column name="eyeColor"></mat-text-column>
+    <mat-text-column name="company"></mat-text-column>
+    <mat-text-column name="phone"></mat-text-column>
+    <mat-text-column name="address"></mat-text-column>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+        (mouseenter)="rowHovered(row)"
+        (mouseleave)="rowBlurred(row)"
+        [class.row-active]="isRowHovered(row)"
+        (click)="selection.toggle(row)">
+    </tr>
+  </table>
+</div>
+

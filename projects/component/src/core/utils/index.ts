@@ -1,22 +1,11 @@
-export { ArgumentNotObservableError } from './argument-not-observable-error';
-export { STATE_DEFAULT } from './state-default';
 export { getChangeDetectionHandler } from './get-change-detection-handling';
+export { getGlobalThis } from './get-global-this';
+export { isIvy } from './is-ivy';
+export { hasZone } from './has-zone';
+
 export {
-  getRequestAnimationFrameFromZoneFullEnv,
-} from './get-request-animation-frame-from-zone-full-env';
-export { isZoneLess } from './zone-check';
-export { isIvy } from './ivy-check';
-export {
-  CoalesceConfig,
-  CoalescingContext,
-  getCoalesceWorkConfig,
-  isScheduling,
-  coalesceWork,
-} from './coalesce-work';
-export {
-  potentialObservableValue,
-  remainHigherOrder,
-  isUndefinedOrNullGuard,
+  observableValue,
+  RemainHigherOrder,
   isDefinedGuard,
   isIterableGuard,
   isObservableGuard,

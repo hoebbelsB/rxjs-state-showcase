@@ -8,7 +8,7 @@ import { Performance01DataService, Person } from '../performance-01-data.service
     styleUrls: ['./performance01-index.component.scss']
 })
 export class Performance01IndexComponent implements OnInit {
-    displayedColumns: string[] = ['select', 'name', 'age', 'balance', 'picture', 'eyeColor', 'company', 'phone', 'address', 'actions'];
+    displayedColumns: string[] = ['select', 'name', 'age', 'balance', 'picture', 'eyeColor', 'company', 'phone', 'address'];
     private _data: Person[] = [];
     set data(data: Person[]) {
         this._data = data;
@@ -70,11 +70,6 @@ export class Performance01IndexComponent implements OnInit {
             return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
         }
         return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.name}`;
-    }
-
-    onRowDeleteClick(e: MouseEvent, person: Person) {
-        e.preventDefault();
-        this.data = this.data.filter(p => p._id !== person._id);
     }
 
     rowHovered(row: Person) {

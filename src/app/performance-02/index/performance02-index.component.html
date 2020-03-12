@@ -23,52 +23,48 @@
     </mat-select>
   </mat-form-field>
 </mat-toolbar>
-<table mat-table [dataSource]="filteredData$" class="mat-elevation-z8">
-  <!-- Checkbox Column -->
-  <ng-container matColumnDef="select">
-    <th mat-header-cell *matHeaderCellDef>
-      <mat-checkbox (change)="masterToggle.next($event)"
-                    [checked]="(anySelected$ | async) && allSelected$ | async"
-                    [indeterminate]="(anySelected$ | async) && !(allSelected$ | async)"
-                    [aria-label]="masterCheckboxLabel$ | async">
-      </mat-checkbox>
-    </th>
-    <td mat-cell *matCellDef="let row">
-      <mat-checkbox (click)="$event.stopPropagation()"
-                    *ngIf="(hoveredRow$ | async) === row._id || (rowSelectionState$ | async)[row._id] === true ||
+<div class="table-wrapper mat-elevation-z8">
+  <table mat-table [dataSource]="filteredData$">
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="masterToggle.next($event)"
+                      [checked]="(anySelected$ | async) && allSelected$ | async"
+                      [indeterminate]="(anySelected$ | async) && !(allSelected$ | async)"
+                      [aria-label]="masterCheckboxLabel$ | async">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      *ngIf="(hoveredRow$ | async) === row._id || (rowSelectionState$ | async)[row._id] === true ||
                     (anySelected$ | async) === true"
-                    (change)="$event ? selection.toggle(row) : null"
-                    [checked]="(rowSelectionState$ | async)[row._id] === true"
-                    [aria-label]="(checkBoxLabels$ | async)[row._id]">
-      </mat-checkbox>
-    </td>
-  </ng-container>
-  <mat-text-column name="position"></mat-text-column>
-  <mat-text-column name="name"></mat-text-column>
-  <mat-text-column name="age"></mat-text-column>
-  <mat-text-column name="balance"></mat-text-column>
-  <ng-container matColumnDef="picture">
-    <th mat-header-cell *matHeaderCellDef> Picture </th>
-    <td mat-cell *matCellDef="let person">
-      <img [src]="person.picture" [alt]="person.name" />
-    </td>
-  </ng-container>
-  <mat-text-column name="eyeColor"></mat-text-column>
-  <mat-text-column name="company"></mat-text-column>
-  <mat-text-column name="phone"></mat-text-column>
-  <mat-text-column name="address"></mat-text-column>
-  <ng-container matColumnDef="actions">
-    <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell *matCellDef="let person">
-      <button mat-icon-button
-              (click)="onRowDeleteClick($event, person)"><mat-icon>delete</mat-icon></button>
-    </td>
-  </ng-container>
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-      (mouseenter)="hoveredRow$.next(row._id)"
-      (mouseleave)="hoveredRow$.next(null)"
-      [class.row-active]="(hoveredRow$ | async) === row._id"
-      (click)="selection.toggle(row)">
-  </tr>
-</table>
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="(rowSelectionState$ | async)[row._id] === true"
+                      [aria-label]="(checkBoxLabels$ | async)[row._id]">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+    <mat-text-column name="position"></mat-text-column>
+    <mat-text-column name="name"></mat-text-column>
+    <mat-text-column name="age"></mat-text-column>
+    <mat-text-column name="balance"></mat-text-column>
+    <ng-container matColumnDef="picture">
+      <th mat-header-cell *matHeaderCellDef> Picture </th>
+      <td mat-cell *matCellDef="let person">
+        <img [src]="person.picture" [alt]="person.name" />
+      </td>
+    </ng-container>
+    <mat-text-column name="eyeColor"></mat-text-column>
+    <mat-text-column name="company"></mat-text-column>
+    <mat-text-column name="phone"></mat-text-column>
+    <mat-text-column name="address"></mat-text-column>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+        (mouseenter)="hoveredRow$.next(row._id)"
+        (mouseleave)="hoveredRow$.next(null)"
+        [class.row-active]="(hoveredRow$ | async) === row._id"
+        (click)="selection.toggle(row)">
+    </tr>
+  </table>
+</div>
+

@@ -6,7 +6,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NgRxComponentModule } from '../../projects/component/src';
+import { ReactiveComponentModule } from '../../projects/component/src';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
@@ -26,7 +26,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         MatIconModule,
         MatListModule,
         RouterModule,
-        NgRxComponentModule
+        ReactiveComponentModule
     ],
   providers: [],
   bootstrap: [AppComponent]

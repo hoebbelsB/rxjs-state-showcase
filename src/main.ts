@@ -7,7 +7,7 @@ import { environment } from './environments/environment';
 if (environment.production) {
   enableProdMode();
 }
-
+console.log(environment.zonefull);
 const compilerOptions: any = !environment.zonefull ? {
         ngZone: 'noop'
     } : {};

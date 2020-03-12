@@ -9,7 +9,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { NgRxComponentModule } from '../../../projects/component/src';
+import { ReactiveComponentModule } from '../../../projects/component/src';
 
 import { Performance04RoutingModule } from './performance-04-routing.module';
 import { Performance04IndexComponent } from './index/performance04-index.component';
@@ -29,7 +29,7 @@ import { Performance04IndexComponent } from './index/performance04-index.compone
         MatFormFieldModule,
         MatInputModule,
         MatSelectModule,
-        NgRxComponentModule
+        ReactiveComponentModule
     ]
 })
 export class Performance04Module { }

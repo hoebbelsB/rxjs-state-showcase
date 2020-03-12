@@ -1,26 +1,24 @@
 import { from, Observable, of } from 'rxjs';
-import {
-  ArgumentNotObservableError,
-  isObservableGuard,
-  isPromiseGuard,
-  isUndefinedOrNullGuard,
-  potentialObservableValue,
-} from '../utils';
+import { isObservableGuard, isPromiseGuard } from '../utils';
 
-// @TODO make it a OperatorFunction
 export function toObservableValue<T>(
-  potentialObservableValue$: potentialObservableValue<T>
-): Observable<T | undefined | null> {
-  if (isUndefinedOrNullGuard(potentialObservableValue$)) {
+  potentialObservableValue$: Observable<T> | Promise<T> | undefined | null
+): Observable<T | undefined | null | any> {
+  if (
+    // Comparing to the literal null value with the == operator covers both null and undefined values.
+    potentialObservableValue$ == null
+  ) {
     return of(potentialObservableValue$);
   }
 
   if (
-    isPromiseGuard(potentialObservableValue$) ||
-    isObservableGuard(potentialObservableValue$)
+    isPromiseGuard<T>(potentialObservableValue$) ||
+    isObservableGuard<T>(potentialObservableValue$)
   ) {
     return from(potentialObservableValue$);
   }
 
-  throw new ArgumentNotObservableError();
+  throw new Error(
+    'Argument not observable. Only null/undefined or Promise/Observable-like values are allowed.'
+  );
 }

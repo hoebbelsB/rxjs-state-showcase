@@ -12,7 +12,7 @@ import { Performance02DataService, Person } from '../performance-02-data.service
 })
 export class Performance02IndexComponent implements OnInit, OnDestroy {
 
-    displayedColumns: string[] = ['select', 'name', 'age', 'balance', 'picture', 'eyeColor', 'company', 'phone', 'address', 'actions'];
+    displayedColumns: string[] = ['select', 'name', 'age', 'balance', 'picture', 'eyeColor', 'company', 'phone', 'address'];
 
     readonly data$ = new BehaviorSubject<Person[]>([]);
     readonly filter$ = new BehaviorSubject<string>(null);
@@ -135,14 +135,9 @@ export class Performance02IndexComponent implements OnInit, OnDestroy {
         return `${ rowSelected ? 'deselect' : 'select' } row ${ row.name }`;
     }
 
-    onRowDeleteClick(e: MouseEvent, person: Person) {
-        e.preventDefault();
-        this.data$.next(this.data$.getValue().filter(p => p._id !== person._id));
-    }
-
-    filterData(data: Person[], filter: string): Person[] {
-        if (!!filter) {
-            const filterValue = filter.toLowerCase();
+    filterData(data: Person[], filterStr: string): Person[] {
+        if (!!filterStr) {
+            const filterValue = filterStr.toLowerCase();
             return data.filter(p => {
                 return p.name.toLowerCase().includes(filterValue) ||
                     p.balance.toLowerCase().includes(filterValue) ||

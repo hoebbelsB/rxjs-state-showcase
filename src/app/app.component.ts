@@ -1,8 +1,9 @@
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ApplicationRef, ChangeDetectorRef, Component, ɵmarkDirty as markDirty, ɵdetectChanges as detectChanges } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { filter, map, tap, withLatestFrom } from 'rxjs/operators';
+import { environment } from '../environments/environment';
 import { State } from './state/state';
 
 export interface AppState {
@@ -24,16 +25,21 @@ export class AppComponent extends State<AppState> {
     constructor(
         private breakPointObserver: BreakpointObserver,
         private router: Router,
-        private cdRef: ChangeDetectorRef
+        private cdRef: ChangeDetectorRef,
+        private appRef: ApplicationRef
     ) {
         super();
         this.hold(
             this.router.events
                 .pipe(
                     filter(e => e instanceof NavigationEnd),
-                    tap(e => this.cdRef.detectChanges())
+                    tap(e => this.appRef.tick())
                 )
         );
+        /*this.hold(
+            this.select(),
+            () => this.appRef.tick()
+        );*/
         this.setState({
             mobile: false,
             navOpen: true
