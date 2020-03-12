@@ -1,7 +1,6 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {Routes} from '@angular/router';
 
-const routes: Routes = [
+export const ROUTES: Routes = [
     {
         path: 'performance-01',
         loadChildren: () => import('./performance-01/performance-01.module')
@@ -42,11 +41,3 @@ const routes: Routes = [
         redirectTo: 'performance-01'
     }
 ];
-
-
-@NgModule({
-    imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule]
-})
-export class AppRoutingModule {
-}

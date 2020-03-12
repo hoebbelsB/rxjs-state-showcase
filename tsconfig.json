@@ -19,9 +19,17 @@
       "dom"
     ],
     "paths": {
-      "component": [
-        "dist/component/component",
-        "dist/component"
+      "@component": [
+        "projects/component/src/index.ts"
+      ],
+      "@rx-state/rxjs-state": [
+        "projects/rxjs-state/src/index.ts"
+      ],
+      "@rx-state/ngx-state": [
+        "projects/ngx-state/src/index.ts"
+      ],
+      "@navigation": [
+        "projects/navigation/src/index.ts"
       ]
     }
   },

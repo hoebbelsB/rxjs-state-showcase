@@ -3,7 +3,7 @@ import { isObservableGuard, isPromiseGuard } from '../utils';
 
 export function toObservableValue<T>(
   potentialObservableValue$: Observable<T> | Promise<T> | undefined | null
-): Observable<T | undefined | null | any> {
+): Observable<T | undefined | null> {
   if (
     // Comparing to the literal null value with the == operator covers both null and undefined values.
     potentialObservableValue$ == null

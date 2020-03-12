@@ -10,15 +10,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
-import { Performance01RoutingModule } from './performance-01-routing.module';
 import { Performance01IndexComponent } from './index/performance01-index.component';
+import {RouterModule} from '@angular/router';
+import {ROUTES as PERFORMANCE_ROUTES} from './performance-01.routes';
 
 
 @NgModule({
   declarations: [Performance01IndexComponent],
     imports: [
         CommonModule,
-        Performance01RoutingModule,
+        RouterModule.forChild(PERFORMANCE_ROUTES),
         MatListModule,
         MatTableModule,
         MatCheckboxModule,
