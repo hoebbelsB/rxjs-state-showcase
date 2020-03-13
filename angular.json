@@ -7,21 +7,21 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss",
+          "style": "scss",
           "style": "scss",
           "changeDetection": "OnPush",
-          "spec": false
+          "skipTests": true
         },
         "@schematics/angular:directive": {
-          "spec": false,
+          "skipTests": true,
           "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "spec": false,
+          "skipTests": true,
           "skipTests": true
         },
         "@schematics/angular:service": {
-          "spec": false,
+          "skipTests": true,
           "skipTests": true
         },
         "@schematics/angular:module": {
