@@ -16,6 +16,7 @@ import {
 } from 'rxjs/operators';
 import { State } from '../../state/state';
 import { Performance03DataService, Person } from '../performance-03-data.service';
+import {environment} from '../../../environments/environment';
 
 export interface Performance03State {
     data: Person[];
@@ -32,7 +33,8 @@ export interface Performance03State {
 @Component({
     selector: 'app-performance-03-index',
     templateUrl: './performance03-index.component.html',
-    styleUrls: ['./performance03-index.component.scss']
+    styleUrls: ['./performance03-index.component.scss'],
+    changeDetection: environment.changeDetection
 })
 export class Performance03IndexComponent extends State<Performance03State> implements OnInit {
 

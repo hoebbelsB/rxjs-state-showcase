@@ -1,14 +1,15 @@
 import { from, Observable, of } from 'rxjs';
 import { isObservableGuard, isPromiseGuard } from '../utils';
+import {potentialObservableValue} from '../../../../rxjs-state/src/lib/core/utils';
 
 export function toObservableValue<T>(
-  potentialObservableValue$: Observable<T> | Promise<T> | undefined | null
+  potentialObservableValue$: potentialObservableValue<T> | undefined | null
 ): Observable<T | undefined | null> {
   if (
     // Comparing to the literal null value with the == operator covers both null and undefined values.
     potentialObservableValue$ == null
   ) {
-    return of(potentialObservableValue$);
+    return of(potentialObservableValue$ as any);
   }
 
   if (

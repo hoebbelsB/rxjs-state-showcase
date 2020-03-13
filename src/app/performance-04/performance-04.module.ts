@@ -11,15 +11,16 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ReactiveComponentModule } from '../../../projects/component/src';
 
-import { Performance04RoutingModule } from './performance-04-routing.module';
 import { Performance04IndexComponent } from './index/performance04-index.component';
+import {RouterModule} from '@angular/router';
+import {ROUTES as PERFORMANCE04_ROUTES} from '../performance-01/performance-01.routes';
 
 
 @NgModule({
   declarations: [Performance04IndexComponent],
     imports: [
         CommonModule,
-        Performance04RoutingModule,
+        RouterModule.forChild(PERFORMANCE04_ROUTES),
         MatListModule,
         MatTableModule,
         MatCheckboxModule,

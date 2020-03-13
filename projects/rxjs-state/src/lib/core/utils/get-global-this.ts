@@ -1,5 +1,7 @@
-export function getGlobalThis() {
-  // @ TODO discuss with ngRx-Team
-  //  AND consider self
-  return (global || window) as any;
+// Returns a reference to global thin
+// - Browser
+// - SSR
+// - Tests
+export function getGlobalThis(): any {
+    return ((globalThis as any) || (self as any) || (window as any)) as any;
 }

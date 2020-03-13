@@ -4,11 +4,13 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
 import { filter, map, shareReplay, startWith, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { Performance02DataService, Person } from '../performance-02-data.service';
+import {environment} from '../../../environments/environment';
 
 @Component({
     selector: 'app-performance-02-index',
     templateUrl: './performance02-index.component.html',
-    styleUrls: ['./performance02-index.component.scss']
+    styleUrls: ['./performance02-index.component.scss'],
+    changeDetection: environment.changeDetection
 })
 export class Performance02IndexComponent implements OnInit, OnDestroy {
 

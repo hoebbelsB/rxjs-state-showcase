@@ -1,4 +1,4 @@
-<ng-container *ngrxLet="viewState$ | ngrxPush as state">
+<ng-container *ngrxLet="viewState$ as state">
   <mat-toolbar style="margin-bottom: 1rem" color="primary">
     <span>Detected Changes: {{ detectedChanges() }}</span>
     <span>Showing {{ (filteredData$ | ngrxPush)?.length }} / {{ state?.data?.length }} entries</span>

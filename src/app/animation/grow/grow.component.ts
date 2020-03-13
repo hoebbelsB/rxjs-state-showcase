@@ -2,6 +2,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { ApplicationRef, ChangeDetectionStrategy, Component, Input, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 import { State } from '../../state/state';
+import {environment} from '../../../environments/environment';
 
 export type GrowAnimationState = 'grown' | 'shrinked';
 
@@ -13,7 +14,7 @@ export interface GrowComponentState {
     selector: 'app-grow',
     templateUrl: './grow.component.html',
     styleUrls: ['./grow.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: environment.changeDetection,
     animations: [
         trigger(
             'grow',

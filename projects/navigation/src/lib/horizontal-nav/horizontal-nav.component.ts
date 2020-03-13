@@ -1,16 +1,16 @@
 import {Component, Input} from '@angular/core';
-import {LocalState} from '../';
+import {RxState} from '@rx-state/ngx-state';
 import {MenuItem} from '../menu-item.interface';
 
 @Component({
     selector: 'horizontal-nav',
     template: `
-      <button mat-button *forEach="let item of items$ | async">
+      <button mat-button *forEach="let item of items$ | ngrxPush">
         {{item.label}}
       </button>
     `
 })
-export class HorizontalNavComponent extends LocalState<{ items: MenuItem[] }> {
+export class HorizontalNavComponent extends RxState<{ items: MenuItem[] }> {
 
     items$ = this.select('items');
 

@@ -17,9 +17,9 @@ const blacklistedEvents = [
     'mouseup',
     'load',
     'pointerup',
-    //'change',
-    //'blur',
-    //'focus',
+    // 'change',
+    // 'blur',
+    // 'focus',
     // 'click',
     'contextmenu',
     'drag',
@@ -29,11 +29,11 @@ const blacklistedEvents = [
     'dragover',
     'dragstart',
     'drop',
-    //'input'
+    // 'input'
 ];
 const targets = [window, Document, HTMLBodyElement, HTMLElement];
 (window as any).__Zone_ignore_on_properties = [];
-targets.forEach(function (target) {
+targets.forEach((target) => {
     (window as any).__Zone_ignore_on_properties.push({
         target,
         ignoreProperties: blacklistedEvents

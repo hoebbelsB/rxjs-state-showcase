@@ -1,22 +1,12 @@
-import { SelectionModel } from '@angular/cdk/collections';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { MatCheckboxChange } from '@angular/material/checkbox';
-import { BehaviorSubject, combineLatest, EMPTY, Observable, Subject } from 'rxjs';
-import {
-    debounce,
-    debounceTime,
-    distinctUntilChanged,
-    filter,
-    map,
-    pluck,
-    shareReplay,
-    startWith,
-    takeUntil, tap,
-    withLatestFrom
-} from 'rxjs/operators';
-import { stateful } from '../../state/operators';
-import { State } from '../../state/state';
-import { Performance04DataService, Person } from '../performance-04-data.service';
+import {SelectionModel} from '@angular/cdk/collections';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {MatCheckboxChange} from '@angular/material/checkbox';
+import {combineLatest, Observable, Subject} from 'rxjs';
+import {map, startWith, withLatestFrom} from 'rxjs/operators';
+import {stateful} from '../../state/operators';
+import {State} from '../../state/state';
+import {Performance04DataService, Person} from '../performance-04-data.service';
+import {environment} from '../../../environments/environment';
 
 export interface Performance04State {
     data: Person[];
@@ -33,7 +23,8 @@ export interface Performance04State {
 @Component({
     selector: 'app-performance-04-index',
     templateUrl: './performance04-index.component.html',
-    styleUrls: ['./performance04-index.component.scss']
+    styleUrls: ['./performance04-index.component.scss'],
+    changeDetection: environment.changeDetection
 })
 export class Performance04IndexComponent extends State<Performance04State> implements OnInit {
 
@@ -82,11 +73,11 @@ export class Performance04IndexComponent extends State<Performance04State> imple
                         if (selected.length > 0) {
                             selected.forEach(p => rowSelectionState[p._id] = true);
                         }
-                        const checkboxLabels: { [key: string]: string} = {};
+                        const checkboxLabels: { [key: string]: string } = {};
                         data.forEach(p => {
                             checkboxLabels[p._id] = this.checkboxLabel(p, allSelected, !!rowSelectionState[p._id]);
                         });
-                        const masterCheckboxLabel = `${ !allSelected ? 'select' : 'deselect' } all`;
+                        const masterCheckboxLabel = `${!allSelected ? 'select' : 'deselect'} all`;
                         return {
                             anySelected,
                             allSelected,
@@ -121,12 +112,12 @@ export class Performance04IndexComponent extends State<Performance04State> imple
     }
 
     refetchData(limit?: number) {
-        this.setState({ data: this.dataService.getData(limit) });
+        this.setState({data: this.dataService.getData(limit)});
     }
 
     /** The label for the checkbox on the passed row */
     checkboxLabel(row: Person, allSelected: boolean, rowSelected: boolean): string {
-        return `${ rowSelected ? 'deselect' : 'select' } row ${ row.name }`;
+        return `${rowSelected ? 'deselect' : 'select'} row ${row.name}`;
     }
 
     filterData(data: Person[], f: string): Person[] {

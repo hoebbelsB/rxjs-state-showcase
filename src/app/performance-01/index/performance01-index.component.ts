@@ -1,11 +1,13 @@
-import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit } from '@angular/core';
-import { Performance01DataService, Person } from '../performance-01-data.service';
+import {SelectionModel} from '@angular/cdk/collections';
+import {Component, OnInit} from '@angular/core';
+import {Performance01DataService, Person} from '../performance-01-data.service';
+import {environment} from '../../../environments/environment';
 
 @Component({
     selector: 'app-performance-01-index',
     templateUrl: './performance01-index.component.html',
-    styleUrls: ['./performance01-index.component.scss']
+    styleUrls: ['./performance01-index.component.scss'],
+    changeDetection: environment.changeDetection
 })
 export class Performance01IndexComponent implements OnInit {
     displayedColumns: string[] = ['select', 'name', 'age', 'balance', 'picture', 'eyeColor', 'company', 'phone', 'address'];

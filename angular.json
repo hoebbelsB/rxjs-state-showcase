@@ -61,6 +61,22 @@
                 }
               ]
             },
+            "push-zonefull": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.push-zonefull.ts"
+                }
+              ]
+            },
+            "push-zoneless": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.push-zoneless.ts"
+                }
+              ]
+            },
             "zoneless": {
               "fileReplacements": [
                 {
@@ -105,6 +121,12 @@
             "browserTarget": "rxjs-state-showcase:build"
           },
           "configurations": {
+            "push-zonefull": {
+              "browserTarget": "angular-push-pipe:build:push-zonefull"
+            },
+            "push-zoneless": {
+              "browserTarget": "angular-push-pipe:build:push-zoneless"
+            },
             "zonefull": {
               "browserTarget": "rxjs-state-showcase:build:zonefull"
             },

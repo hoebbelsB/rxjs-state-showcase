@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { filter, map, startWith, tap, withLatestFrom } from 'rxjs/operators';
 import { State } from '../../state/state';
 import { GrowAnimationState } from '../grow/grow.component';
+import {environment} from '../../../environments/environment';
 
 export interface AnimationIndexComponentState {
     growState: GrowAnimationState;
@@ -13,7 +14,7 @@ export interface AnimationIndexComponentState {
     selector: 'app-animation-index',
     templateUrl: './animation-index.component.html',
     styleUrls: ['./animation-index.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: environment.changeDetection
 })
 export class AnimationIndexComponent extends State<AnimationIndexComponentState> {
 

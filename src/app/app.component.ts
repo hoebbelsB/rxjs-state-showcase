@@ -36,10 +36,6 @@ export class AppComponent extends State<AppState> {
                     tap(e => this.appRef.tick())
                 )
         );
-        /*this.hold(
-            this.select(),
-            () => this.appRef.tick()
-        );*/
         this.setState({
             mobile: false,
             navOpen: true

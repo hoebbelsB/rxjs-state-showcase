@@ -1,17 +1,10 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { Performance04IndexComponent } from './index/performance04-index.component';
+import {Routes} from '@angular/router';
+import {Performance04IndexComponent} from './index/performance04-index.component';
 
 
-const routes: Routes = [
+const ROUTES: Routes = [
     {
         path: '',
         component: Performance04IndexComponent
     }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class Performance04RoutingModule { }
