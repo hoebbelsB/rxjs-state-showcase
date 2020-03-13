@@ -1,16 +1,16 @@
-import { CompilerOptions, enableProdMode, NgZone } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import {enableProdMode} from '@angular/core';
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
-import { AppModule } from './app/app.module';
-import { environment } from './environments/environment';
+import {AppModule} from './app/app.module';
+import {environment} from './environments/environment';
 
 if (environment.production) {
-  enableProdMode();
+    enableProdMode();
 }
-console.log(environment.zonefull);
-const compilerOptions: any = !environment.zonefull ? {
-        ngZone: 'noop'
-    } : {};
+
+const compilerOptions: any = environment.zoneLess ? {
+    ngZone: 'noop'
+} : {};
 
 platformBrowserDynamic().bootstrapModule(AppModule, compilerOptions)
-  .catch(err => console.error(err));
+    .catch(err => console.error(err));

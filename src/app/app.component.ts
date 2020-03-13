@@ -1,10 +1,11 @@
-import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
-import { ApplicationRef, ChangeDetectorRef, Component, ɵmarkDirty as markDirty, ɵdetectChanges as detectChanges } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { filter, map, tap, withLatestFrom } from 'rxjs/operators';
-import { environment } from '../environments/environment';
-import { State } from './state/state';
+import {BreakpointObserver, Breakpoints, BreakpointState} from '@angular/cdk/layout';
+import {ApplicationRef, ChangeDetectorRef, Component, NgZone} from '@angular/core';
+import {NavigationEnd, Router} from '@angular/router';
+import {Subject} from 'rxjs';
+import {filter, map, tap, withLatestFrom} from 'rxjs/operators';
+import {State} from './state/state';
+import {hasZone, isIvy} from '../../projects/component/src/core/utils';
+import {environment} from '../environments/environment';
 
 export interface AppState {
     navOpen: boolean;
@@ -17,7 +18,9 @@ export interface AppState {
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent extends State<AppState> {
-
+    readonly env = environment;
+    readonly hasZone = hasZone(this.ngZone);
+    readonly ivy = isIvy();
     readonly toggleSidenav = new Subject<void>();
 
     readonly viewState$ = this.select();
@@ -26,7 +29,8 @@ export class AppComponent extends State<AppState> {
         private breakPointObserver: BreakpointObserver,
         private router: Router,
         private cdRef: ChangeDetectorRef,
-        private appRef: ApplicationRef
+        private appRef: ApplicationRef,
+        private ngZone: NgZone
     ) {
         super();
         this.hold(
@@ -43,12 +47,12 @@ export class AppComponent extends State<AppState> {
         this.connect(
             'mobile',
             this.breakPointObserver.observe([
-                    Breakpoints.XSmall,
-                    Breakpoints.Small,
-                    Breakpoints.Medium,
-                    Breakpoints.Large,
-                    Breakpoints.XLarge
-                ])
+                Breakpoints.XSmall,
+                Breakpoints.Small,
+                Breakpoints.Medium,
+                Breakpoints.Large,
+                Breakpoints.XLarge
+            ])
                 .pipe(
                     map<BreakpointState, boolean>(breakpointState => {
                         return breakpointState.breakpoints[Breakpoints.XSmall];
