@@ -27,7 +27,6 @@ export class AppComponent extends State<AppState> {
     readonly hasZone = hasZone(this.ngZone);
     readonly ivy = isIvy();
     readonly toggleSidenav = new Subject<void>();
-
     readonly viewState$ = this.select();
 
     constructor(
@@ -48,7 +47,11 @@ export class AppComponent extends State<AppState> {
         this.setState({
             mobile: false,
             navOpen: true,
-            menuItems: [...PERFORMANCE_MENU_ITEMS, ...PUSH_MENU_ITEMS, ...LET_MENU_ITEMS]
+            menuItems: [
+                ...PUSH_MENU_ITEMS,
+                ...LET_MENU_ITEMS,
+                ...PERFORMANCE_MENU_ITEMS
+            ],
         });
         this.connect(
             'mobile',

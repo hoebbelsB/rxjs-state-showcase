@@ -11,5 +11,9 @@ export const MENU_ITEMS: MenuItem[] = [
     {
         link: 'push-03',
         label: '03 Push Multiple'
+    },
+    {
+        link: 'push-04',
+        label: '04 Push Minimal'
     }
 ];

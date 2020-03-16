@@ -17,11 +17,14 @@ import {Child01Component} from './01/parent/child/child01.component';
 import {Child02Component} from './02/parent/child/child.component';
 import {Parent02Component} from './02/parent/parent.component';
 import {Parent03Component} from './03/parent/parent.component';
+import {Parent04Component} from './04/parent/parent.component';
+import {Child04Component} from './04/parent/child/child.component';
 
 @NgModule({
     declarations: [
         Parent01Component, Child01Component,
         Parent02Component, Child02Component,
+        Parent04Component, Child04Component,
         Parent03Component
     ],
     imports: [
