@@ -1,91 +1,89 @@
+import { ChangeDetectorRef, NgZone } from '@angular/core';
+import { getChangeDetectionHandler } from './utils';
 import {
-  ChangeDetectorRef,
-  EmbeddedViewRef,
-  NgZone,
-  OnDestroy,
-  Type,
-} from '@angular/core';
-import {
-  getChangeDetectionHandler,
-  observableValue,
-  RemainHigherOrder,
-} from './utils';
-import {
-  defer,
   NextObserver,
   Observable,
   PartialObserver,
   Subject,
+  Subscribable,
   Subscription,
 } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { processCdAwareObservables } from './operators';
+import { distinctUntilChanged, map, switchAll, tap } from 'rxjs/operators';
+import { toObservableValue } from './projections';
 
 export interface CoalescingConfig {
   optimized: boolean;
 }
 
-// This abstract class holds all the shared logic for the push pipe and the let directive
-// responsible for change detection
-// If you extend this class you need to implement how the update of the rendered value happens.
-// Also custom behaviour is something you need to implement in the extending class
-export abstract class CdAware implements OnDestroy {
-  readonly handleChangeDetection: <T>(
-    component?: T
-  ) => void = getChangeDetectionHandler(this.ngZone, this.cdRef);
-  protected readonly subscription = new Subscription();
-  protected readonly observablesSubject = new Subject<
-    observableValue<any> | null | undefined
+export interface CdAware<U> extends Subscribable<U> {
+  next: (value: Observable<U> | Promise<U> | null | undefined) => void;
+}
+
+export interface WorkConfig {
+  context: any;
+  ngZone: NgZone;
+  cdRef: ChangeDetectorRef;
+}
+
+export function setUpWork(cfg: WorkConfig): () => void {
+  const render: (component?: any) => void = getChangeDetectionHandler(
+    cfg.ngZone,
+    cfg.cdRef
+  );
+  return () => render(cfg.context);
+}
+
+/**
+ * class CdAware
+ *
+ * @description
+ * This abstract class holds all the shared logic for the push pipe and the let directive
+ * responsible for change detection
+ * If you extend this class you need to implement how the update of the rendered value happens.
+ * Also custom behaviour is something you need to implement in the extending class
+ */
+export function createCdAware<U>(cfg: {
+  work: () => void;
+  resetContextObserver: NextObserver<unknown>;
+  configurableBehaviour: (
+    o: Observable<Observable<U | null | undefined>>
+  ) => Observable<Observable<U | null | undefined>>;
+  updateViewContextObserver: PartialObserver<U | null | undefined>;
+}): CdAware<U | undefined | null> {
+  const observablesSubject = new Subject<
+    Observable<U> | Promise<U> | null | undefined
   >();
   // We have to defer the setup of observables$ until subscription as getConfigurableBehaviour is defined in the
   // extending class. So getConfigurableBehaviour is not available in the abstract layer
-  protected readonly observables$ = defer(() =>
-    this.observablesSubject.pipe(
-      processCdAwareObservables(
-        this.getResetContextBehaviour(),
-        this.getUpdateContextBehaviour(),
-        this.getConfigurableBehaviour()
-      )
-    )
+  const observables$: Observable<
+    U | undefined | null
+  > = observablesSubject.pipe(
+    // Ignore potential observables of the same instances
+    distinctUntilChanged(),
+    // Try to convert it to values, throw if not possible
+    map(v => toObservableValue(v)),
+    tap((v: any) => {
+      cfg.resetContextObserver.next(v);
+      cfg.work();
+    }),
+    map(value$ =>
+      value$.pipe(distinctUntilChanged(), tap(cfg.updateViewContextObserver))
+    ),
+    // e.g. coalescing
+    cfg.configurableBehaviour,
+    // Unsubscribe from previous observables
+    // Then flatten the latest internal observables into the output
+    // @NOTICE applied behaviour (on the values, not the observable) will fire here
+    switchAll(),
+    tap(() => cfg.work())
   );
 
-  constructor(
-    protected readonly cdRef: ChangeDetectorRef,
-    protected readonly ngZone: NgZone
-  ) {}
-
-  work(): void {
-    this.handleChangeDetection(
-      // cast is needed to make it work for typescript.
-      // cdRef is kinda EmbeddedView
-      (this.cdRef as EmbeddedViewRef<Type<any>>).context
-    );
-  }
-
-  // The side effect for when a new potential observable enters
-  // Only the NextObserver is needed as we handle error and complete somewhere else
-  abstract getResetContextObserver<T>(): NextObserver<T>;
-
-  // The side effect for when a new value is emitted from the passed observable
-  // Here we can use the next, error and complete channels for side-effects
-  // We dont handle the error here
-  abstract getUpdateViewContextObserver<T>(): PartialObserver<T>;
-
-  // The custom behaviour of the observable carrying the values to render
-  // Here we apply potential configurations as well as behaviour for different implementers ob this abstract calss
-  abstract getConfigurableBehaviour<T>(): RemainHigherOrder<T>;
-
-  getUpdateContextBehaviour<T>(): RemainHigherOrder<T> {
-    return map(value$ =>
-      value$.pipe(tap<T>(this.getUpdateViewContextObserver()))
-    );
-  }
-
-  getResetContextBehaviour<T>(): RemainHigherOrder<T> {
-    return tap<Observable<T>>(this.getResetContextObserver());
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
+  return {
+    next(value: any): void {
+      observablesSubject.next(value);
+    },
+    subscribe(): Subscription {
+      return observables$.subscribe();
+    },
+  } as CdAware<U | undefined | null>;
 }

@@ -17,10 +17,10 @@ import {
  * const ls = new State<{test: string, bar: number}>();
  */
 export class State<T> implements Subscribable<any> {
-    private accumulationObservable = createAccumulationObservable<T>();
-    private effectObservable = createSideEffectObservable();
+    private readonly accumulationObservable = createAccumulationObservable<T>();
+    private readonly effectObservable = createSideEffectObservable();
 
-    $ = this.accumulationObservable.state$;
+    readonly $ = this.accumulationObservable.state$;
 
     constructor() {
 

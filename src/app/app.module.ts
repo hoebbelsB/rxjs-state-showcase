@@ -11,7 +11,7 @@ import { ReactiveComponentModule } from '../../projects/component/src';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {ROUTES} from "./app.routing";
+import {ROUTES} from './app.routing';
 
 @NgModule({
   declarations: [

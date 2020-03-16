@@ -1,43 +1,29 @@
 import {Routes} from '@angular/router';
+import {ROUTES as PERFORMANCE_ROUTES} from './performance/performance.routes';
+import {ROUTES as PUSH_ROUTES} from './push/push.routes';
 
 export const ROUTES: Routes = [
+    ...PERFORMANCE_ROUTES,
+    ...PUSH_ROUTES,
     {
-        path: 'performance-01',
-        loadChildren: () => import('./performance-01/performance-01.module')
-            .then(mod => mod.Performance01Module),
-        canActivate: [],
-        canActivateChild: []
-    },
-    {
-        path: 'performance-02',
-        loadChildren: () => import('./performance-02/performance-02.module')
-            .then(mod => mod.Performance02Module),
-        canActivate: [],
-        canActivateChild: []
-    },
-    {
-        path: 'performance-03',
-        loadChildren: () => import('./performance-03/performance-03.module')
-            .then(mod => mod.Performance03Module),
-        canActivate: [],
-        canActivateChild: []
-    },
-    {
-        path: 'performance-04',
-        loadChildren: () => import('./performance-04/performance-04.module')
-            .then(mod => mod.Performance04Module),
-        canActivate: [],
-        canActivateChild: []
-    },
-    {
-        path: 'animation',
+        path: '',
         loadChildren: () => import('./animation/animation.module')
             .then(mod => mod.AnimationModule),
         canActivate: [],
         canActivateChild: []
     },
     {
-        path: '**',
-        redirectTo: 'performance-01'
+        path: '',
+        loadChildren: () => import('./push/push.module')
+            .then(mod => mod.PushModule),
+        canActivate: [],
+        canActivateChild: []
+    },
+    {
+        path: '',
+        loadChildren: () => import('./let/let.module')
+            .then(mod => mod.LetModule),
+        canActivate: [],
+        canActivateChild: []
     }
 ];

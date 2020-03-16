@@ -53,35 +53,35 @@
             "scripts": []
           },
           "configurations": {
-            "zonefull": {
+            "cddefault-zonefull": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.zonefull.ts"
+                  "with": "src/environments/environment.cddefault-zonefull.ts"
                 }
               ]
             },
-            "push-zonefull": {
+            "cdpush-zonefull": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.push-zonefull.ts"
+                  "with": "src/environments/environment.cdpush-zonefull.ts"
                 }
               ]
             },
-            "push-zoneless": {
+            "cdpush-zoneless": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.push-zoneless.ts"
+                  "with": "src/environments/environment.cdpush-zoneless.ts"
                 }
               ]
             },
-            "zoneless": {
+            "cddefault-zoneless": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.zoneless.ts"
+                  "with": "src/environments/environment.cddefault-zoneless.ts"
                 }
               ]
             },
@@ -121,17 +121,17 @@
             "browserTarget": "angular-zone-less-examples:build"
           },
           "configurations": {
-            "push-zonefull": {
-              "browserTarget": "angular-zone-less-examples:build:push-zonefull"
+            "cdpush-zonefull": {
+              "browserTarget": "angular-zone-less-examples:build:cdpush-zonefull"
             },
-            "push-zoneless": {
-              "browserTarget": "angular-zone-less-examples:build:push-zoneless"
+            "cdpush-zoneless": {
+              "browserTarget": "angular-zone-less-examples:build:cdpush-zoneless"
             },
-            "zonefull": {
-              "browserTarget": "angular-zone-less-examples:build:zonefull"
+            "cddefault-zonefull": {
+              "browserTarget": "angular-zone-less-examples:build:cddefault-zonefull"
             },
-            "zoneless": {
-              "browserTarget": "angular-zone-less-examples:build:zoneless"
+            "cddefault-zoneless": {
+              "browserTarget": "angular-zone-less-examples:build:cddefault-zoneless"
             },
             "production": {
               "browserTarget": "angular-zone-less-examples:build:production"

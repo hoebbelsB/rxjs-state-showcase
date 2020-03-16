@@ -27,21 +27,11 @@
                  class="main-sidenav"
                  fixedTopGap="56">
       <mat-nav-list>
-        <a mat-list-item routerLinkActive="active" routerLink="performance-01">
+        <a mat-list-item routerLinkActive="active"
+           [routerLink]="item.link"
+        *ngFor="let item of state.menuItems">
           <mat-icon style="margin-right: .5rem;">warning</mat-icon>
-          Performance 01
-        </a>
-        <a mat-list-item routerLinkActive="active" routerLink="performance-02">
-          <mat-icon style="margin-right: .5rem;">warning</mat-icon>
-          Performance 02
-        </a>
-        <a mat-list-item routerLinkActive="active" routerLink="performance-03">
-          <mat-icon style="margin-right: .5rem;">warning</mat-icon>
-          Performance 03
-        </a>
-        <a mat-list-item routerLinkActive="active" routerLink="performance-04">
-          <mat-icon style="margin-right: .5rem;">warning</mat-icon>
-          Performance 04
+          {{item.label}}
         </a>
         <a mat-list-item routerLinkActive="active" routerLink="animation">
           <mat-icon style="margin-right: .5rem;">invert_colors</mat-icon>

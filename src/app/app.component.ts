@@ -6,10 +6,15 @@ import {filter, map, tap, withLatestFrom} from 'rxjs/operators';
 import {State} from './state/state';
 import {hasZone, isIvy} from '../../projects/component/src/core/utils';
 import {environment} from '../environments/environment';
+import {MenuItem} from '@navigation';
+import {MENU_ITEMS as PERFORMANCE_MENU_ITEMS} from './performance/performance.menu';
+import {MENU_ITEMS as PUSH_MENU_ITEMS} from './push/push.menu';
+import {MENU_ITEMS as LET_MENU_ITEMS} from './let/let.menu';
 
 export interface AppState {
     navOpen: boolean;
     mobile: boolean;
+    menuItems: MenuItem[];
 }
 
 @Component({
@@ -42,7 +47,8 @@ export class AppComponent extends State<AppState> {
         );
         this.setState({
             mobile: false,
-            navOpen: true
+            navOpen: true,
+            menuItems: [...PERFORMANCE_MENU_ITEMS, ...PUSH_MENU_ITEMS, ...LET_MENU_ITEMS]
         });
         this.connect(
             'mobile',

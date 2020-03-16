@@ -3,7 +3,7 @@ import { NavigationEnd } from '@angular/router';
 import { Subject } from 'rxjs';
 import { filter, map, startWith, tap, withLatestFrom } from 'rxjs/operators';
 import { State } from '../../state/state';
-import { GrowAnimationState } from '../grow/grow.component';
+import { GrowAnimationState } from './grow/grow.component';
 import {environment} from '../../../environments/environment';
 
 export interface AnimationIndexComponentState {

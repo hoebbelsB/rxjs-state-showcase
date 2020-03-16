@@ -1,5 +1,5 @@
-import {ConnectableObservable, merge, Observable, queueScheduler, Subject, Subscribable, Subscription} from "rxjs";
-import {distinctUntilChanged, mergeAll, observeOn, publishReplay, scan} from "rxjs/operators";
+import {ConnectableObservable, merge, Observable, queueScheduler, Subject, Subscribable, Subscription} from 'rxjs';
+import {distinctUntilChanged, mergeAll, observeOn, publishReplay, scan} from 'rxjs/operators';
 
 export function createAccumulationObservable<T>(
     stateObservables = new Subject<Observable<Partial<T>>>(),
@@ -29,8 +29,8 @@ export function createAccumulationObservable<T>(
         stateSlices.next(stateSlice);
     }
 
-    function nextSliceObservable(state$: Observable<Partial<T>>): void {
-        stateObservables.next(state$);
+    function nextSliceObservable(s$: Observable<Partial<T>>): void {
+        stateObservables.next(s$);
     }
 
     function subscribe(): Subscription {
