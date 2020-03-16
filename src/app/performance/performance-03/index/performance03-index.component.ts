@@ -120,7 +120,7 @@ export class Performance03IndexComponent extends State<Performance03State> imple
         );
     }
 
-    refetchData(limit?: number) {
+    refetchData(limit: number = 100) {
         this.setState({data: this.dataService.getData(limit)});
     }
 

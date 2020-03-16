@@ -128,7 +128,7 @@ export class Performance02IndexComponent implements OnInit, OnDestroy {
         this.destroy$.next();
     }
 
-    refetchData(limit?: number) {
+    refetchData(limit: number = 100) {
         this.data$.next(this.dataService.getData(limit));
     }
 

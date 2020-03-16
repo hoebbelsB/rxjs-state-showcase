@@ -14,9 +14,16 @@ import {RouterModule} from '@angular/router';
 import {ROUTES as LET_ROUTES} from './let.routes';
 import {LetParentComponent} from './01/parent/parent.component';
 import {LetChildComponent} from './01/parent/child/child.component';
+import {LetParent02Component} from './02/parent/parent.component';
+import {LetChild02Component} from './02/parent/child/child.component';
+import {LetParent03Component} from './03/parent/parent.component';
 
 @NgModule({
-    declarations: [LetParentComponent, LetChildComponent],
+    declarations: [
+        LetParentComponent, LetChildComponent,
+        LetParent02Component, LetChild02Component,
+        LetParent03Component
+    ],
     imports: [
         CommonModule,
         RouterModule.forChild(LET_ROUTES),

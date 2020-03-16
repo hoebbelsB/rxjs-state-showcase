@@ -48,7 +48,7 @@ export class Performance01IndexComponent implements OnInit {
         this.refetchData();
     }
 
-    refetchData(limit?: number) {
+    refetchData(limit: number = 100) {
         this.data = this.dataService.getData(limit);
     }
 

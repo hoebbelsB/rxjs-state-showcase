@@ -7,5 +7,9 @@ export const MENU_ITEMS: MenuItem[] = [
     {
         link: 'push-02',
         label: '02 Push Minimal'
+    },
+    {
+        link: 'push-03',
+        label: '03 Push Multiple'
     }
 ];

@@ -16,11 +16,13 @@ import {Parent01Component} from './01/parent/parent01.component';
 import {Child01Component} from './01/parent/child/child01.component';
 import {Child02Component} from './02/parent/child/child.component';
 import {Parent02Component} from './02/parent/parent.component';
+import {Parent03Component} from './03/parent/parent.component';
 
 @NgModule({
     declarations: [
         Parent01Component, Child01Component,
         Parent02Component, Child02Component,
+        Parent03Component
     ],
     imports: [
         CommonModule,
