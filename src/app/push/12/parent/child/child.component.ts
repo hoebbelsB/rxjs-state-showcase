@@ -4,20 +4,19 @@ import {Observable, ReplaySubject} from 'rxjs';
 import {switchAll} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-push-child02',
+  selector: 'app-push-child12',
   template: `
-    <h3>Push Child 02</h3>
+    <h3>Push Child 12</h3>
     <b>Number of renderings: {{getNumOfRenderings()}}</b><br/>
     Passed input binding: {{value$ | ngrxPush}} <!-- -->
   `,
   changeDetection: environment.changeDetection
 })
-export class Child02Component {
+export class Child12Component {
 
   valueSubject = new ReplaySubject<Observable<number>>(1);
   @Input()
   set value(value$: Observable<number>) {
-    console.log('new parent value', value$);
     this.valueSubject.next(value$);
   }
   value$ = this.valueSubject.pipe(

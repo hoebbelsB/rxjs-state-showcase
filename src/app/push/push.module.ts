@@ -12,20 +12,29 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {ReactiveComponentModule} from '../../../projects/component/src';
 import {RouterModule} from '@angular/router';
 import {ROUTES as PUSH_ROUTES} from './push.routes';
-import {Parent01Component} from './01/parent/parent01.component';
-import {Child01Component} from './01/parent/child/child01.component';
-import {Child02Component} from './02/parent/child/child.component';
-import {Parent02Component} from './02/parent/parent.component';
-import {Parent03Component} from './03/parent/parent.component';
-import {Parent04Component} from './04/parent/parent.component';
-import {Child04Component} from './04/parent/child/child.component';
+import {Parent01Component} from './01/parent.component';
+import {Parent02Component} from './02/parent.component';
+import {Parent03Component} from './03/parent.component';
+import {Parent11Component} from './11/parent/parent.component';
+import {Child11Component} from './11/parent/child/child.component';
+import {Child12Component} from './12/parent/child/child.component';
+import {Parent12Component} from './12/parent/parent.component';
+import {Parent13Component} from './13/parent/parent.component';
+import {Child13Component} from './13/parent/child/child.component';
+import {Parent14Component} from './14/parent/parent.component';
+import {Child14Component} from './14/parent/child/child.component';
+import {Parent04Component} from './04/parent.component';
 
 @NgModule({
     declarations: [
-        Parent01Component, Child01Component,
-        Parent02Component, Child02Component,
-        Parent04Component, Child04Component,
-        Parent03Component
+        Parent01Component,
+        Parent02Component,
+        Parent03Component,
+        Parent04Component,
+        Parent11Component, Child11Component,
+        Parent12Component, Child12Component,
+        Parent13Component, Child13Component,
+        Parent14Component, Child14Component,
     ],
     imports: [
         CommonModule,

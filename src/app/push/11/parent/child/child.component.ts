@@ -4,15 +4,15 @@ import {Observable, ReplaySubject} from 'rxjs';
 import {switchAll} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-push-child04',
+  selector: 'app-push-child11',
   template: `
-    <h3>Push Child 04</h3>
+    <h3>Push Pipe Child 11</h3>
     <b>Number of renderings: {{getNumOfRenderings()}}</b><br/>
     Passed input binding: {{value}} <!-- -->
   `,
   changeDetection: environment.changeDetection
 })
-export class Child04Component {
+export class Child11Component {
     @Input()
     value;
 
