@@ -4,7 +4,7 @@ import {NavigationEnd, Router} from '@angular/router';
 import {Subject} from 'rxjs';
 import {filter, map, tap, withLatestFrom} from 'rxjs/operators';
 import {State} from './state/state';
-import {hasZone, isIvy} from '../../projects/component/src/core/utils';
+import {getChangeDetectionHandler, hasZone, isIvy} from '../../projects/component/src/core/utils';
 import {environment} from '../environments/environment';
 import {MenuItem} from '@navigation';
 import {MENU_ITEMS as PERFORMANCE_MENU_ITEMS} from './performance/performance.menu';
@@ -26,6 +26,7 @@ export class AppComponent extends State<AppState> {
     readonly env = environment;
     readonly hasZone = hasZone(this.ngZone);
     readonly ivy = isIvy();
+    readonly renderTechnique = getChangeDetectionHandler(this.ngZone, this.cdRef).name;
     readonly toggleSidenav = new Subject<void>();
     readonly viewState$ = this.select();
 

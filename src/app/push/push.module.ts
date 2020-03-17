@@ -24,6 +24,7 @@ import {Child13Component} from './13/parent/child/child.component';
 import {Parent14Component} from './14/parent/parent.component';
 import {Child14Component} from './14/parent/child/child.component';
 import {Parent04Component} from './04/parent.component';
+import {ParentOverviewComponent} from './overview.component';
 
 @NgModule({
     declarations: [
@@ -35,6 +36,7 @@ import {Parent04Component} from './04/parent.component';
         Parent12Component, Child12Component,
         Parent13Component, Child13Component,
         Parent14Component, Child14Component,
+        ParentOverviewComponent
     ],
     imports: [
         CommonModule,

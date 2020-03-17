@@ -6,8 +6,13 @@ import {Parent12Component} from './12/parent/parent.component';
 import {Parent13Component} from './13/parent/parent.component';
 import {Parent14Component} from './14/parent/parent.component';
 import {Parent04Component} from './04/parent.component';
+import {ParentOverviewComponent} from './overview.component';
 
 export const ROUTES = [
+    {
+        path: 'push',
+        component: ParentOverviewComponent
+    },
     {
         path: 'push-01',
         component: Parent01Component

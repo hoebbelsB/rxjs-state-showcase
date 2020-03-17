@@ -4,7 +4,7 @@ import {Observable, Subject} from 'rxjs';
 import {scan, startWith} from 'rxjs/operators';
 
 @Component({
-    selector: 'app-push-parent',
+    selector: 'app-push-parent01',
     template: `
         <h2>
             Push Pipe 01

@@ -1,22 +1,26 @@
-<div
-  style="position: absolute; right: 10px; top: 0;">
-  hasZone: {{hasZone}}
-</div>
-<div
-  style="position: absolute; right: 10px; top: 40px;">
-  changeDetection: {{env.changeDetection === 1 ? 'Default' : 'OnPush'}}
-</div>
-<div
-  style="position: absolute; right: 10px; top: 80px;">
-  ivy: {{ivy}}
-</div>
-
 <ng-container *ngIf="viewState$ | ngrxPush as state">
   <mat-toolbar color="primary" class="app-toolbar">
     <button mat-icon-button (click)="toggleSidenav.next()">
       <mat-icon>menu</mat-icon>
     </button>
     <h1 class="mat-title">RxJs State Showcase</h1>
+    &nbsp;&nbsp;&nbsp;
+    <span>
+      hasZone: {{hasZone}}
+    </span>
+    &nbsp;&nbsp;&nbsp;
+    <span>
+      changeDetection: {{env.changeDetection === 1 ? 'Default' : 'OnPush'}}
+    </span>
+    &nbsp;&nbsp;&nbsp;
+    <span>
+      ivy: {{ivy}}
+    </span>
+    &nbsp;&nbsp;&nbsp;
+    <span>
+      renderTechnique: {{renderTechnique}}
+    </span>
+
   </mat-toolbar>
   <mat-sidenav-container
     class="app-sidenav-container"

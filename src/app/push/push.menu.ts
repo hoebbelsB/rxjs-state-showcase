@@ -2,6 +2,10 @@ import {MenuItem} from '@navigation';
 
 
 export const MENU_ITEMS: MenuItem[] = [
+    {
+        link: 'push',
+        label: 'Push Pipe'
+    },
     // 01. One single-shot observable bound by one ngrxPush as template expression
     {
         link: 'push-01',
