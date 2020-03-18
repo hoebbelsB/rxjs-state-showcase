@@ -1,26 +1,26 @@
-import {Component, OnInit} from '@angular/core';
-import {environment} from '../../../../environments/environment';
+import {Component} from '@angular/core';
+import {environment} from '../../../environments/environment';
 import {Observable, Subject} from 'rxjs';
 import {scan, startWith} from 'rxjs/operators';
 
 @Component({
-    selector: 'app-push-parent12',
+    selector: 'app-mixed-parent01',
     template: `
-        <h2>Push Parent 12
-            <small>one single-shot observable passed directly to input binding rendered over ngrxPush</small>
+        <h2>
+            Mixed Setup 01
+            <small>One single-shot observable bound by one ngrxPush and one ngrxLet as input binding</small>
         </h2>
         <b>Number of renderings: {{getNumOfRenderings()}}</b>
         <br/>
         <button (click)="btnClick.next()">increment</button>
         <!-- -->
-
         <br/>
-        <app-push-child12 [value]="value1$">
-        </app-push-child12>
+        <ng-container *ngrxLet="value1$ as sync1">{{sync1}}</ng-container>
+        <app-mixed-child01 [value]="value1$ | ngrxPush"></app-mixed-child01>
     `,
     changeDetection: environment.changeDetection
 })
-export class Parent12Component implements OnInit {
+export class Parent01Component {
     btnClick = new Subject<Event>();
 
     value1$: Observable<number> = this.btnClick.pipe(
@@ -29,11 +29,6 @@ export class Parent12Component implements OnInit {
 
     constructor() {
     }
-
-    ngOnInit(): void {
-        // markDirty(this);
-    }
-
 
     getNumOfRenderings() {
         return ++this.numRenderings;

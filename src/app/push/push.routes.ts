@@ -1,17 +1,18 @@
 import {Parent01Component} from './01/parent.component';
 import {Parent02Component} from './02/parent.component';
 import {Parent03Component} from './03/parent.component';
-import {Parent11Component} from './11/parent/parent.component';
-import {Parent12Component} from './12/parent/parent.component';
-import {Parent13Component} from './13/parent/parent.component';
-import {Parent14Component} from './14/parent/parent.component';
+import {Parent11Component} from './11/parent.component';
+import {Parent12Component} from './12/parent.component';
+import {Parent13Component} from './13/parent.component';
+import {Parent14Component} from './14/parent.component';
 import {Parent04Component} from './04/parent.component';
-import {ParentOverviewComponent} from './overview.component';
+import {PushOverviewComponent} from './push.overview.component';
+import {Parent21Component} from './21/parent.component';
 
 export const ROUTES = [
     {
         path: 'push',
-        component: ParentOverviewComponent
+        component: PushOverviewComponent
     },
     {
         path: 'push-01',
@@ -44,5 +45,9 @@ export const ROUTES = [
     {
         path: 'push-14',
         component: Parent14Component
+    },
+    {
+        path: 'push-21',
+        component: Parent21Component
     }
 ];

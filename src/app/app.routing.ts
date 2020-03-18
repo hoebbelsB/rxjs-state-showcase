@@ -21,6 +21,13 @@ export const ROUTES: Routes = [
     },
     {
         path: '',
+        loadChildren: () => import('./mixed/mixed.module')
+            .then(mod => mod.MixedModule),
+        canActivate: [],
+        canActivateChild: []
+    },
+    {
+        path: '',
         loadChildren: () => import('./let/let.module')
             .then(mod => mod.LetModule),
         canActivate: [],

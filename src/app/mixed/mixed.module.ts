@@ -11,26 +11,23 @@ import {MatTableModule} from '@angular/material/table';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {ReactiveComponentModule} from '../../../projects/component/src';
 import {RouterModule} from '@angular/router';
-import {ROUTES as LET_ROUTES} from './let.routes';
-import {LetParent01Component} from './01/parent.component';
-import {LetParent02Component} from './02/parent.component';
-import {LetParent03Component} from './03/parent.component';
-import {LetParent11Component} from './11/parent.component';
-import {LetOverviewComponent} from './let.overview.component';
-import {LetParent12Component} from './12/parent.component';
+import {ROUTES as MIXED_ROUTES} from './mixed.routes';
+import {Parent01Component} from './01/parent.component';
+import {Child01Component} from './01/child.component';
+import {Parent02Component} from './02/parent.component';
+import {Child02Component} from './02/child.component';
+
+import {MixedOverviewComponent} from './mixed.overview.component';
 
 @NgModule({
     declarations: [
-        LetParent01Component,
-        LetParent02Component,
-        LetParent03Component,
-        LetParent11Component,
-        LetParent12Component,
-        LetOverviewComponent
+        Parent01Component, Child01Component,
+        Parent02Component, Child02Component,
+        MixedOverviewComponent
     ],
     imports: [
         CommonModule,
-        RouterModule.forChild(LET_ROUTES),
+        RouterModule.forChild(MIXED_ROUTES),
         MatListModule,
         MatTableModule,
         MatCheckboxModule,
@@ -43,5 +40,5 @@ import {LetParent12Component} from './12/parent.component';
         ReactiveComponentModule
     ]
 })
-export class LetModule {
+export class MixedModule {
 }

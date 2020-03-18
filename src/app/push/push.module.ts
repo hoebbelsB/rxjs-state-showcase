@@ -15,16 +15,18 @@ import {ROUTES as PUSH_ROUTES} from './push.routes';
 import {Parent01Component} from './01/parent.component';
 import {Parent02Component} from './02/parent.component';
 import {Parent03Component} from './03/parent.component';
-import {Parent11Component} from './11/parent/parent.component';
-import {Child11Component} from './11/parent/child/child.component';
-import {Child12Component} from './12/parent/child/child.component';
-import {Parent12Component} from './12/parent/parent.component';
-import {Parent13Component} from './13/parent/parent.component';
-import {Child13Component} from './13/parent/child/child.component';
-import {Parent14Component} from './14/parent/parent.component';
-import {Child14Component} from './14/parent/child/child.component';
+import {Parent11Component} from './11/parent.component';
+import {Child11Component} from './11/child.component';
+import {Child12Component} from './12/child.component';
+import {Parent12Component} from './12/parent.component';
+import {Parent13Component} from './13/parent.component';
+import {Child13Component} from './13/child.component';
+import {Parent14Component} from './14/parent.component';
+import {Child14Component} from './14/child.component';
 import {Parent04Component} from './04/parent.component';
-import {ParentOverviewComponent} from './overview.component';
+import {PushOverviewComponent} from './push.overview.component';
+import {Child21Component} from './21/child.component';
+import {Parent21Component} from './21/parent.component';
 
 @NgModule({
     declarations: [
@@ -36,7 +38,8 @@ import {ParentOverviewComponent} from './overview.component';
         Parent12Component, Child12Component,
         Parent13Component, Child13Component,
         Parent14Component, Child14Component,
-        ParentOverviewComponent
+        Parent21Component, Child21Component,
+        PushOverviewComponent
     ],
     imports: [
         CommonModule,

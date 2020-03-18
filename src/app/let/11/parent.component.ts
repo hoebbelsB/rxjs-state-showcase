@@ -1,28 +1,22 @@
 import {Component} from '@angular/core';
-import {environment} from '../../../../environments/environment';
+import {environment} from '../../../environments/environment';
 import {from, Observable, Subject} from 'rxjs';
 import {scan, startWith} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-let-parent03',
+  selector: 'app-let-parent11',
   template: `
-    <h2>Let Parent 03</h2>
+    <h2>Let Directive 11
+    <small>One single-shot observable bound by one ngrxLet as input binding with let syntax</small>
+    </h2>
     <b>Number of renderings: {{getNumOfRenderings()}}</b>
     <br/>
     <button (click)="btnClick.next()">increment</button>
-    <ng-container *ngrxLet="value$ as v">
-        Value: {{v}}
-    </ng-container>
-    <ng-container *ngrxLet="value$ as v">
-        Value: {{v}}
-    </ng-container>
-    <ng-container *ngrxLet="value$ as v">
-        Value: {{v}}
-    </ng-container>
+    <ng-container *ngrxLet="value$; let v">Value: {{v}}</ng-container>
   `,
   changeDetection: environment.changeDetection
 })
-export class LetParent03Component {
+export class LetParent11Component {
 
   btnClick = new Subject<Event>();
   value$: Observable<number> = this.btnClick.pipe(startWith(0), scan((a): any => ++a, 0));

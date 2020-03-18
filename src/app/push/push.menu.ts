@@ -4,7 +4,7 @@ import {MenuItem} from '@navigation';
 export const MENU_ITEMS: MenuItem[] = [
     {
         link: 'push',
-        label: 'Push Pipe'
+        label: 'Push Pipe Overview'
     },
     // 01. One single-shot observable bound by one ngrxPush as template expression
     {
@@ -46,7 +46,7 @@ export const MENU_ITEMS: MenuItem[] = [
         link: 'push-14',
         label: 'Push Pipe 14'
     },
-    // 21. One single-shot observable bound by one ngrxPush as input binding. The nested components uses ngrxPush to render changes.
+    // 21. ???????????????
     {
         link: 'push-21',
         label: 'Push Pipe 21'
