@@ -1,6 +1,10 @@
 import {MenuItem} from '@navigation';
 export const MENU_ITEMS: MenuItem[] = [
     {
+        link: 'let',
+        label: 'Let Directive Overview'
+    },
+    {
         link: 'let-01',
         label: 'Let Directive 01'
     },
