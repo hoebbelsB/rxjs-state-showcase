@@ -17,8 +17,8 @@ import {scan, startWith} from 'rxjs/operators';
         <br/>
         {{nums1$ | ngrxPush}}
         <app-mixed-child02 [value]="nums1$ | ngrxPush"></app-mixed-child02>
-        <p *ngFor="let num of nums1$ | ngrxPush">{{num}}</p>
-        <ng-container *ngIf="nums1$ as sync1">{{sync1 | json}}</ng-container>
+        <span *ngFor="let num of nums1$ | ngrxPush">{{num}}</span>
+        <ng-container *ngIf="nums1$ | ngrxPush as sync1">{{sync1 | json}}</ng-container>
         <ng-container *ngrxLet="nums1$ as sync1">{{sync1 | json}}</ng-container>
         <app-mixed-child01 [value]="nums1$ | ngrxPush"></app-mixed-child01>
     `,
@@ -28,7 +28,7 @@ export class Parent02Component {
     btnClick = new Subject<Event>();
 
     nums1$: Observable<number> = this.btnClick.pipe(
-        startWith(0), scan((nums, num): any => [...nums, num], []));
+        startWith(0), scan(i => ++i, 0), scan((nums, num): any => [...nums, num], []));
     numRenderings = 0;
 
     constructor() {
