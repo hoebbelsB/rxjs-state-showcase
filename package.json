@@ -2,7 +2,6 @@
   "name": "rxjs-state-showcase",
   "version": "0.0.0",
   "scripts": {
-    
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
@@ -22,6 +21,7 @@
     "@angular/platform-browser": "~9.0.6",
     "@angular/platform-browser-dynamic": "~9.0.6",
     "@angular/router": "~9.0.6",
+    "@ngrx/component": "github:ngrx/component-builds",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"

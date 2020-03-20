@@ -8,6 +8,7 @@ import {Parent14Component} from './14/parent.component';
 import {Parent04Component} from './04/parent.component';
 import {PushOverviewComponent} from './push.overview.component';
 import {Parent21Component} from './21/parent.component';
+import {Parent31Component} from './31/parent.component';
 
 export const ROUTES = [
     {
@@ -49,5 +50,9 @@ export const ROUTES = [
     {
         path: 'push-21',
         component: Parent21Component
+    },
+    {
+        path: 'push-31',
+        component: Parent31Component
     }
 ];

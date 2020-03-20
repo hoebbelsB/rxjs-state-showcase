@@ -27,6 +27,8 @@ import {Parent04Component} from './04/parent.component';
 import {PushOverviewComponent} from './push.overview.component';
 import {Child21Component} from './21/child.component';
 import {Parent21Component} from './21/parent.component';
+import {Parent31Component} from './31/parent.component';
+import {Child31Component} from './31/child.component';
 
 @NgModule({
     declarations: [
@@ -39,6 +41,7 @@ import {Parent21Component} from './21/parent.component';
         Parent13Component, Child13Component,
         Parent14Component, Child14Component,
         Parent21Component, Child21Component,
+        Parent31Component, Child31Component,
         PushOverviewComponent
     ],
     imports: [

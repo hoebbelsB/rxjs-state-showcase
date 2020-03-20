@@ -15,6 +15,7 @@ import {environment} from '../../environments/environment';
             <app-push-parent13 class="item"></app-push-parent13>
             <app-push-parent14 class="item"></app-push-parent14>
             <app-push-parent21 class="item"></app-push-parent21>
+            <app-push-parent31 class="item"></app-push-parent31>
         </div>
     `,
     changeDetection: environment.changeDetection,

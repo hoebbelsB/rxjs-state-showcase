@@ -4,10 +4,9 @@ import {environment} from '../../environments/environment';
 @Component({
     selector: 'app-push-overview',
     template: `
-        <h1>Push Pipe and Let Directive Mixed Setup Overview</h1>
+        <h1>ChangeDetection Overview</h1>
         <div class="push-cases">
-            <app-mixed-parent01 class="item"></app-mixed-parent01>
-            <app-mixed-parent02 class="item"></app-mixed-parent02>
+            <app-cd-parent01 class="item"></app-cd-parent01>
         </div>
     `,
     changeDetection: environment.changeDetection,
@@ -22,7 +21,7 @@ import {environment} from '../../environments/environment';
         }
     `]
 })
-export class MixedOverviewComponent {
+export class CdOverviewComponent {
 
 
 }

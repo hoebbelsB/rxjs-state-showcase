@@ -50,5 +50,10 @@ export const MENU_ITEMS: MenuItem[] = [
     {
         link: 'push-21',
         label: 'Push Pipe 21'
+    },
+    // 31. Injection Point
+    {
+        link: 'push-31',
+        label: 'Push Pipe 31'
     }
 ];
