@@ -1,29 +1,35 @@
-import {ChangeDetectorRef, Component} from '@angular/core';
+import {Component} from '@angular/core';
 import {environment} from '../../../environments/environment';
-import {Observable, Subject} from 'rxjs';
-import {scan, startWith} from 'rxjs/operators';
 
 @Component({
     selector: 'app-cd-parent01',
     template: `
-        <h2>
-            ChangeDetection Setup 01
-            <small></small>
+        <h2>ChangeDetection 01
+            <small>detectChange renders it self and all children with changeDetection Default</small>
         </h2>
         <b>Number of renderings: {{getNumOfRenderings()}}</b>
-        <!-- -->
         <br/>
+        <button (click)="increment()">increment</button>
+        <app-cd-child01-default [value]="value"></app-cd-child01-default>
+        <app-cd-child01-push [value]="value"></app-cd-child01-push>
     `,
     changeDetection: environment.changeDetection
 })
-export class Parent01Component {
-    numRenderings = 0;
+export class CdParent01Component {
 
-    constructor(private cdRef: ChangeDetectorRef) {
-        console.log(this.cdRef);
-    }
+    value = 0;
+    numRenderings = 0;
 
     getNumOfRenderings() {
         return ++this.numRenderings;
     }
+
+    increment() {
+        this.value = this.value++;
+    }
+
+    constructor() {
+
+    }
+
 }

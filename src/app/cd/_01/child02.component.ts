@@ -2,15 +2,15 @@ import {Component, Input} from '@angular/core';
 import {environment} from '../../../environments/environment';
 
 @Component({
-    selector: 'app-cd-child01',
+    selector: 'app-cd-child01-02',
     template: `
-        <h3>ChangeDetection Child 01</h3>
+        <h3>ChangeDetection Child 02</h3>
         <b>Number of renderings: {{getNumOfRenderings()}}</b><br/>
         Passed input binding: {{value}} <!-- -->
     `,
     changeDetection: environment.changeDetection
 })
-export class Child01Component {
+export class Child0102Component {
     @Input()
     value;
 

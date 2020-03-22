@@ -12,14 +12,17 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {ReactiveComponentModule} from '../../../projects/component/src';
 import {RouterModule} from '@angular/router';
 import {ROUTES as CD_ROUTES} from './cd.routes';
-import {Parent01Component} from './01/parent.component';
-import {Child01Component} from './01/child.component';
 
+import {CdParent01Component} from './01/parent.component';
+import {Child0101Component} from './01/child01.component';
+
+import {Child0102Component} from './01/child02.component';
 import {CdOverviewComponent} from './cd.overview.component';
 
 @NgModule({
     declarations: [
-        Parent01Component, Child01Component,
+        CdParent01Component, Child0101Component, Child0102Component,
+        // Parent01Component, Child0101Component, Child0102Component, Child0103Component,
         CdOverviewComponent
     ],
     imports: [

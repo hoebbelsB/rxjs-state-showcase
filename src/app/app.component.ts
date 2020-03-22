@@ -7,10 +7,7 @@ import {State} from './state/state';
 import {getChangeDetectionHandler, hasZone, isIvy} from '../../projects/component/src/core/utils';
 import {environment} from '../environments/environment';
 import {MenuItem} from '@navigation';
-import {MENU_ITEMS as PERFORMANCE_MENU_ITEMS} from './performance/performance.menu';
-import {MENU_ITEMS as PUSH_MENU_ITEMS} from './push/push.menu';
-import {MENU_ITEMS as LET_MENU_ITEMS} from './let/let.menu';
-import {MENU_ITEMS as MIXED_MENU_ITEMS} from './mixed/mixed.menu';
+import {MENU_ITEMS} from './app.menu';
 
 export interface AppState {
     navOpen: boolean;
@@ -49,12 +46,7 @@ export class AppComponent extends State<AppState> {
         this.setState({
             mobile: false,
             navOpen: true,
-            menuItems: [
-                ...PUSH_MENU_ITEMS,
-                ...LET_MENU_ITEMS,
-                ...MIXED_MENU_ITEMS,
-                ...PERFORMANCE_MENU_ITEMS
-            ],
+            menuItems: MENU_ITEMS,
         });
         this.connect(
             'mobile',
