@@ -2,23 +2,24 @@ import {Component, OnInit} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {Observable, Subject} from 'rxjs';
 import {scan, startWith} from 'rxjs/operators';
+import { CdConfigService } from '../../cd-config.service';
 
 @Component({
     selector: 'app-push-parent14',
     template: `
         <h2>Push Pipe 14
-            <small>one single-shot observable bound by multiple ngrxPush as input binding</small>
+            <small>multiple single-shot observable bound by multiple ngrxPush as input binding</small>
         </h2>
         <b>Number of renderings: {{getNumOfRenderings()}}</b>
         <br/>
         <button (click)="btnClick.next()">increment</button>
         <!-- -->
         <br/>
-        <app-push-child14 [value]="value1$ | ngrxPush">
+        <app-push-child14 [value]="value1$ | ngrxPush: cfg">
         </app-push-child14>
-        <app-push-child14 [value]="value2$ | ngrxPush">
+        <app-push-child14 [value]="value2$ | ngrxPush: cfg">
         </app-push-child14>
-        <app-push-child14 [value]="value3$ | ngrxPush">
+        <app-push-child14 [value]="value3$ | ngrxPush: cfg">
         </app-push-child14>
     `,
     changeDetection: environment.changeDetection
@@ -34,7 +35,11 @@ export class Parent14Component implements OnInit {
         startWith(0), scan((a): any => ++a, 0));
     numRenderings = 0;
 
-    constructor() {
+    cfg = this.coalesceConfigService.getConfig();
+
+    constructor(
+        private coalesceConfigService: CdConfigService
+    ) {
     }
 
     ngOnInit(): void {

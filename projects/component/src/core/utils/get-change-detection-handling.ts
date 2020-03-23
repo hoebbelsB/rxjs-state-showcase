@@ -13,7 +13,8 @@ export function getChangeDetectionHandler(
   cdRef: ChangeDetectorRef
 ): <T>(component?: T) => void {
   if (isIvy()) {
-    return hasZone(ngZone) ? markDirty : detectChanges;
+    // TODO: evaluate this...
+    return hasZone(ngZone) ? detectChanges : detectChanges;
   } else {
     return hasZone(ngZone)
       ? cdRef.markForCheck.bind(cdRef)

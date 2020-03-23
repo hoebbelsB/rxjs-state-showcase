@@ -20,7 +20,11 @@
     <span>
       renderTechnique: {{renderTechnique}}
     </span>
-
+    <span>
+      <input type="checkbox" id="coalesceOptimized" (change)="toggleCoalesceConfig.next()"
+             [checked]="coalesceOptimized$ | ngrxPush">
+      <label for="coalesceOptimized"> Optimize coalescing</label>
+    </span>
   </mat-toolbar>
   <mat-sidenav-container
     class="app-sidenav-container"

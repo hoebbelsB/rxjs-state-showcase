@@ -175,8 +175,6 @@ class CoalesceSubscriber<T, R> extends OuterSubscriber<T, R> {
       }
       this._context.isCoalescing = false;
     }
-    ;
-
   }
 
   private tryDurationSelector(value: T): SubscribableOrPromise<any> | null {

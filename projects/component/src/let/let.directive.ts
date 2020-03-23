@@ -9,6 +9,7 @@ import {
   Type,
   ViewContainerRef,
 } from '@angular/core';
+import { coalesce, generateFrames } from '@rx-state/rxjs-state';
 
 import {
   EMPTY,
@@ -19,12 +20,12 @@ import {
   Unsubscribable,
 } from 'rxjs';
 import {
-  catchError,
-  distinctUntilChanged,
-  filter,
-  map,
-  startWith,
-  withLatestFrom,
+    catchError,
+    distinctUntilChanged,
+    filter,
+    map,
+    startWith, tap,
+    withLatestFrom,
 } from 'rxjs/operators';
 import {
   CdAware,
@@ -183,7 +184,21 @@ export class LetDirective<U> implements OnDestroy {
       withLatestFrom(this.config$),
       // @NOTICE: unused config => As discussed with Brandon we keep it here because in the beta release we implement configuration behavior here
       map(([value$, config]) => {
-        return value$.pipe(catchError(e => EMPTY));
+          const durationSelector = () => generateFrames(
+              (window as any).__zone_symbol__requestAnimationFrame,
+              (window as any).__zone_symbol__cancelAnimationFrame
+          );
+          // const coalesceConfig = {context: (this.cdRef as EmbeddedViewRef<Type<any>>).context as any};
+          const coalesceConfig = {context: this.cdRef['_lView'] as any};
+          // const coalesceConfig = {context: PushPipe as any};
+          // const coalesceConfig = {context: {} as any};
+          // As discussed with Brandon we keep it here
+          // because in the beta we implement configuration behavior here
+          return config.optimized ?
+                 value$.pipe(catchError(e => EMPTY),
+                     tap(() => console.log('TAP coalesce')),
+                     coalesce(durationSelector, coalesceConfig),) :
+                 value$.pipe(catchError(e => EMPTY), tap(() => console.log('TAP')));
       })
     );
 
@@ -200,7 +215,7 @@ export class LetDirective<U> implements OnDestroy {
   }
 
   constructor(
-    cdRef: ChangeDetectorRef,
+    private cdRef: ChangeDetectorRef,
     ngZone: NgZone,
     private readonly templateRef: TemplateRef<LetViewContext<U>>,
     private readonly viewContainerRef: ViewContainerRef

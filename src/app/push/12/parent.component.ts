@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {environment} from '../../../environments/environment';
-import {Observable, Subject} from 'rxjs';
-import {scan, startWith} from 'rxjs/operators';
+import { AfterViewInit, Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
+import { outsideZone } from '@rx-state/ngx-state';
+import { fromEvent, Observable, Subject } from 'rxjs';
+import { scan, startWith, switchMap, tap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'app-push-parent12',
@@ -11,7 +12,7 @@ import {scan, startWith} from 'rxjs/operators';
         </h2>
         <b>Number of renderings: {{getNumOfRenderings()}}</b>
         <br/>
-        <button (click)="btnClick.next()">increment</button>
+        <button (click)="btnClick.next()" #button>increment</button>
         <!-- -->
 
         <br/>
@@ -20,18 +21,36 @@ import {scan, startWith} from 'rxjs/operators';
     `,
     changeDetection: environment.changeDetection
 })
-export class Parent12Component implements OnInit {
+export class Parent12Component implements OnInit, AfterViewInit {
+
+    @ViewChild('button') button: ElementRef<HTMLButtonElement>;
     btnClick = new Subject<Event>();
+    numRenderings = 0;
+
+    private readonly afterViewInit$ = new Subject<void>();
 
     value1$: Observable<number> = this.btnClick.pipe(
         startWith(0), scan((a): any => ++a, 0));
-    numRenderings = 0;
 
-    constructor() {
+   /* value1$: Observable<number> = this.afterViewInit$.pipe(
+         // outsideZone(this.ngZone),
+         switchMap(() => fromEvent(this.button.nativeElement, 'click')),
+         startWith(0),
+         scan((a): any => ++a, 0)
+     );*/
+
+    constructor(
+        private ngZone: NgZone
+    ) {
+
     }
 
     ngOnInit(): void {
         // markDirty(this);
+    }
+
+    ngAfterViewInit(): void {
+        this.afterViewInit$.next();
     }
 
 
