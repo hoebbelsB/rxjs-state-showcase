@@ -107,7 +107,7 @@ export class PushPipe<S> implements PipeTransform, OnDestroy {
     ): T;
     transform<T>(
         potentialObservable: Observable<T> | Promise<T> | null | undefined,
-        config: PushPipeConfig = {optimized: false}
+        config: PushPipeConfig = {optimized: true}
     ): T | null | undefined {
         this.configSubject.next(config);
         (this.cdAware).next(potentialObservable as any);
