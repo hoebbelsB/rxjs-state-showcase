@@ -1,4 +1,4 @@
- Rough description
+ Should emit once per micro task across usage.
 
  ![](coalesce.png)
 

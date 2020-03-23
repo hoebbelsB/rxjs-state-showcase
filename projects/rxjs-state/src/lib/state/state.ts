@@ -1,5 +1,5 @@
 import {Observable, OperatorFunction, Subscribable, Subscription, Unsubscribable,} from 'rxjs';
-import {map, pluck, tap} from 'rxjs/operators';
+import {map, pluck, tap, filter} from 'rxjs/operators';
 import {
     createAccumulationObservable,
     createSideEffectObservable,
@@ -17,10 +17,10 @@ import {
  * const ls = new State<{test: string, bar: number}>();
  */
 export class State<T> implements Subscribable<any> {
-    private readonly accumulationObservable = createAccumulationObservable<T>();
-    private readonly effectObservable = createSideEffectObservable();
+    private accumulationObservable = createAccumulationObservable<T>();
+    private effectObservable = createSideEffectObservable();
 
-    readonly $ = this.accumulationObservable.state$;
+    $ = this.accumulationObservable.state$;
 
     constructor() {
 
@@ -64,6 +64,10 @@ export class State<T> implements Subscribable<any> {
         if (typeof keyOrSlice$ === 'string' && value$ !== undefined) {
             this.accumulationObservable.nextSliceObservable(
                 value$.pipe(
+                    // undefined can occur if:
+                    // - key oes not extist
+                    // - key is set to undefined
+                    filter(slice => slice !== undefined),
                     map(slice => ({[keyOrSlice$]: slice}))
                     // @TODO fix typing
                 ) as any
@@ -151,7 +155,6 @@ export class State<T> implements Subscribable<any> {
         throw new WrongSelectParamsError();
     }
 
-    hold<S>(observableWithSideEffect: Observable<S>): void;
     hold<S>(
         obsOrObsWithSideEffect: Observable<S>,
         sideEffectFn?: (arg: S) => void

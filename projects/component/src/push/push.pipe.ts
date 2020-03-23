@@ -1,26 +1,8 @@
-import {
-  ChangeDetectorRef,
-  EmbeddedViewRef,
-  NgZone,
-  OnDestroy,
-  Pipe,
-  PipeTransform,
-  Type,
-} from '@angular/core';
-import {
-  NextObserver,
-  Observable,
-  PartialObserver,
-  Subject,
-  Unsubscribable,
-} from 'rxjs';
-import { distinctUntilChanged, map, withLatestFrom } from 'rxjs/operators';
-import {
-  CdAware,
-  CoalescingConfig as PushPipeConfig,
-  createCdAware,
-  setUpWork,
-} from '../core';
+import {ChangeDetectorRef, EmbeddedViewRef, NgZone, OnDestroy, Pipe, PipeTransform, Type,} from '@angular/core';
+import {NextObserver, Observable, PartialObserver, Subject, Unsubscribable,} from 'rxjs';
+import {distinctUntilChanged, map, tap, withLatestFrom} from 'rxjs/operators';
+import {CdAware, CoalescingConfig as PushPipeConfig, createCdAware, setUpWork,} from '../core';
+import {coalesce, generateFrames} from '@rx-state/rxjs-state';
 
 /**
  * @Pipe PushPipe
@@ -65,68 +47,74 @@ import {
  *
  * @publicApi
  */
-@Pipe({ name: 'ngrxPush', pure: false })
+@Pipe({name: 'ngrxPush', pure: false})
 export class PushPipe<S> implements PipeTransform, OnDestroy {
-  private renderedValue: any | null | undefined;
+    private renderedValue: any | null | undefined;
 
-  private readonly configSubject = new Subject<PushPipeConfig>();
-  private readonly config$ = this.configSubject
-    .asObservable()
-    .pipe(distinctUntilChanged());
+    private readonly configSubject = new Subject<PushPipeConfig>();
+    private readonly config$ = this.configSubject
+        .asObservable()
+        .pipe(distinctUntilChanged());
 
-  private readonly subscription: Unsubscribable;
-  private readonly cdAware: CdAware<S | null | undefined>;
-  private readonly updateViewContextObserver: PartialObserver<
-    S | null | undefined
-  > = {
-    // assign value that will get returned from the transform function on the next change detection
-    next: (value: S | null | undefined) => (this.renderedValue = value),
-  };
-  private readonly resetContextObserver: NextObserver<unknown> = {
-    next: (value: unknown) => (this.renderedValue = undefined),
-  };
-  private readonly configurableBehaviour = <T>(
-    o$: Observable<Observable<T>>
-  ): Observable<Observable<T>> =>
-    o$.pipe(
-      withLatestFrom(this.config$),
-      map(([value$, config]) => {
-        // As discussed with Brandon we keep it here
-        // because in the beta we implement configuration behavior here
-        return value$.pipe();
-      })
-    );
+    private readonly subscription: Unsubscribable;
+    private readonly cdAware: CdAware<S | null | undefined>;
+    private readonly updateViewContextObserver: PartialObserver<S | null | undefined> = {
+        // assign value that will get returned from the transform function on the next change detection
+        next: (value: S | null | undefined) => (this.renderedValue = value),
+    };
+    private readonly resetContextObserver: NextObserver<unknown> = {
+        next: (value: unknown) => (this.renderedValue = undefined),
+    };
+    private readonly configurableBehaviour = <T>(
+        o$: Observable<Observable<T>>
+    ): Observable<Observable<T>> =>
+        o$.pipe(
+            withLatestFrom(this.config$),
+            map(([value$, config]) => {
+                const durationSelector = () => generateFrames(
+                    (window as any).__zone_symbol__requestAnimationFrame,
+                    (window as any).__zone_symbol__cancelAnimationFrame
+                );
+                const coalesceConfig = {context: PushPipe as any};
+                // As discussed with Brandon we keep it here
+                // because in the beta we implement configuration behavior here
+                return config.optimized ?
+                    value$.pipe(tap(() => console.log('TAP coalesce')),
+                        coalesce(durationSelector, coalesceConfig)) :
+                    value$.pipe(tap(() => console.log('TAP')));
+            })
+        )
 
-  constructor(cdRef: ChangeDetectorRef, ngZone: NgZone) {
-    this.cdAware = createCdAware<S>({
-      work: setUpWork({
-        ngZone,
-        cdRef,
-        context: (cdRef as EmbeddedViewRef<Type<any>>).context,
-      }),
-      updateViewContextObserver: this.updateViewContextObserver,
-      resetContextObserver: this.resetContextObserver,
-      configurableBehaviour: this.configurableBehaviour,
-    });
-    this.subscription = this.cdAware.subscribe();
-  }
+    constructor(cdRef: ChangeDetectorRef, ngZone: NgZone) {
+        this.cdAware = createCdAware<S>({
+            work: setUpWork({
+                ngZone,
+                cdRef,
+                context: (cdRef as EmbeddedViewRef<Type<any>>).context,
+            }),
+            updateViewContextObserver: this.updateViewContextObserver,
+            resetContextObserver: this.resetContextObserver,
+            configurableBehaviour: this.configurableBehaviour,
+        });
+        this.subscription = this.cdAware.subscribe();
+    }
 
-  transform<T>(potentialObservable: null, config?: PushPipeConfig): null;
-  transform<T>(potentialObservable: undefined, config?: PushPipeConfig): undefined;
-  transform<T>(
-    potentialObservable: Observable<T> | Promise<T>,
-    config?: PushPipeConfig
-  ): T;
-  transform<T>(
-    potentialObservable: Observable<T> | Promise<T> | null | undefined,
-    config: PushPipeConfig = { optimized: true }
-  ): T | null | undefined {
-    this.configSubject.next(config);
-    (this.cdAware).next(potentialObservable as any);
-    return this.renderedValue as T;
-  }
+    transform<T>(potentialObservable: null, config?: PushPipeConfig): null;
+    transform<T>(potentialObservable: undefined, config?: PushPipeConfig): undefined;
+    transform<T>(
+        potentialObservable: Observable<T> | Promise<T>,
+        config?: PushPipeConfig
+    ): T;
+    transform<T>(
+        potentialObservable: Observable<T> | Promise<T> | null | undefined,
+        config: PushPipeConfig = {optimized: false}
+    ): T | null | undefined {
+        this.configSubject.next(config);
+        (this.cdAware).next(potentialObservable as any);
+        return this.renderedValue as T;
+    }
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
+    }
 }
