@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {Observable, Subject} from 'rxjs';
 import {scan, startWith} from 'rxjs/operators';
+import { CdConfigService } from '../../cd-config.service';
 
 @Component({
     selector: 'app-push-parent31',
@@ -18,7 +19,7 @@ import {scan, startWith} from 'rxjs/operators';
         <insertion [template]="ref"></insertion>
 
         <ng-template #ref>
-            <span>{{value1$ | ngrxPush}}</span>
+            <span>{{value1$ | ngrxPush: cfg}}</span>
         </ng-template>
 
 
@@ -32,7 +33,11 @@ export class Parent31Component {
         startWith(0), scan((a): any => ++a, 0));
     numRenderings = 0;
 
-    constructor() {
+    cfg = this.coalesceConfigService.getConfig();
+
+    constructor(
+        private coalesceConfigService: CdConfigService
+    ) {
     }
 
     getNumOfRenderings() {

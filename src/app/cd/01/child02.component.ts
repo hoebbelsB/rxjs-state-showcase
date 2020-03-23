@@ -8,7 +8,7 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
         <b>Number of renderings: {{getNumOfRenderings()}}</b><br/>
         Passed input binding: {{value}} <!-- -->
     `,
-    changeDetection: ChangeDetectionStrategy.Default
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Child0102Component {
     @Input()

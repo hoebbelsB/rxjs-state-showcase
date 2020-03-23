@@ -1,5 +1,14 @@
-import {ChangeDetectorRef, EmbeddedViewRef, NgZone, OnDestroy, Pipe, PipeTransform, Type,} from '@angular/core';
-import {NextObserver, Observable, PartialObserver, Subject, Unsubscribable,} from 'rxjs';
+import {
+    ChangeDetectorRef,
+    EmbeddedViewRef,
+    NgZone,
+    OnDestroy,
+    Pipe,
+    PipeTransform,
+    Type,
+    ViewRef,
+} from '@angular/core';
+import { config, NextObserver, Observable, PartialObserver, Subject, Unsubscribable, } from 'rxjs';
 import {distinctUntilChanged, map, tap, withLatestFrom} from 'rxjs/operators';
 import {CdAware, CoalescingConfig as PushPipeConfig, createCdAware, setUpWork,} from '../core';
 import {coalesce, generateFrames} from '@rx-state/rxjs-state';
@@ -20,7 +29,8 @@ import {coalesce, generateFrames} from '@rx-state/rxjs-state';
  * ```
  *
  * The problem is `async` pipe just marks the component and all its ancestors as dirty.
- * It needs zone.js microtask queue to exhaust until `ApplicationRef.tick` is called to render all dirty marked components.
+ * It needs zone.js microtask queue to exhaust until `ApplicationRef.tick` is called to render all dirty marked
+ *     components.
  *
  * Heavy dynamic and interactive UIs suffer from zones change detection a lot and can
  * lean to bad performance or even unusable applications, but the `async` pipe does not work in zone-less mode.
@@ -75,17 +85,26 @@ export class PushPipe<S> implements PipeTransform, OnDestroy {
                     (window as any).__zone_symbol__requestAnimationFrame,
                     (window as any).__zone_symbol__cancelAnimationFrame
                 );
-                const coalesceConfig = {context: PushPipe as any};
+                // const coalesceConfig = {context: (this.cdRef as EmbeddedViewRef<Type<any>>).context as any};
+                const coalesceConfig = {context: this.cdRef['_lView'] as any};
+                // const coalesceConfig = {context: PushPipe as any};
+                // const coalesceConfig = {context: {} as any};
                 // As discussed with Brandon we keep it here
                 // because in the beta we implement configuration behavior here
                 return config.optimized ?
-                    value$.pipe(tap(() => console.log('TAP coalesce')),
-                        coalesce(durationSelector, coalesceConfig)) :
-                    value$.pipe(tap(() => console.log('TAP')));
+                    value$.pipe(
+                        tap(() => {
+                            // console.log(this.cdRef['_lView']);
+                            /*console.log('TAP coalesce');*/
+                        }),
+                        coalesce(durationSelector, coalesceConfig), tap(() => console.log('detect changes'))) :
+                    value$.pipe(tap(() => console.log('detect changes')));
             })
         )
 
-    constructor(cdRef: ChangeDetectorRef, ngZone: NgZone) {
+    constructor(
+        private cdRef: ChangeDetectorRef,
+        ngZone: NgZone) {
         this.cdAware = createCdAware<S>({
             work: setUpWork({
                 ngZone,

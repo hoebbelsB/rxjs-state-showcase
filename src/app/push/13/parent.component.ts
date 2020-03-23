@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {Observable, Subject} from 'rxjs';
 import {scan, startWith} from 'rxjs/operators';
+import { CdConfigService } from '../../cd-config.service';
 
 @Component({
   selector: 'app-push-parent13',
@@ -14,11 +15,11 @@ import {scan, startWith} from 'rxjs/operators';
       <button (click)="btnClick.next()">increment</button>
       <!-- -->
       <br/>
-      <app-push-child13 [value]="value1$ | ngrxPush">
+      <app-push-child13 [value]="value1$ | ngrxPush: cfg">
       </app-push-child13>
-      <app-push-child13 [value]="value1$ | ngrxPush">
+      <app-push-child13 [value]="value1$ | ngrxPush: cfg">
       </app-push-child13>
-      <app-push-child13 [value]="value1$ | ngrxPush">
+      <app-push-child13 [value]="value1$ | ngrxPush: cfg">
       </app-push-child13>
   `,
   changeDetection: environment.changeDetection
@@ -30,8 +31,12 @@ export class Parent13Component implements OnInit {
       startWith(0), scan((a): any => ++a, 0));
   numRenderings = 0;
 
-  constructor() {
-  }
+    cfg = this.coalesceConfigService.getConfig();
+
+    constructor(
+        private coalesceConfigService: CdConfigService
+    ) {
+    }
 
   ngOnInit(): void {
     // markDirty(this);
