@@ -1,5 +1,5 @@
 import {Routes} from '@angular/router';
-import {AnimationIndexComponent} from './animation-index/animation-index.component';
+import {AnimationIndexComponent} from './animation/animation-index.component';
 
 
 export const ROUTES: Routes = [{

@@ -10,7 +10,7 @@ import { CdConfigService } from '../../cd-config.service';
     <h2>Push Pipe 02
         <small>one single-shot observable bound by multiple ngrxPush as template expression</small>
     </h2>
-    <b>Number of renderings: {{getNumOfRenderings()}}</b>
+    <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
     <br/>
     <button (click)="btnClick.next()">increment</button>
     <!-- -->

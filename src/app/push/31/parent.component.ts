@@ -11,7 +11,7 @@ import { CdConfigService } from '../../cd-config.service';
             Push Pipe 31
             <small></small>
         </h2>
-        <b>Number of renderings: {{getNumOfRenderings()}}</b>
+        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
         <br/>
         <button (click)="btnClick.next()">increment</button>
         <!-- -->

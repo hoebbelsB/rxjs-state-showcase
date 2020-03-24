@@ -10,7 +10,7 @@ import { CdConfig, CdConfigService } from '../../cd-config.service';
         <h2>ChangeDetection 02
             <small>detectChange renders it self and all children with changeDetection Default</small>
         </h2>
-        <b>Number of renderings: {{getNumOfRenderings()}}</b>
+        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
         <br/>
         <b>Output handler: {{ outputHandler | ngrxPush: cfg }}</b>
         <br/>

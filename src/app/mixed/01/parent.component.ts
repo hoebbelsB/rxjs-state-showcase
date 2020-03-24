@@ -10,7 +10,7 @@ import {scan, startWith} from 'rxjs/operators';
             Mixed Setup 01
             <small>One single-shot observable bound by one ngrxPush and one ngrxLet as input binding</small>
         </h2>
-        <b>Number of renderings: {{getNumOfRenderings()}}</b>
+        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
         <br/>
         <button (click)="btnClick.next()">increment</button>
         <!-- -->

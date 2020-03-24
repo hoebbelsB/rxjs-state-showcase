@@ -7,7 +7,7 @@ import { CdConfigService } from '../../cd-config.service';
     selector: 'app-push-child21',
     template: `
         <h3>Push Pipe Child 21</h3>
-        <b>Number of renderings: {{getNumOfRenderings()}}</b><br/>
+        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b><br/>
         Passed input binding: {{value1$ | ngrxPush: cfg}} <!-- -->
     `,
     changeDetection: environment.changeDetection

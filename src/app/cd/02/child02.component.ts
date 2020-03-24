@@ -7,7 +7,7 @@ import { CdConfig, CdConfigService } from '../../cd-config.service';
     selector: 'app-cd02-child02',
     template: `
         <h3>ChangeDetection Child 02</h3>
-        <b>Number of renderings: {{getNumOfRenderings()}}</b><br/>
+        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b><br/>
         Passed input binding: {{ value$ | ngrxPush: cfg }}<br/> <!-- -->
         Passed input binding2: {{ value2 }}<br/> <!-- -->
     `,

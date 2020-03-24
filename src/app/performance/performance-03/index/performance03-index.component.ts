@@ -3,9 +3,9 @@ import {Component, OnInit} from '@angular/core';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {combineLatest, Observable, Subject} from 'rxjs';
 import {distinctUntilChanged, filter, map, pluck, shareReplay, startWith, withLatestFrom} from 'rxjs/operators';
-import {State} from '../../../state/state';
 import {Performance03DataService, Person} from './performance-03-data.service';
 import {environment} from '../../../../environments/environment';
+import {State} from '@rx-state/rxjs-state';
 
 export interface Performance03State {
     data: Person[];
@@ -28,8 +28,8 @@ export interface Performance03State {
 export class Performance03IndexComponent extends State<Performance03State> implements OnInit {
 
     displayedColumns: string[] = ['select', 'name', 'age', 'balance', 'picture', 'eyeColor', 'company', 'phone', 'address'];
-    readonly viewState$: Observable<Performance03State> = this.state$;
-    readonly data$ = this.state$.pipe(
+    readonly viewState$: Observable<Performance03State> = this.$;
+    readonly data$ = this.$.pipe(
         pluck('data'),
         distinctUntilChanged(),
         shareReplay({
@@ -37,7 +37,7 @@ export class Performance03IndexComponent extends State<Performance03State> imple
             bufferSize: 1
         })
     );
-    readonly filter$ = this.state$.pipe(pluck('filter'), distinctUntilChanged());
+    readonly filter$ = this.$.pipe(pluck('filter'), distinctUntilChanged());
     readonly filteredData$ = combineLatest([
         this.data$,
         this.filter$
@@ -48,7 +48,7 @@ export class Performance03IndexComponent extends State<Performance03State> imple
         }));
 
     selection = new SelectionModel<Person>(true, []);
-    readonly allSelected$ = this.state$.pipe(pluck('allSelected'), distinctUntilChanged());
+    readonly allSelected$ = this.$.pipe(pluck('allSelected'), distinctUntilChanged());
 
     masterToggle = new Subject<MatCheckboxChange>();
 

@@ -8,7 +8,7 @@ import { CdConfigService } from '../../cd-config.service';
   selector: 'app-push-child12',
   template: `
     <h3>Push Child 12</h3>
-    <b>Number of renderings: {{getNumOfRenderings()}}</b><br/>
+    <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b><br/>
     Passed input binding: {{value1$ | ngrxPush: cfg }} <!-- -->
   `,
   changeDetection: environment.changeDetection

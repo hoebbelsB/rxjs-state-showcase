@@ -35,8 +35,8 @@ export const ROUTES: Routes = [
     ...PERFORMANCE_ROUTES,
     {
         path: '',
-        loadChildren: () => import('./animation/animation.module')
-            .then(mod => mod.AnimationModule),
+        loadChildren: () => import('./irrelevant-to-test/irrelevant-to-test.module')
+            .then(mod => mod.IrrelevantToTestModule),
         canActivate: [],
         canActivateChild: []
     }

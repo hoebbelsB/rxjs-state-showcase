@@ -5,7 +5,7 @@ import {environment} from '../../../environments/environment';
     selector: 'app-cd-child01-02',
     template: `
         <h3>ChangeDetection Child 02</h3>
-        <b>Number of renderings: {{getNumOfRenderings()}}</b><br/>
+        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b><br/>
         Passed input binding: {{value}} <!-- -->
     `,
     changeDetection: environment.changeDetection

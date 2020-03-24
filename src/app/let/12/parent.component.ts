@@ -9,7 +9,7 @@ import {scan, startWith} from 'rxjs/operators';
         <h2>Let Directive 12
             <small>One single-shot observables bound by multiple ngrxLet as input binding with let syntax</small>
         </h2>
-        <b>Number of renderings: {{getNumOfRenderings()}}</b>
+        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
         <br/>
         <button (click)="btnClick.next()">increment</button>
         <ng-container *ngrxLet="value1$; let v">Value1: {{v}}</ng-container>

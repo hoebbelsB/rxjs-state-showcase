@@ -1,10 +1,9 @@
-import { ApplicationRef, ChangeDetectionStrategy, Component } from '@angular/core';
-import { NavigationEnd } from '@angular/router';
-import { Subject } from 'rxjs';
-import { filter, map, startWith, tap, withLatestFrom } from 'rxjs/operators';
-import { State } from '../../state/state';
-import { GrowAnimationState } from './grow/grow.component';
+import {ApplicationRef, Component} from '@angular/core';
+import {Subject} from 'rxjs';
+import {map, withLatestFrom} from 'rxjs/operators';
+import {GrowAnimationState} from './grow/grow.component';
 import {environment} from '../../../environments/environment';
+import {State} from '@rx-state/rxjs-state';
 
 export interface AnimationIndexComponentState {
     growState: GrowAnimationState;
@@ -23,9 +22,11 @@ export class AnimationIndexComponent extends State<AnimationIndexComponentState>
     readonly toggleGrowState = new Subject<void>();
 
     private changeDetections = 0;
+
     detectedChanges() {
         return ++this.changeDetections;
     }
+
     constructor(
         private appRef: ApplicationRef
     ) {

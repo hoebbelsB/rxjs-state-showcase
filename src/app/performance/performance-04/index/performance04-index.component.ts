@@ -3,10 +3,10 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {combineLatest, Observable, Subject} from 'rxjs';
 import {map, startWith, withLatestFrom} from 'rxjs/operators';
-import {stateful} from '../../../state/operators';
-import {State} from '../../../state/state';
 import {Performance04DataService, Person} from './performance-04-data.service';
 import {environment} from '../../../../environments/environment';
+import {State} from '@rx-state/rxjs-state';
+import {stateful} from '../../../../../projects/rxjs-state/src/lib/core/operators/stateful';
 
 export interface Performance04State {
     data: Person[];

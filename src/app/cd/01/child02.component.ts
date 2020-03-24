@@ -5,7 +5,7 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
     template: `
         <h3>ChangeDetection Child 02</h3>
         ChangeDetectionStrategy: Push<br>
-        <b>Number of renderings: {{getNumOfRenderings()}}</b><br/>
+        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b><br/>
         Passed input binding: {{value}} <!-- -->
     `,
     changeDetection: ChangeDetectionStrategy.OnPush

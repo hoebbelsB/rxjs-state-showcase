@@ -84,14 +84,10 @@ export class PushPipe<S> implements PipeTransform, OnDestroy {
                 // because in the beta we implement configuration behavior here
                 return config.optimized ?
                     value$.pipe(
-                        tap(() => {
-                            // console.log(this.cdRef['_lView']);
-                            /*console.log('TAP coalesce');*/
-                        }),
-                        coalesce(durationSelector, coalesceConfig), tap(() => console.log('detect changes'))) :
-                    value$.pipe(tap(() => console.log('detect changes')));
+                        coalesce(durationSelector, coalesceConfig)) :
+                    value$.pipe();
             })
-        )
+        );
 
     constructor(
         private cdRef: ChangeDetectorRef,

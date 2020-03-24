@@ -11,7 +11,7 @@ import {getChangeDetectionHandler, isIvy} from '../../../../projects/component/s
             ChangeDetection Setup 01
             <small></small>
         </h2>
-        <b>Number of renderings: {{getNumOfRenderings()}}</b>
+        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
         <!-- -->
         <br/>
         <button (click)="valueSubject.next()">

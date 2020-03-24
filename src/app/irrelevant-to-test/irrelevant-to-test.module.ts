@@ -3,9 +3,9 @@ import {CommonModule} from '@angular/common';
 import {MatButtonModule} from '@angular/material/button';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {ReactiveComponentModule} from '../../../projects/component/src';
-import {AnimationIndexComponent} from './animation-index/animation-index.component';
-import {GrowComponent} from './animation-index/grow/grow.component';
-import {ROUTES} from './animation.routes';
+import {AnimationIndexComponent} from './animation/animation-index.component';
+import {GrowComponent} from './animation/grow/grow.component';
+import {ROUTES} from './irrelevant-to-test.routes';
 import {RouterModule} from '@angular/router';
 
 
@@ -19,5 +19,5 @@ import {RouterModule} from '@angular/router';
         MatButtonModule
     ]
 })
-export class AnimationModule {
+export class IrrelevantToTestModule {
 }

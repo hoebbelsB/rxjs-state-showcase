@@ -10,7 +10,7 @@ import { CdConfigService } from '../../cd-config.service';
         <h2>Push Pipe 03
             <small>multiple single-shot observables bound by multiple ngrxPush as template expression</small>
         </h2>
-        <b>Number of renderings: {{getNumOfRenderings()}}</b>
+        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
         <br/>
         <button (click)="btnClick.next()">increment</button>
         <!-- -->
@@ -20,15 +20,15 @@ import { CdConfigService } from '../../cd-config.service';
     `,
     changeDetection: environment.changeDetection
 })
-export class Parent03Component implements OnInit {
+export class Parent03Component {
     btnClick = new Subject<Event>();
 
     value1$: Observable<number> = this.btnClick.pipe(
         startWith(0), scan((a): any => ++a, 0));
     value2$: Observable<number> = this.btnClick.pipe(
-        startWith(0), scan((a): any => ++a, 0))
+        startWith(0), scan((a): any => ++a, 0));
     value3$: Observable<number> = this.btnClick.pipe(
-        startWith(0), scan((a): any => ++a, 0))
+        startWith(0), scan((a): any => ++a, 0));
     numRenderings = 0;
 
     cfg = this.coalesceConfigService.getConfig();
@@ -37,11 +37,6 @@ export class Parent03Component implements OnInit {
         private coalesceConfigService: CdConfigService
     ) {
     }
-
-    ngOnInit(): void {
-        // markDirty(this);
-    }
-
 
     getNumOfRenderings() {
         return ++this.numRenderings;
