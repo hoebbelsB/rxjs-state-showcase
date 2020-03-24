@@ -1,8 +1,7 @@
-import { AfterViewInit, Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
-import { outsideZone } from '@rx-state/ngx-state';
-import { fromEvent, Observable, Subject } from 'rxjs';
-import { scan, startWith, switchMap, tap } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {defer, fromEvent, Observable, Subject} from 'rxjs';
+import {scan, startWith} from 'rxjs/operators';
+import {environment} from '../../../environments/environment';
 
 @Component({
     selector: 'app-push-parent12',
@@ -12,7 +11,7 @@ import { environment } from '../../../environments/environment';
         </h2>
         <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
         <br/>
-        <button (click)="btnClick.next()" #button>increment</button>
+        <button #button>increment</button>
         <!-- -->
 
         <br/>
@@ -21,32 +20,18 @@ import { environment } from '../../../environments/environment';
     `,
     changeDetection: environment.changeDetection
 })
-export class Parent12Component implements OnInit, AfterViewInit {
-
+export class Parent12Component implements AfterViewInit {
     @ViewChild('button') button: ElementRef<HTMLButtonElement>;
-    btnClick = new Subject<Event>();
+    btnClick$ = defer(() => fromEvent(this.button.nativeElement, 'click'));
     numRenderings = 0;
 
     private readonly afterViewInit$ = new Subject<void>();
 
-    value1$: Observable<number> = this.btnClick.pipe(
+    value1$: Observable<number> = this.btnClick$.pipe(
         startWith(0), scan((a): any => ++a, 0));
 
-   /* value1$: Observable<number> = this.afterViewInit$.pipe(
-         // outsideZone(this.ngZone),
-         switchMap(() => fromEvent(this.button.nativeElement, 'click')),
-         startWith(0),
-         scan((a): any => ++a, 0)
-     );*/
+    constructor() {
 
-    constructor(
-        private ngZone: NgZone
-    ) {
-
-    }
-
-    ngOnInit(): void {
-        // markDirty(this);
     }
 
     ngAfterViewInit(): void {

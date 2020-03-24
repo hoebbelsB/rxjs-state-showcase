@@ -1,4 +1,12 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ɵdetectChanges} from '@angular/core';
+import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    ViewChild
+} from '@angular/core';
+import {defer, fromEvent} from 'rxjs';
 
 @Component({
     selector: 'app-cd-parent04',
@@ -9,13 +17,15 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ɵdetectChanges} 
         </h2>
         ChangeDetectionStrategy: Default<br>
         <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
-        <button (click)="markForCheck()">ChangeDetectorRef#markForCheck</button>
+        <button #button>ChangeDetectorRef#markForCheck</button>
         <app-cd04-child01-default></app-cd04-child01-default>
         <app-cd04-child02-push></app-cd04-child02-push>
     `,
     changeDetection: ChangeDetectionStrategy.Default
 })
-export class CdParent04Component {
+export class CdParent04Component implements AfterViewInit {
+    @ViewChild('button') button: ElementRef<HTMLButtonElement>;
+    btnClick$ = defer(() => fromEvent(this.button.nativeElement, 'click'));
     numRenderings = 0;
 
     getNumOfRenderings() {
@@ -24,6 +34,10 @@ export class CdParent04Component {
 
     markForCheck() {
         this.cdRef.markForCheck();
+    }
+
+    ngAfterViewInit() {
+        this.btnClick$.subscribe(() => this.markForCheck());
     }
 
     constructor(private cdRef: ChangeDetectorRef) {

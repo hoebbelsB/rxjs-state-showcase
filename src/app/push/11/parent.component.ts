@@ -20,7 +20,7 @@ import { CdConfigService } from '../../cd-config.service';
   `,
   changeDetection: environment.changeDetection
 })
-export class Parent11Component implements OnInit {
+export class Parent11Component {
   btnClick = new Subject<Event>();
 
   value1$: Observable<number> = this.btnClick.pipe(
@@ -33,11 +33,6 @@ export class Parent11Component implements OnInit {
         private coalesceConfigService: CdConfigService
     ) {
     }
-
-  ngOnInit(): void {
-    // markDirty(this);
-  }
-
 
   getNumOfRenderings() {
     return ++this.numRenderings;

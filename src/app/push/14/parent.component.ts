@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {Observable, Subject} from 'rxjs';
 import {scan, startWith} from 'rxjs/operators';
-import { CdConfigService } from '../../cd-config.service';
+import {CdConfigService} from '../../cd-config.service';
 
 @Component({
     selector: 'app-push-parent14',
@@ -24,7 +24,7 @@ import { CdConfigService } from '../../cd-config.service';
     `,
     changeDetection: environment.changeDetection
 })
-export class Parent14Component implements OnInit {
+export class Parent14Component {
     btnClick = new Subject<Event>();
 
     value1$: Observable<number> = this.btnClick.pipe(
@@ -41,11 +41,6 @@ export class Parent14Component implements OnInit {
         private coalesceConfigService: CdConfigService
     ) {
     }
-
-    ngOnInit(): void {
-        // markDirty(this);
-    }
-
 
     getNumOfRenderings() {
         return ++this.numRenderings;

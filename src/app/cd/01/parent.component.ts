@@ -1,5 +1,5 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ɵdetectChanges} from '@angular/core';
-import {environment} from '../../../environments/environment';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild, ɵdetectChanges} from '@angular/core';
+import {defer, fromEvent} from 'rxjs';
 
 @Component({
     selector: 'app-cd-parent01',
@@ -10,25 +10,28 @@ import {environment} from '../../../environments/environment';
         </h2>
         ChangeDetectionStrategy: Default<br>
         <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
-        <button (click)="detectChanges()">ɵdetectChanges</button>
+        <button #button>ɵdetectChanges</button>
         <app-cd01-child01-default></app-cd01-child01-default>
         <app-cd01-child02-push></app-cd01-child02-push>
     `,
     changeDetection: ChangeDetectionStrategy.Default
 })
-export class CdParent01Component {
+export class CdParent01Component implements AfterViewInit {
+    @ViewChild('button') button: ElementRef<HTMLButtonElement>;
+    btnClick$ = defer(() => fromEvent(this.button.nativeElement, 'click'));
+
     numRenderings = 0;
 
     getNumOfRenderings() {
         return ++this.numRenderings;
     }
 
-    detectChanges() {
-        ɵdetectChanges(this);
+    ngAfterViewInit() {
+        this.btnClick$.subscribe(() => this.detectChanges());
     }
 
-    constructor(private cdRef: ChangeDetectorRef) {
-
+    detectChanges() {
+        ɵdetectChanges(this);
     }
 
 }

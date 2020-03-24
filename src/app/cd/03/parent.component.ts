@@ -1,4 +1,5 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ɵmarkDirty} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild, ɵmarkDirty} from '@angular/core';
+import {defer, fromEvent} from 'rxjs';
 
 @Component({
     selector: 'app-cd-parent03',
@@ -9,13 +10,16 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ɵmarkDirty} from
         </h2>
         ChangeDetectionStrategy: Default<br>
         <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
-        <button (click)="markDirty()">ɵmarkDirty</button>
+        <button #button>ɵmarkDirty</button>
         <app-cd03-child01-default></app-cd03-child01-default>
         <app-cd03-child02-push></app-cd03-child02-push>
     `,
     changeDetection: ChangeDetectionStrategy.Default
 })
-export class CdParent03Component {
+export class CdParent03Component  implements AfterViewInit {
+
+    @ViewChild('button') button: ElementRef<HTMLButtonElement>;
+    btnClick$ = defer(() => fromEvent(this.button.nativeElement, 'click'));
     numRenderings = 0;
 
     getNumOfRenderings() {
@@ -24,6 +28,10 @@ export class CdParent03Component {
 
     markDirty() {
         ɵmarkDirty(this);
+    }
+
+    ngAfterViewInit() {
+        this.btnClick$.subscribe(() => this.markDirty());
     }
 
 }
