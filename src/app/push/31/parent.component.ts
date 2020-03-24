@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {environment} from '../../../environments/environment';
-import {Observable, Subject} from 'rxjs';
+import {defer, fromEvent, Observable, Subject} from 'rxjs';
 import {scan, startWith} from 'rxjs/operators';
 import { CdConfigService } from '../../cd-config.service';
 
@@ -13,7 +13,7 @@ import { CdConfigService } from '../../cd-config.service';
         </h2>
         <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
         <br/>
-        <button (click)="btnClick.next()">increment</button>
+        <button #button>increment</button>
         <!-- -->
         <br/>
         <insertion [template]="ref"></insertion>
@@ -27,9 +27,10 @@ import { CdConfigService } from '../../cd-config.service';
     changeDetection: environment.changeDetection
 })
 export class Parent31Component {
-    btnClick = new Subject<Event>();
+    @ViewChild('button') button: ElementRef<HTMLButtonElement>;
+    btnClick$ = defer(() => fromEvent(this.button.nativeElement, 'click'));
 
-    value1$: Observable<number> = this.btnClick.pipe(
+    value1$: Observable<number> = this.btnClick$.pipe(
         startWith(0), scan((a): any => ++a, 0));
     numRenderings = 0;
 

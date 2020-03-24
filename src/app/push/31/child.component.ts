@@ -4,7 +4,8 @@ import {environment} from '../../../environments/environment';
     selector: 'insertion',
     template: `
         <h3>Push Pipe Child 31</h3>
-        <ng-container [ngTemplateOutlet]="template"></ng-container>
+        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b><br>
+        Value: <ng-container [ngTemplateOutlet]="template"></ng-container>
     `,
     changeDetection: environment.changeDetection
 })
