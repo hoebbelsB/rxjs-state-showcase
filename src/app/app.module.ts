@@ -14,6 +14,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {ConfigPanelComponent} from './config-panel.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatChipsModule} from '@angular/material/chips';
+import {ZonelessHelpersModule} from '@zoneless-helpers';
 
 @NgModule({
     declarations: [
@@ -32,9 +33,11 @@ import {MatChipsModule} from '@angular/material/chips';
         MatChipsModule,
         MatExpansionModule,
         RouterModule,
+        ZonelessHelpersModule,
         ReactiveComponentModule
     ],
     providers: [],
+    exports: [],
     bootstrap: [AppComponent]
 })
 export class AppModule {

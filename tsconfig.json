@@ -20,6 +20,9 @@
       "dom"
     ],
     "paths": {
+      "@zoneless-helpers": [
+        "projects/zoneless-helpers/src/index.ts"
+      ],
       "@component": [
         "projects/component/src/index.ts"
       ],

@@ -4,7 +4,7 @@
       <mat-icon>menu</mat-icon>
     </button>
     <h1 class="mat-title">Angular Performance Tests</h1>
-    <app-config-panel class="config-panel"></app-config-panel>
+    <app-config-panel class="config-panel" [appComponentRef]="thisRef"></app-config-panel>
   </mat-toolbar>
   <mat-sidenav-container
     [style.marginTop.px]="state.mobile ? 56 : 0"

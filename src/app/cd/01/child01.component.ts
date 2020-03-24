@@ -6,15 +6,11 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
         <h3>ChangeDetection Child 01</h3>
         ChangeDetectionStrategy: Default<br>
         <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b><br/>
-        Passed input binding: {{value}} <!-- -->
-        <app-cd-child0101-push [value]="value"></app-cd-child0101-push>
+        <app-cd-child0101-push></app-cd-child0101-push>
     `,
     changeDetection: ChangeDetectionStrategy.Default
 })
 export class Child0101Component {
-    @Input()
-    value;
-
     numRenderings = 0;
 
     getNumOfRenderings() {

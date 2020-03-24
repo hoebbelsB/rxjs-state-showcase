@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ɵdetectChanges} from '@angular/core';
 import {environment} from '../../../environments/environment';
 
 @Component({
@@ -9,27 +9,24 @@ import {environment} from '../../../environments/environment';
         </h2>
         ChangeDetectionStrategy: Default<br>
         <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
-        <br/>
-        <button (click)="increment()">increment</button>
-        <app-cd-child01-default [value]="value"></app-cd-child01-default>
-        <app-cd-child01-push [value]="value"></app-cd-child01-push>
+        <button (click)="detectChanges()">ɵdetectChanges</button>
+        <app-cd-child01-default></app-cd-child01-default>
+        <app-cd-child01-push></app-cd-child01-push>
     `,
     changeDetection: ChangeDetectionStrategy.Default
 })
 export class CdParent01Component {
-
-    value = 0;
     numRenderings = 0;
 
     getNumOfRenderings() {
         return ++this.numRenderings;
     }
 
-    increment() {
-        this.value = this.value++;
+    detectChanges() {
+        ɵdetectChanges(this);
     }
 
-    constructor() {
+    constructor(private cdRef: ChangeDetectorRef) {
 
     }
 

@@ -22,6 +22,7 @@ export interface AppState {
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent extends RxState<AppState> {
+    thisRef = this;
     readonly env = environment;
     readonly toggleSidenav = new Subject<void>();
     readonly viewState$ = this.select();

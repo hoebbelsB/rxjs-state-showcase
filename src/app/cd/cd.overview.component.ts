@@ -2,17 +2,17 @@ import {Component} from '@angular/core';
 import {environment} from '../../environments/environment';
 
 @Component({
-    selector: 'app-push-overview',
+    selector: 'app-cd-overview',
     template: `
         <h1>ChangeDetection Overview</h1>
-        <div class="push-cases">
+        <div class="cd-cases">
             <app-cd-parent01 class="item"></app-cd-parent01>
             <app-cd-parent02 class="item"></app-cd-parent02>
         </div>
     `,
     changeDetection: environment.changeDetection,
     styles: [`
-        .push-cases {
+        .cd-cases {
             display: flex;
             flex-wrap: wrap;
         }
