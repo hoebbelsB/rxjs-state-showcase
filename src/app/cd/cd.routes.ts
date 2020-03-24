@@ -3,6 +3,8 @@ import { CdParent02Component } from './02/parent.component';
 import {CdOverviewComponent} from './cd.overview.component';
 import {CdParent03Component} from './03/parent.component';
 import {CdParent04Component} from './04/parent.component';
+import {CdParent05Component} from './05/parent.component';
+import {CdParent06Component} from './06/parent.component';
 
 
 export const ROUTES = [
@@ -25,5 +27,13 @@ export const ROUTES = [
     {
         path: 'cd-04',
         component: CdParent04Component
+    },
+    {
+        path: 'cd-05',
+        component: CdParent05Component
+    },
+    {
+        path: 'cd-06',
+        component: CdParent06Component
     }
 ];

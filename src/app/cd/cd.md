@@ -8,5 +8,7 @@
   - when called in the component renders itself and all components with cd.Default
 - 04. `ChangeDetectorRef#markForCheck`
   - when called in the component renders itself and all components with cd.Default
-- 05.`ApprefTick`
+- 05.`scheduleDetectChanges`
+  - when called in the element renders itself and all components with cd.Default
+- 06.`ApprefTick`
   - when called in the component renders itself and all components with cd.Default

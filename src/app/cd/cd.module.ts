@@ -31,6 +31,11 @@ import {CdParent04Component} from './04/parent.component';
 import {Child0401Component} from './04/child01.component';
 import {Child0402Component} from './04/child02.component';
 import {Child040101Component} from './04/child0101.component';
+import {CdParent05Component} from './05/parent.component';
+import {Child0601Component} from './06/child01.component';
+import {CdParent06Component} from './06/parent.component';
+import {Child0602Component} from './06/child02.component';
+import {Child060101Component} from './06/child0101.component';
 
 
 @NgModule({
@@ -39,6 +44,8 @@ import {Child040101Component} from './04/child0101.component';
         CdParent02Component, Child0201Component, Child020101Component, Child0202Component,
         CdParent03Component, Child0301Component, Child030101Component, Child0302Component,
         CdParent04Component, Child0401Component, Child040101Component, Child0402Component,
+        CdParent05Component,
+        CdParent06Component, Child0601Component, Child060101Component, Child0602Component,
         CdOverviewComponent
     ],
     imports: [
