@@ -1,4 +1,4 @@
-import {ApplicationRef, ChangeDetectorRef, Component, Input, NgZone, ɵdetectChanges} from '@angular/core';
+import {ApplicationRef, ChangeDetectorRef, Component, Input, NgZone, ViewChild, ɵdetectChanges} from '@angular/core';
 import {environment} from '../environments/environment';
 import {getChangeDetectionHandler, hasZone, isIvy} from '../../projects/component/src/core/utils';
 import {BreakpointObserver} from '@angular/cdk/layout';
@@ -35,7 +35,6 @@ import {State} from '@rx-state/rxjs-state';
                 <button id="btnAppTick" mat-raised-button>ApplicationRef.tick()</button>
                 <button id="btnDetectChanges" mat-raised-button>ɵdetectChanges(appRef)</button>
             </mat-expansion-panel>
-            VM {{vm$ | ngrxPush | json}}
     `,
     styles: [`
         .config-panel {
@@ -54,6 +53,9 @@ export class ConfigPanelComponent extends State<{ expanded: boolean }> {
     vm$ = this.select();
     @Input()
     appComponentRef;
+
+    @ViewChild('#btnAppTick')
+    btnAppTick;
 
     readonly env = environment;
     readonly hasZone = hasZone(this.ngZone);
@@ -80,7 +82,7 @@ export class ConfigPanelComponent extends State<{ expanded: boolean }> {
         this.setState({expanded: true});
         this.coalesceConfigService.connect(this.configForm$);
 
-        const appTickClick$ = fromEvent(document.getElementById('btnAppTick'), 'click').pipe(tap(console.log));
+        const appTickClick$ = fromEvent(this.btnAppTick, 'click').pipe(tap(console.log));
         const detectChangeClick$ = fromEvent(document.getElementById('btnDetectChanges'), 'click');
         this.hold(
             merge(

@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 
 @Component({
-    selector: 'app-cd01-child0101-push',
+    selector: 'app-cd02-child0101-push',
     template: `
         <h3>ChangeDetection Child 01 01</h3>
         ChangeDetectionStrategy: OnPush<br>
@@ -9,7 +9,7 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
     `,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Child010101Component {
+export class Child020101Component {
     numRenderings = 0;
 
     getNumOfRenderings() {

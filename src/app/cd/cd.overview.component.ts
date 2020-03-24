@@ -8,6 +8,8 @@ import {environment} from '../../environments/environment';
         <div class="cd-cases">
             <app-cd-parent01 class="item"></app-cd-parent01>
             <app-cd-parent02 class="item"></app-cd-parent02>
+            <app-cd-parent03 class="item"></app-cd-parent03>
+            <app-cd-parent04 class="item"></app-cd-parent04>
         </div>
     `,
     changeDetection: environment.changeDetection,

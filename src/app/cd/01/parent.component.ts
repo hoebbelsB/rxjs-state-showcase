@@ -5,13 +5,14 @@ import {environment} from '../../../environments/environment';
     selector: 'app-cd-parent01',
     template: `
         <h2>ChangeDetection 01
-            <small>detectChange renders itself and all children with changeDetection Default</small>
+            <small>ɵdetectChanges when called in the component renders itself and all child components
+                with cd.Default</small>
         </h2>
         ChangeDetectionStrategy: Default<br>
         <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
         <button (click)="detectChanges()">ɵdetectChanges</button>
-        <app-cd-child01-default></app-cd-child01-default>
-        <app-cd-child01-push></app-cd-child01-push>
+        <app-cd01-child01-default></app-cd01-child01-default>
+        <app-cd01-child02-push></app-cd01-child02-push>
     `,
     changeDetection: ChangeDetectionStrategy.Default
 })
