@@ -1,14 +1,5 @@
-import {
-    ChangeDetectorRef,
-    EmbeddedViewRef,
-    NgZone,
-    OnDestroy,
-    Pipe,
-    PipeTransform,
-    Type,
-    ViewRef, ɵɵdirectiveInject, ɵɵinjectPipeChangeDetectorRef,
-} from '@angular/core';
-import { config, NextObserver, Observable, PartialObserver, Subject, Unsubscribable, } from 'rxjs';
+import {ChangeDetectorRef, EmbeddedViewRef, NgZone, OnDestroy, Pipe, PipeTransform, Type,} from '@angular/core';
+import {NextObserver, Observable, PartialObserver, Subject, Unsubscribable,} from 'rxjs';
 import {distinctUntilChanged, map, tap, withLatestFrom} from 'rxjs/operators';
 import {CdAware, CoalescingConfig as PushPipeConfig, createCdAware, setUpWork,} from '../core';
 import {coalesce, generateFrames} from '@rx-state/rxjs-state';
