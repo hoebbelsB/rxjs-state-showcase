@@ -1,6 +1,7 @@
 import {Parent01Component} from './01/parent.component';
 import {Parent02Component} from './02/parent.component';
 import {Parent03Component} from './03/parent.component';
+import { Parent05Component } from './05/parent.component';
 import {Parent11Component} from './11/parent.component';
 import {Parent12Component} from './12/parent.component';
 import {Parent13Component} from './13/parent.component';
@@ -30,6 +31,10 @@ export const ROUTES = [
     {
         path: 'push-04',
         component: Parent04Component
+    },
+    {
+        path: 'push-05',
+        component: Parent05Component
     },
     {
         path: 'push-11',

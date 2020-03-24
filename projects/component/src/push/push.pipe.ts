@@ -6,7 +6,7 @@ import {
     Pipe,
     PipeTransform,
     Type,
-    ViewRef,
+    ViewRef, ɵɵdirectiveInject, ɵɵinjectPipeChangeDetectorRef,
 } from '@angular/core';
 import { config, NextObserver, Observable, PartialObserver, Subject, Unsubscribable, } from 'rxjs';
 import {distinctUntilChanged, map, tap, withLatestFrom} from 'rxjs/operators';
@@ -105,6 +105,10 @@ export class PushPipe<S> implements PipeTransform, OnDestroy {
     constructor(
         private cdRef: ChangeDetectorRef,
         ngZone: NgZone) {
+        // TODO: evaluate: https://github.com/angular/angular/pull/33449
+        //  && https://github.com/angular/angular/issues/33677
+        /*const correctCdRef = ɵɵinjectPipeChangeDetectorRef()
+        console.log(correctCdRef);*/
         this.cdAware = createCdAware<S>({
             work: setUpWork({
                 ngZone,

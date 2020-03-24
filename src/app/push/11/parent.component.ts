@@ -15,7 +15,7 @@ import { CdConfigService } from '../../cd-config.service';
     <button (click)="btnClick.next()">increment</button>
     <!-- -->
     <br/>
-    <app-push-child11 *ngrxLet="value1$; let val" [value]="val">
+    <app-push-child11 [value]="value1$ | ngrxPush: cfg">
     </app-push-child11>
   `,
   changeDetection: environment.changeDetection

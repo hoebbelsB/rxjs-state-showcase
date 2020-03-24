@@ -10,6 +10,7 @@ import {environment} from '../../environments/environment';
             <app-push-parent02 class="item"></app-push-parent02>
             <app-push-parent03 class="item"></app-push-parent03>
             <app-push-parent04 class="item"></app-push-parent04>
+            <app-push-parent05 class="item"></app-push-parent05>
             <app-push-parent11 class="item"></app-push-parent11>
             <app-push-parent12 class="item"></app-push-parent12>
             <app-push-parent13 class="item"></app-push-parent13>

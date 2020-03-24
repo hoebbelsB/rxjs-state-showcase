@@ -1,13 +1,13 @@
 import {
-  ChangeDetectorRef,
-  Directive,
-  EmbeddedViewRef,
-  Input,
-  NgZone,
-  OnDestroy,
-  TemplateRef,
-  Type,
-  ViewContainerRef,
+    ChangeDetectorRef,
+    Directive,
+    EmbeddedViewRef,
+    Input,
+    NgZone,
+    OnDestroy,
+    TemplateRef,
+    Type,
+    ViewContainerRef, ɵɵdirectiveInject, ɵɵinjectPipeChangeDetectorRef,
 } from '@angular/core';
 import { coalesce, generateFrames } from '@rx-state/rxjs-state';
 

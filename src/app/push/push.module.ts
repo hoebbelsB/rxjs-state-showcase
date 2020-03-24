@@ -11,6 +11,8 @@ import {MatTableModule} from '@angular/material/table';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {ReactiveComponentModule} from '../../../projects/component/src';
 import {RouterModule} from '@angular/router';
+import { Child05Component } from './05/child.component';
+import { Parent05Component } from './05/parent.component';
 import {ROUTES as PUSH_ROUTES} from './push.routes';
 import {Parent01Component} from './01/parent.component';
 import {Parent02Component} from './02/parent.component';
@@ -35,7 +37,7 @@ import {Child31Component} from './31/child.component';
         Parent01Component,
         Parent02Component,
         Parent03Component,
-        Parent04Component,
+        Parent04Component, Parent05Component, Child05Component,
         Parent11Component, Child11Component,
         Parent12Component, Child12Component,
         Parent13Component, Child13Component,

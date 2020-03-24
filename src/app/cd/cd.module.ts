@@ -11,6 +11,9 @@ import {MatTableModule} from '@angular/material/table';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {ReactiveComponentModule} from '../../../projects/component/src';
 import {RouterModule} from '@angular/router';
+import { Cd02Child01Component } from './02/child01.component';
+import { Cd02Child02Component } from './02/child02.component';
+import { CdParent02Component } from './02/parent.component';
 import {ROUTES as CD_ROUTES} from './cd.routes';
 
 import {CdParent01Component} from './01/parent.component';
@@ -22,6 +25,7 @@ import {CdOverviewComponent} from './cd.overview.component';
 @NgModule({
     declarations: [
         CdParent01Component, Child0101Component, Child0102Component,
+        CdParent02Component, Cd02Child01Component, Cd02Child02Component,
         // Parent01Component, Child0101Component, Child0102Component, Child0103Component,
         CdOverviewComponent
     ],
