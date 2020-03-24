@@ -26,6 +26,10 @@ export const MENU_ITEMS: MenuItem[] = [
         link: 'push-04',
         label: 'Push Pipe 04'
     },
+    {
+        link: 'push-05',
+        label: 'Multi-Shot input binding'
+    },
     // 11. One single-shot observable bound by one ngrxPush as input binding
     {
         link: 'push-11',

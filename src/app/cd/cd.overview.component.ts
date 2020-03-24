@@ -7,6 +7,7 @@ import {environment} from '../../environments/environment';
         <h1>ChangeDetection Overview</h1>
         <div class="push-cases">
             <app-cd-parent01 class="item"></app-cd-parent01>
+            <app-cd-parent02 class="item"></app-cd-parent02>
         </div>
     `,
     changeDetection: environment.changeDetection,

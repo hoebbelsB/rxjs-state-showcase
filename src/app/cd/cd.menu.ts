@@ -10,5 +10,9 @@ export const MENU_ITEMS: MenuItem[] = [
     {
         link: 'cd-01',
         label: 'ChangeDetection 01'
+    },
+    {
+        link: 'cd-02',
+        label: 'ChangeDetection 02'
     }
 ];
