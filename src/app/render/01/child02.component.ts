@@ -1,16 +1,16 @@
-import {Component, Input} from '@angular/core';
-import {environment} from '../../../environments/environment';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 
 @Component({
-    selector: 'app-cd-child01-01',
+    selector: 'app-cd-child01-push',
     template: `
-        <h3>ChangeDetection Child 01</h3>
+        <h3>ChangeDetection Child 02</h3>
+        ChangeDetectionStrategy: Push<br>
         <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b><br/>
         Passed input binding: {{value}} <!-- -->
     `,
-    changeDetection: environment.changeDetection
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Child_0101Component {
+export class Child0102Component {
     @Input()
     value;
 

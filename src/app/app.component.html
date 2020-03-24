@@ -1,47 +1,27 @@
 <ng-container *ngIf="viewState$ | ngrxPush as state">
-  <mat-toolbar color="primary" class="app-toolbar">
-    <button mat-icon-button (click)="toggleSidenav.next()">
+  <mat-toolbar class="app-toolbar" color="primary">
+    <button (click)="toggleSidenav.next()" mat-icon-button>
       <mat-icon>menu</mat-icon>
     </button>
-    <h1 class="mat-title">RxJs State Showcase</h1>
-    &nbsp;&nbsp;&nbsp;
-    <span>
-      hasZone: {{hasZone}}
-    </span>
-    &nbsp;&nbsp;&nbsp;
-    <span>
-      changeDetection: {{env.changeDetection === 1 ? 'Default' : 'OnPush'}}
-    </span>
-    &nbsp;&nbsp;&nbsp;
-    <span>
-      ivy: {{ivy}}
-    </span>
-    &nbsp;&nbsp;&nbsp;
-    <span>
-      renderTechnique: {{renderTechnique}}
-    </span>
-    <span>
-      <input type="checkbox" id="coalesceOptimized" (change)="toggleCoalesceConfig.next()"
-             [checked]="coalesceOptimized$ | ngrxPush">
-      <label for="coalesceOptimized"> Optimize coalescing</label>
-    </span>
+    <h1 class="mat-title">Angular Performance Tests</h1>
+    <app-config-panel class="config-panel"></app-config-panel>
   </mat-toolbar>
   <mat-sidenav-container
-    class="app-sidenav-container"
-    [style.marginTop.px]="state.mobile ? 56 : 0">
-    <mat-sidenav [mode]="state.mobile ? 'over' : 'side'"
+    [style.marginTop.px]="state.mobile ? 56 : 0"
+    class="app-sidenav-container">
+    <mat-sidenav [fixedInViewport]="state.mobile"
+                 [mode]="state.mobile ? 'over' : 'side'"
                  [opened]="state.navOpen"
-                 [fixedInViewport]="state.mobile"
                  class="main-sidenav"
                  fixedTopGap="56">
       <mat-nav-list>
-        <a mat-list-item routerLinkActive="active"
-           [routerLink]="item.link"
-        *ngFor="let item of state.menuItems">
+        <a *ngFor="let item of state.menuItems" [routerLink]="item.link"
+           mat-list-item
+           routerLinkActive="active">
           <mat-icon style="margin-right: .5rem;">warning</mat-icon>
           {{item.label}}
         </a>
-        <a mat-list-item routerLinkActive="active" routerLink="animation">
+        <a mat-list-item routerLink="animation" routerLinkActive="active">
           <mat-icon style="margin-right: .5rem;">invert_colors</mat-icon>
           Animation
         </a>

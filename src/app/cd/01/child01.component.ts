@@ -7,6 +7,7 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
         ChangeDetectionStrategy: Default<br>
         <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b><br/>
         Passed input binding: {{value}} <!-- -->
+        <app-cd-child0101-push [value]="value"></app-cd-child0101-push>
     `,
     changeDetection: ChangeDetectionStrategy.Default
 })
