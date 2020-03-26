@@ -57,7 +57,7 @@ export function createCdAware<U>(cfg: {
             const strategy = strategies[c] ? strategies[c] : strategies.idle;
             if (ob$ === undefined || ob$ === null) {
                 cfg.resetContextObserver.next(undefined);
-                // strategy.render();
+                strategy.render();
                 return NEVER;
             }
 

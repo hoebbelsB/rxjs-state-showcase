@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild, ɵdetectChanges} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {defer, fromEvent} from 'rxjs';
 import {environment} from '../../../environments/environment';
 
@@ -8,7 +8,7 @@ import {environment} from '../../../environments/environment';
         <h2>ChangeDetection 11
             <small>ViewChild triggers zone</small>
         </h2>
-        <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b><br>: strategy
+        <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b><br>
         <button #button>Click over ViewChild</button>
     `,
     changeDetection: environment.changeDetection

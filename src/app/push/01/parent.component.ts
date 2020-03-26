@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {environment} from '../../../environments/environment';
-import {defer, fromEvent, Observable, Subject} from 'rxjs';
+import {defer, fromEvent, NEVER, Observable, Subject} from 'rxjs';
 import {scan, startWith} from 'rxjs/operators';
 import { CdConfigService } from '../../cd-config.service';
 
@@ -27,7 +27,7 @@ export class Parent01Component implements AfterViewInit {
     btnClick$ = defer(() => fromEvent(this.button.nativeElement, 'click'));
 
     numRenderings = 0;
-    value1$: Observable<number>;
+    value1$: Observable<number> = NEVER;
 
     get strategy() {
         return this.coalesceConfigService.getConfig('strategy') as any;
