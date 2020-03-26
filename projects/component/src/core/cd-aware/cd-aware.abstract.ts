@@ -9,7 +9,7 @@ import {
     Subscribable,
     Subscription,
 } from 'rxjs';
-import {distinctUntilChanged, filter, startWith, switchMap, tap} from 'rxjs/operators';
+import {distinctUntilChanged, filter, map, startWith, switchMap, tap} from 'rxjs/operators';
 import {DEFAULT_STRATEGY_NAME, getStrategies} from './strategy';
 
 export interface CdAware<U> extends Subscribable<U> {
@@ -44,16 +44,16 @@ export function createCdAware<U>(cfg: {
         filter(v => !!v),
         distinctUntilChanged(),
         startWith(DEFAULT_STRATEGY_NAME),
+        map(strategy => strategies[strategy] ? strategies[strategy] : strategies.idle)
     );
     const observablesSubject = new Subject<Observable<U>>();
     const observables$ = observablesSubject.pipe(
-        distinctUntilChanged()
+        distinctUntilChanged(),
     );
 
     const recomposeTrigger$ = combineLatest(observables$, config$);
     const renderSideEffect$: Observable<any> = recomposeTrigger$.pipe(
-        switchMap(([observable$, config]) => {
-            const strategy = strategies[config] ? strategies[config] : strategies.idle;
+        switchMap(([observable$, strategy]) => {
             if (observable$ === undefined || observable$ === null) {
                 cfg.resetContextObserver.next(undefined);
                 strategy.render();
