@@ -1,8 +1,6 @@
 import {ChangeDetectorRef, EmbeddedViewRef, NgZone, OnDestroy, Pipe, PipeTransform, Type} from '@angular/core';
-import {NextObserver, Observable, PartialObserver, Subject, Unsubscribable} from 'rxjs';
-import {distinctUntilChanged, map, withLatestFrom} from 'rxjs/operators';
-import {CdAware, CdConfig as PushPipeConfig, createCdAware, setUpWork} from '../core';
-import {coalesce, generateFrames} from '@rx-state/rxjs-state';
+import {NextObserver, Observable, PartialObserver, Unsubscribable} from 'rxjs';
+import {CdAware, createCdAware, setUpWork} from '../core';
 
 /**
  * @Pipe PushPipe
@@ -61,10 +59,6 @@ export class PushPipe<S> implements PipeTransform, OnDestroy {
     private readonly resetContextObserver: NextObserver<unknown> = {
         next: (value: unknown) => (this.renderedValue = undefined),
     };
-    private readonly configurableBehaviour = <T>(
-        o$: Observable<Observable<T>>
-    ): Observable<Observable<T>> =>
-        o$.pipe()
 
     constructor(
         private cdRef: ChangeDetectorRef,
@@ -73,12 +67,6 @@ export class PushPipe<S> implements PipeTransform, OnDestroy {
             component: this,
             ngZone,
             cdRef,
-            work: setUpWork({
-                ngZone,
-                cdRef,
-                context: (cdRef as EmbeddedViewRef<Type<any>>).context,
-            }),
-            // behaviour: this.configurableBehaviour,
             updateViewContextObserver: this.updateViewContextObserver,
             resetContextObserver: this.resetContextObserver,
         });
@@ -93,7 +81,7 @@ export class PushPipe<S> implements PipeTransform, OnDestroy {
     ): T;
     transform<T>(
         potentialObservable: Observable<T> | Promise<T> | null | undefined,
-        config: string
+        config: string | undefined
     ): T | null | undefined {
         this.cdAware.nextConfig(config);
         this.cdAware.nextVale(potentialObservable as any);

@@ -1,25 +1,23 @@
-import { ChangeDetectorRef, NgZone } from '@angular/core';
-import {getChangeDetectionHandler, Output} from '../utils';
+import {ChangeDetectorRef, NgZone} from '@angular/core';
 import {
-    combineLatest, config,
+    combineLatest,
+    NEVER,
     NextObserver,
     Observable,
+    of,
     PartialObserver,
     Subject,
     Subscribable,
     Subscription,
 } from 'rxjs';
-import {distinctUntilChanged, filter, map, startWith, switchAll, tap} from 'rxjs/operators';
-import { toObservableValue } from '../projections';
-
-export interface CdConfig {
-    optimized: boolean;
-}
+import {distinctUntilChanged, filter, startWith, switchMap, tap} from 'rxjs/operators';
+import {getStrategies} from './strategy';
 
 export interface CdAware<U> extends Subscribable<U> {
     nextVale: (value: any) => void;
     nextConfig: (config: string) => void;
 }
+
 /**
  * class CdAware
  *
@@ -33,38 +31,42 @@ export function createCdAware<U>(cfg: {
     component: any;
     ngZone: NgZone;
     cdRef: ChangeDetectorRef;
-    work: () => void;
+    render?: () => void;
     behaviour?: (
         o: Observable<Observable<U | null | undefined>>
     ) => Observable<Observable<U | null | undefined>>;
     resetContextObserver: NextObserver<unknown>;
-    updateViewContextObserver: PartialObserver<U | null | undefined>;
+    updateViewContextObserver: PartialObserver<any>;
 }): CdAware<U | undefined | null> {
+    const strategies = getStrategies(cfg);
+
     const configSubject = new Subject<string>();
     const config$ = configSubject.pipe(
         distinctUntilChanged(),
         filter(v => !!v),
         startWith('idle')
     );
-    const observablesSubject = new Subject<Observable<U> | Promise<U> | null | undefined>();
+    const observablesSubject = new Subject<Observable<U>>();
     const observables$ = observablesSubject.pipe(
-        distinctUntilChanged(),
-        map(v => toObservableValue(v))
-        );
+        distinctUntilChanged()
+    );
     const recomposeTrigger$ = combineLatest(observables$, config$);
-    const renderSideEffect$: Observable<U | undefined | null> = observables$.pipe(
-        tap((v) => {
-            cfg.resetContextObserver.next(v);
-            cfg.work();
-        }),
-        map((value$: Observable<any>) =>
-            value$.pipe(
-                distinctUntilChanged(), tap(cfg.updateViewContextObserver)
-            )
-        ),
-        // cfg.behaviour,
-        switchAll<U>(),
-        tap(() => cfg.work())
+    const renderSideEffect$: Observable<any> = recomposeTrigger$.pipe(
+        switchMap(([ob$, c]) => {
+            const strategy = strategies[c] ? strategies[c] : strategies.idle;
+            if (ob$ === undefined || ob$ === null) {
+                cfg.resetContextObserver.next(undefined);
+                strategy.render();
+                return NEVER;
+            }
+
+            return ob$.pipe(
+                distinctUntilChanged(),
+                tap(cfg.updateViewContextObserver),
+                strategy.behaviour(),
+                tap(() => strategy.render())
+            );
+        })
     );
 
     return {

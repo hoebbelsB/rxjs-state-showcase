@@ -12,11 +12,12 @@ import { CdConfigService } from '../../cd-config.service';
             <small>one single-shot observable bound by one ngrxPush as template expression</small>
         </h2>
         <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
+        <b>strategy: <span class="strategy">{{strategy}}</span></b>
         <br/>
         <button #button>increment</button>
         <!-- -->
         <br/>
-        Value1: {{value1$ | ngrxPush }}
+        Value1: {{value1$ | ngrxPush: strategy }}
     `,
     changeDetection: environment.changeDetection
 })
@@ -28,7 +29,9 @@ export class Parent01Component implements AfterViewInit {
     numRenderings = 0;
     value1$: Observable<number>;
 
-    cfg = this.coalesceConfigService.getConfig();
+    get strategy() {
+        return this.coalesceConfigService.getConfig('strategy') || 'idle';
+    }
 
     constructor(
         private coalesceConfigService: CdConfigService

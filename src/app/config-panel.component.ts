@@ -30,7 +30,13 @@ import {State} from '@rx-state/rxjs-state';
                 <select formControlName="strategy"
                         id="strategy">
                     <option [value]="strategy"
-                            *ngFor="let strategy of ['idle', 'optimistic2']">
+                            *ngFor="let strategy of [
+                            'idle',
+                            'pessimistic1',
+                            'pessimistic2',
+                            'optimistic1',
+                            'optimistic2'
+                            ]">
                         {{strategy}}
                     </option>
                 </select>

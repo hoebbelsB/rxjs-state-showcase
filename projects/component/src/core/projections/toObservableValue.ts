@@ -1,4 +1,4 @@
-import { from, of } from 'rxjs';
+import {from, Observable, of} from 'rxjs';
 import {
   isObservableGuard,
   isPromiseGuard,
@@ -8,7 +8,9 @@ import {
 
 export function toObservableValue<T>(
   p: PotentialObservableValue<T>
-): Output<T> {
+): Observable<T>
+    | Observable<undefined>
+    | Observable<null> {
   // Comparing to the literal null value with the == operator covers both null and undefined values.
   if (p === null) {
     return of(p as null);

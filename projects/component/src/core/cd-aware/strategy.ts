@@ -1,9 +1,9 @@
 import {coalesce, generateFrames} from '@rx-state/rxjs-state';
-import {MonoTypeOperatorFunction, Observable} from 'rxjs';
+import {MonoTypeOperatorFunction, NEVER, Observable} from 'rxjs';
 import {ChangeDetectorRef, NgZone} from '@angular/core';
 import {getDetectChanges} from '../utils/get-change-detection-handling';
 import {hasZone} from '../utils';
-import {map} from 'rxjs/operators';
+import {tap} from 'rxjs/operators';
 
 function getSaveDurationSelector(ngZone: NgZone): () => Observable<number> {
     return () => hasZone(ngZone) ? generateFrames(
@@ -19,15 +19,58 @@ export interface StrategyFactoryConfig {
 }
 
 export interface CdStrategy<T> {
-    behaviour?: (cfg?: any) => MonoTypeOperatorFunction<Observable<T>>;
-    work: () => void;
+    behaviour: (cfg?: any) => MonoTypeOperatorFunction<Observable<T>>;
+    render: () => void;
+}
+
+export function getStrategies(cfg: StrategyFactoryConfig) {
+    return {
+        idle: createIdleStrategy({ngZone: cfg.ngZone, cdRef: cfg.cdRef, component: cfg.component}),
+        pessimistic1: createPessimistic1Strategy(cfg),
+        pessimistic2: createPessimistic2Strategy(cfg),
+        optimistic1: createOptimistic1Strategy(cfg),
+        optimistic2: createOptimistic2Strategy(cfg)
+    };
 }
 
 export function createIdleStrategy<T>(cfg: StrategyFactoryConfig): CdStrategy<T> {
     return {
-        work: (): void => {
+        render: (): void => {
             cfg.cdRef.markForCheck();
-        }
+        },
+        behaviour: () => o => o.pipe(tap(v => console.log('idle')))
+    };
+}
+export function createPessimistic1Strategy<T>(cfg: StrategyFactoryConfig): CdStrategy<T> {
+    return {
+        render: (): void => {
+            cfg.cdRef.markForCheck();
+        },
+        behaviour: () => o => o.pipe(tap(v => console.log('pessimistic1')))
+    };
+}
+export function createPessimistic2Strategy<T>(cfg: StrategyFactoryConfig): CdStrategy<T> {
+    return {
+        render: (): void => {
+            cfg.cdRef.markForCheck();
+        },
+        behaviour: () => o => o.pipe(tap(v => console.log('pessimistic2')))
+    };
+}
+export function createOptimistic1Strategy<T>(cfg: StrategyFactoryConfig): CdStrategy<T> {
+    return {
+        render: (): void => {
+            cfg.cdRef.markForCheck();
+        },
+        behaviour: () => o => o.pipe(tap(v => console.log('optimistic1')))
+    };
+}
+export function createOptimistic2Strategy<T>(cfg: StrategyFactoryConfig): CdStrategy<T> {
+    return {
+        render: (): void => {
+            cfg.cdRef.markForCheck();
+        },
+        behaviour: () => o => o.pipe(tap(v => console.log('optimistic2')))
     };
 }
 
@@ -37,16 +80,13 @@ export function createDummyStrategy<T>(cfg: StrategyFactoryConfig): CdStrategy<T
     const durationSelector = getSaveDurationSelector(cfg.ngZone);
     const coalesceConfig = {context: cfg.cdRef['_lView'] as any};
 
-    const behaviour = (o$: Observable<Observable<T>>): Observable<Observable<T>> => o$.pipe(
-        map((value$) => zoneFull ?
-            value$.pipe(coalesce(durationSelector, coalesceConfig)) :
-            value$
-        )
-    );
+    const behaviour = (o$: Observable<Observable<T>>): Observable<Observable<T>> => zoneFull ?
+        o$.pipe(coalesce(durationSelector, coalesceConfig)) :
+        o$;
 
     return {
         behaviour: () => behaviour,
-        work: (): void => {
+        render: (): void => {
             detectChanges(cfg.component);
         }
     };
