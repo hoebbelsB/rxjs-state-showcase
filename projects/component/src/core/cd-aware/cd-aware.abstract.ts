@@ -11,7 +11,7 @@ import {
     Subscription,
 } from 'rxjs';
 import {distinctUntilChanged, filter, startWith, switchMap, tap} from 'rxjs/operators';
-import {getStrategies} from './strategy';
+import {DEFAULT_STRATEGY_NAME, getStrategies} from './strategy';
 
 export interface CdAware<U> extends Subscribable<U> {
     nextVale: (value: any) => void;
@@ -44,7 +44,7 @@ export function createCdAware<U>(cfg: {
     const config$ = configSubject.pipe(
         distinctUntilChanged(),
         filter(v => !!v),
-        startWith('idle')
+        startWith(DEFAULT_STRATEGY_NAME)
     );
     const observablesSubject = new Subject<Observable<U>>();
     const observables$ = observablesSubject.pipe(

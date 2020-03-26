@@ -33,7 +33,7 @@ export class Parent12Component implements AfterViewInit {
         startWith(0), scan((a): any => ++a, 0));
 
     get strategy() {
-        return this.coalesceConfigService.getConfig('strategy') || 'idle';
+        return this.coalesceConfigService.getConfig('strategy');
     }
 
     constructor(

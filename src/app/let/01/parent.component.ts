@@ -28,7 +28,7 @@ export class LetParent01Component {
   }
 
     get strategy() {
-        return this.coalesceConfigService.getConfig('strategy') || 'idle';
+        return this.coalesceConfigService.getConfig('strategy');
     }
 
     constructor(

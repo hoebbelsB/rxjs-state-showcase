@@ -31,6 +31,7 @@ import {State} from '@rx-state/rxjs-state';
                         id="strategy">
                     <option [value]="strategy"
                             *ngFor="let strategy of [
+                            undefined,
                             'idle',
                             'pessimistic1',
                             'pessimistic2',
@@ -62,7 +63,6 @@ export class ConfigPanelComponent extends State<{
     expanded: boolean
 }> {
 
-    vm$ = this.select();
     strategy$ = this.coalesceConfigService.select('strategy');
     @Input()
     appComponentRef;
@@ -78,7 +78,7 @@ export class ConfigPanelComponent extends State<{
     readonly renderTechnique = (this.engine ? 'ɵ' : 'cdRef.') + getChangeDetectionHandler(this.ngZone, this.cdRef).name;
 
     readonly configForm = this.fb.group({
-        strategy: ['idle']
+        strategy: [undefined]
     });
     readonly configForm$: Observable<{ strategy: string }> = this.configForm.valueChanges.pipe(startWith(this.configForm.value));
 

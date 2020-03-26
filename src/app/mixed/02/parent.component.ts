@@ -34,7 +34,7 @@ export class Parent02Component {
     numRenderings = 0;
 
     get strategy() {
-        return this.coalesceConfigService.getConfig('strategy') || 'idle';
+        return this.coalesceConfigService.getConfig('strategy');
     }
 
     constructor(

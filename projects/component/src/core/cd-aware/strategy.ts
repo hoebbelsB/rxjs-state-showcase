@@ -22,6 +22,7 @@ export interface CdStrategy<T> {
     render: () => void;
 }
 
+export const DEFAULT_STRATEGY_NAME = 'idle';
 export function getStrategies(cfg: StrategyFactoryConfig) {
     return {
         idle: createIdleStrategy(cfg),

@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {State} from '@rx-state/rxjs-state';
+import {DEFAULT_STRATEGY_NAME} from '@component';
 
 export interface CdConfig {
     strategies: string[];
@@ -18,7 +19,7 @@ export class CdConfigService extends State<CdConfig> {
         this.subscription.add(this.subscribe());
         this.hold(this.select(), state => this._state = state);
         this.setState({
-            strategy: 'idle'
+            strategy: DEFAULT_STRATEGY_NAME
         });
     }
 
