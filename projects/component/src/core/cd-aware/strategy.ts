@@ -25,7 +25,7 @@ export interface CdStrategy<T> {
 
 export function getStrategies(cfg: StrategyFactoryConfig) {
     return {
-        idle: createIdleStrategy({ngZone: cfg.ngZone, cdRef: cfg.cdRef, component: cfg.component}),
+        idle: createIdleStrategy(cfg),
         pessimistic1: createPessimistic1Strategy(cfg),
         pessimistic2: createPessimistic2Strategy(cfg),
         optimistic1: createOptimistic1Strategy(cfg),

@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {defer, fromEvent, Observable, Subject} from 'rxjs';
 import {scan, startWith} from 'rxjs/operators';
 import {environment} from '../../../environments/environment';
+import {CdConfigService} from '../../cd-config.service';
 
 @Component({
     selector: 'app-push-parent12',
@@ -31,7 +32,12 @@ export class Parent12Component implements AfterViewInit {
     value1$: Observable<number> = this.btnClick$.pipe(
         startWith(0), scan((a): any => ++a, 0));
 
-    constructor() {
+    get strategy() {
+        return this.coalesceConfigService.getConfig('strategy') || 'idle';
+    }
+
+    constructor(
+        private coalesceConfigService: CdConfigService) {
 
     }
 

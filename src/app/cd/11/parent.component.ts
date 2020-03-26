@@ -8,7 +8,7 @@ import {environment} from '../../../environments/environment';
         <h2>ChangeDetection 11
             <small>ViewChild triggers zone</small>
         </h2>
-        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
+        <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b><br>: strategy
         <button #button>Click over ViewChild</button>
     `,
     changeDetection: environment.changeDetection

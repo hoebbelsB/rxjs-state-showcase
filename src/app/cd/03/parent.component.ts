@@ -9,7 +9,7 @@ import {defer, fromEvent} from 'rxjs';
                 with cd.Default</small>
         </h2>
         ChangeDetectionStrategy: Default<br>
-        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
+        <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b>
         <button #button>ɵmarkDirty</button>
         <app-cd03-child01-default></app-cd03-child01-default>
         <app-cd03-child02-push></app-cd03-child02-push>

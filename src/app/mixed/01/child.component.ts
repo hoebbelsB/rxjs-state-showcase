@@ -5,7 +5,7 @@ import {environment} from '../../../environments/environment';
     selector: 'app-mixed-child01',
     template: `
         <h3>Mixed Setup Child 01</h3>
-        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b><br/>
+        <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b><br>
         Passed input binding: {{value}} <!-- -->
     `,
     changeDetection: environment.changeDetection

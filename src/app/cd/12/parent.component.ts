@@ -7,7 +7,7 @@ import {defer, fromEvent} from 'rxjs';
         <h2>ChangeDetection 12
             <small>document.getElementById triggers zone</small>
         </h2>
-        <!-- <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b> -->
+        <!-- <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b><br>: strategy -->
         <button id="btn-cd12">Click over ViewChild</button>
     `,
     changeDetection: ChangeDetectionStrategy.Default

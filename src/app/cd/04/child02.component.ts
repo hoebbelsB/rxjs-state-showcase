@@ -5,7 +5,7 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
     template: `
         <h3>ChangeDetection Child 02</h3>
         ChangeDetectionStrategy: OnPush<br>
-        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
+        <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b><br>: strategy
     `,
     changeDetection: ChangeDetectionStrategy.OnPush
 })

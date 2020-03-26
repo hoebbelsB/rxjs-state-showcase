@@ -1,6 +1,6 @@
-import {ChangeDetectorRef, EmbeddedViewRef, NgZone, OnDestroy, Pipe, PipeTransform, Type} from '@angular/core';
+import {ChangeDetectorRef, NgZone, OnDestroy, Pipe, PipeTransform} from '@angular/core';
 import {NextObserver, Observable, PartialObserver, Unsubscribable} from 'rxjs';
-import {CdAware, createCdAware, setUpWork} from '../core';
+import {CdAware, createCdAware} from '../core';
 
 /**
  * @Pipe PushPipe

@@ -10,9 +10,10 @@ import { CdConfig, CdConfigService } from '../../cd-config.service';
         <h2>ChangeDetection 02
             <small>detectChange renders it self and all children with changeDetection Default</small>
         </h2>
-        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
+        <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b><br>
+        <span>strategy: </span><b class="strategy">{{strategy}}</b>
         <br/>
-        <b>Output handler: {{ outputHandler | ngrxPush: cfg }}</b>
+        <b>Output handler: {{ outputHandler | ngrxPush: strategy }}</b>
         <br/>
         <button #button>increment</button>
         <br/>
@@ -20,7 +21,7 @@ import { CdConfig, CdConfigService } from '../../cd-config.service';
         <app-cd02-child01 (output)="outputHandler.next($event)" [value]="value1$"></app-cd02-child01>
         <br/>
         <br/>
-        <app-cd02-child02 [value2]="value1$ | ngrxPush: cfg"></app-cd02-child02>
+        <app-cd02-child02 [value2]="value1$ | ngrxPush: strategy"></app-cd02-child02>
     `,
     changeDetection: environment.changeDetection
 })

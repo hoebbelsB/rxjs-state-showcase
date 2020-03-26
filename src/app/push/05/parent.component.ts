@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {from, Observable, Subject} from 'rxjs';
 import {concatMap, scan, startWith} from 'rxjs/operators';
-import { CdConfigService } from '../../cd-config.service';
+import {CdConfigService} from '../../cd-config.service';
 
 @Component({
     selector: 'app-push-parent05',

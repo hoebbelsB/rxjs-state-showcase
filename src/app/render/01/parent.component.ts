@@ -7,7 +7,8 @@ import {environment} from '../../../environments/environment';
         <h2>ChangeDetection 01
             <small>detectChange renders it self and all children with changeDetection Default</small>
         </h2>
-        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
+        <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b><br>
+        <span>strategy: </span><b class="strategy">{{strategy}}</b>
         <br/>
         <button (click)="increment()">increment</button>
         <app-cd-child01-default [value]="value"></app-cd-child01-default>

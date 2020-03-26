@@ -7,8 +7,9 @@ import { CdConfig, CdConfigService } from '../../cd-config.service';
     selector: 'app-cd02-child02',
     template: `
         <h3>ChangeDetection Child 02</h3>
-        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b><br/>
-        Passed input binding: {{ value$ | ngrxPush: cfg }}<br/> <!-- -->
+        <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b><br>
+        <span>strategy: </span><b class="strategy">{{strategy}}</b><br/>
+        Passed input binding: {{ value$ | ngrxPush: strategy }}<br/> <!-- -->
         Passed input binding2: {{ value2 }}<br/> <!-- -->
     `,
     changeDetection: environment.changeDetection

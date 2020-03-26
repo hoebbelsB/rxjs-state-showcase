@@ -5,7 +5,7 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
     template: `
         <h3>ChangeDetection Child 01</h3>
         ChangeDetectionStrategy: Default<br>
-        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b><br/>
+        <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b><br>
         <app-cd02-child0101-push></app-cd02-child0101-push>
     `,
     changeDetection: ChangeDetectionStrategy.Default

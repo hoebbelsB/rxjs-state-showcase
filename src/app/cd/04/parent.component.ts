@@ -16,7 +16,7 @@ import {defer, fromEvent} from 'rxjs';
                 with cd.Default</small>
         </h2>
         ChangeDetectionStrategy: Default<br>
-        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
+        <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b><br>: strategy
         <button #button>ChangeDetectorRef#markForCheck</button>
         <app-cd04-child01-default></app-cd04-child01-default>
         <app-cd04-child02-push></app-cd04-child02-push>

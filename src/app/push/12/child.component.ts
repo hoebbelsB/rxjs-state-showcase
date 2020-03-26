@@ -9,7 +9,7 @@ import { CdConfigService } from '../../cd-config.service';
   template: `
     <h3>Push Child 12</h3>
     <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b><br>
-        <span>strategy: </span><b class="strategy">{{strategy}}</b><br/>
+    <span>strategy: </span><b class="strategy">{{strategy}}</b><br/>
     Passed input binding: {{value1$ | ngrxPush: strategy }} <!-- -->
   `,
   changeDetection: environment.changeDetection
