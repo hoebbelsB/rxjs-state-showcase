@@ -19,7 +19,9 @@ export class Child12Component {
   valueSubject = new ReplaySubject<Observable<number>>(1);
   @Input()
   set value(value$: Observable<number>) {
-    this.valueSubject.next(value$);
+      if(value$) {
+          this.valueSubject.next(value$);
+      }
   }
   value1$ = this.valueSubject.pipe(
    switchAll()

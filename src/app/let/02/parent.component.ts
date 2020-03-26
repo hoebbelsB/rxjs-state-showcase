@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {environment} from '../../../environments/environment';
-import {from, Observable, Subject} from 'rxjs';
+import {defer, from, fromEvent, Observable, Subject} from 'rxjs';
 import {scan, startWith} from 'rxjs/operators';
 import {CdConfigService} from '../../cd-config.service';
 
@@ -13,17 +13,18 @@ import {CdConfigService} from '../../cd-config.service';
         <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b><br>
         <span>strategy: </span><b class="strategy">{{strategy}}</b>
         <br/>
-        <button (click)="btnClick.next()">increment</button>
+        <button #button>increment</button>
         <ng-container *ngrxLet="value1$ as v">Value1: {{v}}</ng-container>
         <ng-container *ngrxLet="value1$ as v">Value1: {{v}}</ng-container>
         <ng-container *ngrxLet="value1$ as v">Value1: {{v}}</ng-container>
     `,
     changeDetection: environment.changeDetection
 })
-export class LetParent02Component {
+export class LetParent02Component  implements AfterViewInit {
+    @ViewChild('button') button: ElementRef<HTMLButtonElement>;
+    btnClick$ = defer(() => fromEvent(this.button.nativeElement, 'click'));
 
-    btnClick = new Subject<Event>();
-    value1$: Observable<number> = this.btnClick.pipe(startWith(0), scan((a): any => ++a, 0));
+    value1$: Observable<number>;
     numRenderings = 0;
 
     getNumOfRenderings() {
@@ -38,6 +39,10 @@ export class LetParent02Component {
         private coalesceConfigService: CdConfigService
     ) {
 
+    }
+
+    ngAfterViewInit(): void {
+        this.value1$ = this.btnClick$.pipe(startWith(0), scan((a): any => ++a, 0));
     }
 
 }

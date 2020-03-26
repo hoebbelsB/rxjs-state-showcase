@@ -188,7 +188,7 @@ export function createOptimistic1Strategy<T>(cfg: StrategyFactoryConfig): CdStra
             (inZone ? ɵmarkDirty(cfg.component) :  ɵdetectChanges(cfg.component)) :
             (inZone ? cfg.cdRef.markForCheck() : cfg.cdRef.detectChanges());
     }
-    const coalesceConfig = {context: (inIvy ? cfg.cdRef['_lView'] : (cfg.cdRef as any).context) as any};
+    const coalesceConfig = {context: cfg.cdRef['_lView']}; // (inIvy ? cfg.cdRef['_lView'] : (cfg.cdRef as any).context) as any};
 
     const behaviour = (o$: Observable<Observable<T>>): Observable<Observable<T>> => {
         console.log('optimistic1');

@@ -27,12 +27,11 @@ import { CdConfigService } from '../../cd-config.service';
     `,
     changeDetection: environment.changeDetection
 })
-export class Parent31Component {
+export class Parent31Component implements AfterViewInit {
     @ViewChild('button') button: ElementRef<HTMLButtonElement>;
     btnClick$ = defer(() => fromEvent(this.button.nativeElement, 'click'));
 
-    value1$: Observable<number> = this.btnClick$.pipe(
-        startWith(0), scan((a): any => ++a, 0));
+    value1$: Observable<number>;
     numRenderings = 0;
 
     get strategy() {
@@ -46,5 +45,10 @@ export class Parent31Component {
 
     getNumOfRenderings() {
         return ++this.numRenderings;
+    }
+
+    ngAfterViewInit(): void {
+        this.value1$ = this.btnClick$.pipe(
+            startWith(0), scan((a): any => ++a, 0));
     }
 }

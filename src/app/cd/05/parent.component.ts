@@ -20,8 +20,7 @@ import {defer, fromEvent} from 'rxjs';
     changeDetection: ChangeDetectionStrategy.Default
 })
 export class CdParent05Component implements AfterViewInit {
-    @ViewChild('button') button: ElementRef<HTMLButtonElement>;
-    btnClick$ = defer(() => fromEvent(this.button.nativeElement, 'click'));
+
     numRenderings = 0;
 
     getNumOfRenderings() {
@@ -33,7 +32,7 @@ export class CdParent05Component implements AfterViewInit {
     }
 
     ngAfterViewInit() {
-        this.btnClick$.subscribe(() => this.markForCheck());
+
     }
 
     constructor(private cdRef: ChangeDetectorRef) {

@@ -29,8 +29,7 @@ export class Parent12Component implements AfterViewInit {
 
     private readonly afterViewInit$ = new Subject<void>();
 
-    value1$: Observable<number> = this.btnClick$.pipe(
-        startWith(0), scan((a): any => ++a, 0));
+    value1$: Observable<number>;
 
     get strategy() {
         return this.coalesceConfigService.getConfig('strategy');
@@ -42,7 +41,9 @@ export class Parent12Component implements AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        this.afterViewInit$.next();
+        this.value1$ = this.btnClick$.pipe(
+            startWith(0), scan((a): any => ++a, 0));
+
     }
 
 
