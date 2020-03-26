@@ -11,9 +11,9 @@ import {
 } from '@angular/core';
 import {coalesce, generateFrames} from '@rx-state/rxjs-state';
 
-import {EMPTY, NextObserver, Observable, PartialObserver, ReplaySubject, Unsubscribable,} from 'rxjs';
-import {catchError, distinctUntilChanged, filter, map, startWith, tap, withLatestFrom,} from 'rxjs/operators';
-import {CdAware, CoalescingConfig as NgRxLetConfig, createCdAware, setUpWork,} from '../core';
+import {EMPTY, NextObserver, Observable, PartialObserver, ReplaySubject, Unsubscribable} from 'rxjs';
+import {catchError, distinctUntilChanged, filter, map, startWith, tap, withLatestFrom} from 'rxjs/operators';
+import {CdAware, CdConfig as NgRxLetConfig, createCdAware, setUpWork} from '../core';
 
 export interface LetViewContext<T> {
     // to enable `let` syntax we have to use $implicit (var; let v = var)
@@ -176,7 +176,7 @@ export class LetDirective<U> implements OnDestroy {
                 return config.optimized ?
                     value$.pipe(catchError(e => EMPTY),
                         tap(() => console.log('TAP coalesce')),
-                        coalesce(durationSelector, coalesceConfig),) :
+                        coalesce(durationSelector, coalesceConfig)) :
                     value$.pipe(catchError(e => EMPTY), tap(() => console.log('TAP')));
             })
         );
@@ -185,7 +185,7 @@ export class LetDirective<U> implements OnDestroy {
     set ngrxLet(
         potentialObservable: Observable<U> | Promise<U> | null | undefined
     ) {
-        this.cdAware.next(potentialObservable);
+        this.cdAware.nextVale(potentialObservable);
     }
 
     @Input()
@@ -200,6 +200,9 @@ export class LetDirective<U> implements OnDestroy {
         private readonly viewContainerRef: ViewContainerRef
     ) {
         this.cdAware = createCdAware<U>({
+             component: this,
+             cdRef,
+             ngZone,
             work: setUpWork({
                 cdRef,
                 ngZone,
@@ -207,7 +210,7 @@ export class LetDirective<U> implements OnDestroy {
             }),
             resetContextObserver: this.resetContextObserver,
             updateViewContextObserver: this.updateViewContextObserver,
-            configurableBehaviour: this.configurableBehaviour,
+            behaviour: this.configurableBehaviour,
         });
         this.subscription = this.cdAware.subscribe();
     }

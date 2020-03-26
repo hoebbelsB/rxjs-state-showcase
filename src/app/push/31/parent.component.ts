@@ -19,7 +19,7 @@ import { CdConfigService } from '../../cd-config.service';
         <insertion [template]="ref"></insertion>
 
         <ng-template #ref>
-            <span>{{value1$ | ngrxPush: cfg}}</span>
+            <span>{{value1$ | ngrxPush}}</span>
         </ng-template>
 
 

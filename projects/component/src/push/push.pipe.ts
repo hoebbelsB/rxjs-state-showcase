@@ -1,7 +1,7 @@
-import {ChangeDetectorRef, EmbeddedViewRef, NgZone, OnDestroy, Pipe, PipeTransform, Type,} from '@angular/core';
-import {NextObserver, Observable, PartialObserver, Subject, Unsubscribable,} from 'rxjs';
-import {distinctUntilChanged, map, tap, withLatestFrom} from 'rxjs/operators';
-import {CdAware, CoalescingConfig as PushPipeConfig, createCdAware, setUpWork,} from '../core';
+import {ChangeDetectorRef, EmbeddedViewRef, NgZone, OnDestroy, Pipe, PipeTransform, Type} from '@angular/core';
+import {NextObserver, Observable, PartialObserver, Subject, Unsubscribable} from 'rxjs';
+import {distinctUntilChanged, map, withLatestFrom} from 'rxjs/operators';
+import {CdAware, CdConfig as PushPipeConfig, createCdAware, setUpWork} from '../core';
 import {coalesce, generateFrames} from '@rx-state/rxjs-state';
 
 /**
@@ -92,19 +92,18 @@ export class PushPipe<S> implements PipeTransform, OnDestroy {
     constructor(
         private cdRef: ChangeDetectorRef,
         ngZone: NgZone) {
-        // TODO: evaluate: https://github.com/angular/angular/pull/33449
-        //  && https://github.com/angular/angular/issues/33677
-        /*const correctCdRef = ɵɵinjectPipeChangeDetectorRef()
-        console.log(correctCdRef);*/
         this.cdAware = createCdAware<S>({
+            component: this,
+            ngZone,
+            cdRef,
             work: setUpWork({
                 ngZone,
                 cdRef,
                 context: (cdRef as EmbeddedViewRef<Type<any>>).context,
             }),
+            behaviour: this.configurableBehaviour,
             updateViewContextObserver: this.updateViewContextObserver,
             resetContextObserver: this.resetContextObserver,
-            configurableBehaviour: this.configurableBehaviour,
         });
         this.subscription = this.cdAware.subscribe();
     }
@@ -120,7 +119,7 @@ export class PushPipe<S> implements PipeTransform, OnDestroy {
         config: PushPipeConfig = {optimized: true}
     ): T | null | undefined {
         this.configSubject.next(config);
-        (this.cdAware).next(potentialObservable as any);
+        this.cdAware.nextVale(potentialObservable);
         return this.renderedValue as T;
     }
 

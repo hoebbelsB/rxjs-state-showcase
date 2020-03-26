@@ -3,7 +3,8 @@ import {Subscription} from 'rxjs';
 import {State} from '@rx-state/rxjs-state';
 
 export interface CdConfig {
-    optimized: boolean;
+    strategies: string[];
+    strategy: string;
 }
 
 @Injectable({providedIn: 'root'})
@@ -17,7 +18,7 @@ export class CdConfigService extends State<CdConfig> {
         this.subscription.add(this.subscribe());
         this.hold(this.select(), state => this._state = state);
         this.setState({
-            optimized: true
+            strategy: 'idle'
         });
     }
 
