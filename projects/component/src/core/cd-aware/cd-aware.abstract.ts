@@ -4,7 +4,6 @@ import {
     NEVER,
     NextObserver,
     Observable,
-    of,
     PartialObserver,
     Subject,
     Subscribable,
@@ -64,6 +63,7 @@ export function createCdAware<U>(cfg: {
             return observable$.pipe(
                 distinctUntilChanged(),
                 tap(cfg.updateViewContextObserver),
+                tap(console.log),
                 strategy.behaviour(),
                 tap(() => strategy.render())
             );

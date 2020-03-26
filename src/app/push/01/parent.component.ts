@@ -24,7 +24,6 @@ import { CdConfigService } from '../../cd-config.service';
 export class Parent01Component implements AfterViewInit {
 
     @ViewChild('button') button: ElementRef<HTMLButtonElement>;
-    btnClick$ = defer(() => fromEvent(this.button.nativeElement, 'click'));
 
     numRenderings = 0;
     value1$: Observable<number> = NEVER;
@@ -40,7 +39,7 @@ export class Parent01Component implements AfterViewInit {
         return ++this.numRenderings;
     }
     ngAfterViewInit(): void {
-       this.value1$ = this.btnClick$.pipe(
+       this.value1$ = fromEvent(this.button.nativeElement, 'click').pipe(
            startWith(0), scan((a): any => ++a, 0));
     }
 

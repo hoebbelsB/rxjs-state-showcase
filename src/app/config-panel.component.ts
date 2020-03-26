@@ -1,11 +1,19 @@
-import {ApplicationRef, ChangeDetectorRef, Component, Input, NgZone, ViewChild, ɵdetectChanges} from '@angular/core';
+import {
+    AfterViewInit,
+    ApplicationRef,
+    ChangeDetectorRef,
+    Component,
+    Input,
+    NgZone,
+    ɵdetectChanges
+} from '@angular/core';
 import {environment} from '../environments/environment';
 import {getChangeDetectionHandler, hasZone, isIvy} from '../../projects/component/src/core/utils';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {Router} from '@angular/router';
 import {CdConfigService} from './cd-config.service';
 import {FormBuilder} from '@angular/forms';
-import {fromEvent, merge, Observable} from 'rxjs';
+import {defer, fromEvent, merge, Observable} from 'rxjs';
 import {startWith, tap} from 'rxjs/operators';
 import {State} from '@rx-state/rxjs-state';
 
@@ -61,7 +69,10 @@ import {State} from '@rx-state/rxjs-state';
 })
 export class ConfigPanelComponent extends State<{
     expanded: boolean
-}> {
+}> implements AfterViewInit {
+
+    detectChangeClick$ = defer(() => fromEvent(document.getElementById('btnDetectChanges'), 'click'));
+
     expanded = false;
     @Input()
     appComponentRef;
@@ -79,6 +90,7 @@ export class ConfigPanelComponent extends State<{
     readonly configForm$: Observable<{ strategy: string }> = this.configForm.valueChanges.pipe(startWith(this.configForm.value));
     strategy = () => this.coalesceConfigService.getConfig('strategy');
 
+
     constructor(
         private fb: FormBuilder,
         private breakPointObserver: BreakpointObserver,
@@ -92,16 +104,6 @@ export class ConfigPanelComponent extends State<{
         this.setState({expanded: true});
         this.coalesceConfigService.connect(this.configForm$.pipe(tap(() => appRef.tick())));
 
-
-        const appTickClick$ = fromEvent(document.getElementById('btnAppTick'), 'click');
-        const detectChangeClick$ = fromEvent(document.getElementById('btnDetectChanges'), 'click');
-        this.hold(
-            merge(
-                appTickClick$.pipe(tap(() => this.tick())),
-                detectChangeClick$.pipe(tap(() => this.detectChanges()))
-            )
-        );
-
     }
 
     detectChanges() {
@@ -109,6 +111,14 @@ export class ConfigPanelComponent extends State<{
     }
 
     tick() {
+        console.log('appRef.tick()');
         this.appRef.tick();
+    }
+
+    ngAfterViewInit(): void {
+        merge(
+            fromEvent(document.getElementById('btnAppTick'), 'click').pipe(tap(() => this.tick())),
+            this.detectChangeClick$.pipe(tap(() => this.detectChanges()))
+        ).subscribe();
     }
 }

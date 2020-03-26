@@ -20,6 +20,7 @@ export interface StrategyFactoryConfig {
 export interface CdStrategy<T> {
     behaviour: (cfg?: any) => MonoTypeOperatorFunction<Observable<T>>;
     render: () => void;
+    name: string;
 }
 
 export const DEFAULT_STRATEGY_NAME = 'idle';
@@ -60,7 +61,8 @@ export function createIdleStrategy<T>(cfg: StrategyFactoryConfig): CdStrategy<T>
         behaviour: () => o => {
             console.log('idle');
             return o;
-        }
+        },
+        name: 'idle'
     };
 }
 
@@ -109,7 +111,8 @@ export function createPessimistic1Strategy<T>(cfg: StrategyFactoryConfig): CdStr
 
     return {
         behaviour: () => behaviour,
-        render
+        render,
+        name: 'pessimistic1'
     };
 }
 
@@ -159,7 +162,8 @@ export function createPessimistic2Strategy<T>(cfg: StrategyFactoryConfig): CdStr
 
     return {
         behaviour: () => behaviour,
-        render
+        render,
+        name: 'pessimistic2'
     };
 }
 
@@ -204,13 +208,14 @@ export function createOptimistic1Strategy<T>(cfg: StrategyFactoryConfig): CdStra
     const coalesceConfig = { context: inIvy ? cfg.cdRef['_lView'] : ((cfg.cdRef as any).context) as any};
 
     const behaviour = (o$: Observable<Observable<T>>): Observable<Observable<T>> => {
-        console.log('optimistic1');
+        console.log('optimistic1' + inZone ? 'coalesce(cfg)' : '');
         return inZone ? o$.pipe(coalesce(durationSelector, coalesceConfig)) : o$;
     };
 
     return {
         behaviour: () => behaviour,
-        render
+        render,
+        name: 'optimistic1'
     };
 }
 
@@ -246,7 +251,8 @@ export function createOptimistic2Strategy<T>(cfg: StrategyFactoryConfig): CdStra
 
     return {
         behaviour: () => behaviour,
-        render(): void { inIvy ? ɵdetectChanges(cfg.component) : cfg.cdRef.detectChanges(); }
+        render(): void { inIvy ? ɵdetectChanges(cfg.component) : cfg.cdRef.detectChanges(); },
+        name: 'optimistic2'
     };
 }
 
@@ -264,7 +270,8 @@ export function createDummyStrategy<T>(cfg: StrategyFactoryConfig): CdStrategy<T
         behaviour: () => behaviour,
         render: (): void => {
             detectChanges(cfg.component);
-        }
+        },
+        name: 'dummy'
     };
 }
 

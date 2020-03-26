@@ -1,7 +1,6 @@
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {ApplicationRef, Component, NgZone} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
-import {Subject} from 'rxjs';
 import {filter, tap} from 'rxjs/operators';
 import {environment} from '../environments/environment';
 import {hasZone} from '../../projects/component/src/core/utils';
