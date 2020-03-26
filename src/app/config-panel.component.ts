@@ -25,7 +25,6 @@ import {State} from '@rx-state/rxjs-state';
                     </mat-chip-list>
                 </mat-panel-description>
             </mat-expansion-panel-header>
-            {{vm$ | ngrxPush | json}}
 
             <form [formGroup]="configForm">
                 <select formControlName="strategy"
