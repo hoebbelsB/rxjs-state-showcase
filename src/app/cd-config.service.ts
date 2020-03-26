@@ -22,8 +22,8 @@ export class CdConfigService extends State<CdConfig> {
         });
     }
 
-    getConfig(): CdConfig {
-        return this._state;
+    getConfig(prop?: string): CdConfig {
+        return prop ? this._state[prop] : this._state;
     }
 
 }
