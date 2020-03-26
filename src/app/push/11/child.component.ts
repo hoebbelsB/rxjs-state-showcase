@@ -5,7 +5,8 @@ import {environment} from '../../../environments/environment';
     selector: 'app-push-child11',
     template: `
         <h3>Push Pipe Child 11</h3>
-        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b><br/>
+        <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b><br>
+        <span>strategy: </span><b class="strategy">{{strategy}}</b><br/>
         Passed input binding: {{value}} <!-- -->
     `,
     changeDetection: environment.changeDetection

@@ -11,7 +11,8 @@ import { CdConfigService } from '../../cd-config.service';
             Push Pipe 31
             <small></small>
         </h2>
-        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
+        <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b><br>
+        <span>strategy: </span><b class="strategy">{{strategy}}</b>
         <br/>
         <button #button>increment</button>
         <!-- -->
@@ -34,7 +35,9 @@ export class Parent31Component {
         startWith(0), scan((a): any => ++a, 0));
     numRenderings = 0;
 
-    cfg = this.coalesceConfigService.getConfig();
+    get strategy() {
+        return this.coalesceConfigService.getConfig('strategy') || 'idle';
+    }
 
     constructor(
         private coalesceConfigService: CdConfigService

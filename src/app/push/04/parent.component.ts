@@ -10,11 +10,12 @@ import { CdConfigService } from '../../cd-config.service';
         <h2>Push Pipe 04
             <small>one sync multi-shot observables bound by multiple ngrxPush as template expression</small>
         </h2>
-        <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
+        <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b><br>
+        <span>strategy: </span><b class="strategy">{{strategy}}</b>
         <br/>
         <button (click)="btnClick.next()">increment</button>
         <!-- -->
-        Value1: {{value1$ | ngrxPush: cfg}}
+        Value1: {{value1$ | ngrxPush: strategy}}
     `,
     changeDetection: environment.changeDetection
 })
@@ -25,7 +26,9 @@ export class Parent04Component {
         startWith(0), concatMap(a => from(this.numArray)), scan((a): any => ++a, 0));
     numRenderings = 0;
 
-    cfg = this.coalesceConfigService.getConfig();
+    get strategy() {
+        return this.coalesceConfigService.getConfig('strategy') || 'idle';
+    }
 
     constructor(
         private coalesceConfigService: CdConfigService

@@ -10,12 +10,13 @@ import { CdConfigService } from '../../cd-config.service';
     <h2>Push Pipe 11
     <small>one single-shot observable bound by one ngrxPush as input binding</small>
     </h2>
-    <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b>
+    <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b><br>
+        <span>strategy: </span><b class="strategy">{{strategy}}</b>
     <br/>
     <button (click)="btnClick.next()">increment</button>
     <!-- -->
     <br/>
-    <app-push-child11 [value]="value1$ | ngrxPush: cfg">
+    <app-push-child11 [value]="value1$ | ngrxPush: strategy">
     </app-push-child11>
   `,
   changeDetection: environment.changeDetection
@@ -27,7 +28,9 @@ export class Parent11Component {
       startWith(0), scan((a): any => ++a, 0));
   numRenderings = 0;
 
-    cfg = this.coalesceConfigService.getConfig();
+    get strategy() {
+        return this.coalesceConfigService.getConfig('strategy') || 'idle';
+    }
 
     constructor(
         private coalesceConfigService: CdConfigService

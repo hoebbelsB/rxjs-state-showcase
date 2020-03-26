@@ -8,8 +8,9 @@ import { CdConfigService } from '../../cd-config.service';
   selector: 'app-push-child12',
   template: `
     <h3>Push Child 12</h3>
-    <b>render: <span class="num-renders">{{getNumOfRenderings()}}</span></b><br/>
-    Passed input binding: {{value1$ | ngrxPush: cfg }} <!-- -->
+    <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b><br>
+        <span>strategy: </span><b class="strategy">{{strategy}}</b><br/>
+    Passed input binding: {{value1$ | ngrxPush: strategy }} <!-- -->
   `,
   changeDetection: environment.changeDetection
 })
@@ -29,7 +30,9 @@ export class Child12Component {
     return ++this.numRenderings;
   }
 
-  cfg = this.coalesceConfigService.getConfig();
+  get strategy() {
+        return this.coalesceConfigService.getConfig('strategy') || 'idle';
+    }
 
   constructor(
       private coalesceConfigService: CdConfigService
