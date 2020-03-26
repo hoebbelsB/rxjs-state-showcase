@@ -1,6 +1,6 @@
 import {coalesce, generateFrames} from '@rx-state/rxjs-state';
 import {MonoTypeOperatorFunction, Observable} from 'rxjs';
-import {ChangeDetectorRef, NgZone, ɵmarkDirty, ɵdetectChanges} from '@angular/core';
+import {ChangeDetectorRef, NgZone, ɵdetectChanges, ɵmarkDirty} from '@angular/core';
 import {getDetectChanges} from '../utils/get-change-detection-handling';
 import {hasZone, isIvy} from '../utils';
 
@@ -23,6 +23,7 @@ export interface CdStrategy<T> {
 }
 
 export const DEFAULT_STRATEGY_NAME = 'idle';
+
 export function getStrategies(cfg: StrategyFactoryConfig) {
     return {
         idle: createIdleStrategy(cfg),
@@ -88,11 +89,12 @@ export function createPessimistic1Strategy<T>(cfg: StrategyFactoryConfig): CdStr
     const inIvy = isIvy();
     const inZone = hasZone(cfg.ngZone);
     const durationSelector = getSaveDurationSelector(cfg.ngZone);
+
     function render() {
         if (inZone && !inIvy) {
             cfg.cdRef.markForCheck();
         } else if (!inZone && !inIvy) {
-          cfg.cdRef.detectChanges();
+            cfg.cdRef.detectChanges();
         } else {
             ɵmarkDirty(cfg.component);
         }
@@ -184,17 +186,26 @@ export function createOptimistic1Strategy<T>(cfg: StrategyFactoryConfig): CdStra
     const durationSelector = getSaveDurationSelector(cfg.ngZone);
 
     function render() {
-        return inIvy ?
-            (inZone ? ɵmarkDirty(cfg.component) :  ɵdetectChanges(cfg.component)) :
-            (inZone ? cfg.cdRef.markForCheck() : cfg.cdRef.detectChanges());
+        if (inIvy) {
+            if (inZone) {
+                ɵmarkDirty(cfg.component);
+            } else {
+                ɵdetectChanges(cfg.component);
+            }
+        } else {
+            if (inZone) {
+                cfg.cdRef.markForCheck();
+            } else {
+                cfg.cdRef.detectChanges();
+            }
+        }
     }
-    const coalesceConfig = {context: cfg.cdRef['_lView']}; // (inIvy ? cfg.cdRef['_lView'] : (cfg.cdRef as any).context) as any};
+
+    const coalesceConfig = { context: inIvy ? cfg.cdRef['_lView'] : ((cfg.cdRef as any).context) as any};
 
     const behaviour = (o$: Observable<Observable<T>>): Observable<Observable<T>> => {
         console.log('optimistic1');
-        return inZone ?
-            o$.pipe(coalesce(durationSelector, coalesceConfig)) :
-            o$;
+        return inZone ? o$.pipe(coalesce(durationSelector, coalesceConfig)) : o$;
     };
 
     return {
@@ -219,7 +230,7 @@ export function createOptimistic1Strategy<T>(cfg: StrategyFactoryConfig): CdStra
  *
  * |          | Render Method      | Coalescing | Coalesce Scope |
  * | -------- | -------------------| ---------- | -------------- |
- * | ZoneFull | ɵdetectChange      | ✔️         | LView          |
+ * | ZoneFull | ɵdetectChanges     | ✔️         | LView          |
  * | ZoneLess | ɵdetectChanges     | ✔️         | LView          |
  */
 export function createOptimistic2Strategy<T>(cfg: StrategyFactoryConfig): CdStrategy<T> {
@@ -235,7 +246,7 @@ export function createOptimistic2Strategy<T>(cfg: StrategyFactoryConfig): CdStra
 
     return {
         behaviour: () => behaviour,
-        render: (): void => detectChanges(cfg.component)
+        render(): void { inIvy ? ɵdetectChanges(cfg.component) : cfg.cdRef.detectChanges(); }
     };
 }
 

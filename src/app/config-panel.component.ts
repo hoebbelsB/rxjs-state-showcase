@@ -66,9 +66,6 @@ export class ConfigPanelComponent extends State<{
     @Input()
     appComponentRef;
 
-    @ViewChild('#btnAppTick')
-    btnAppTick;
-
     readonly env = environment;
     readonly hasZone = hasZone(this.ngZone);
     readonly zoneEnv = hasZone(this.ngZone) ? 'NgZone' : 'NgNoopZone';
@@ -93,10 +90,10 @@ export class ConfigPanelComponent extends State<{
     ) {
         super();
         this.setState({expanded: true});
-        this.coalesceConfigService.connect(this.configForm$);
+        this.coalesceConfigService.connect(this.configForm$.pipe(tap(() => appRef.tick())));
 
 
-        const appTickClick$ = fromEvent(this.btnAppTick, 'click').pipe(tap(console.log));
+        const appTickClick$ = fromEvent(document.getElementById('btnAppTick'), 'click');
         const detectChangeClick$ = fromEvent(document.getElementById('btnDetectChanges'), 'click');
         this.hold(
             merge(
