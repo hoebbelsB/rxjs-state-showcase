@@ -24,8 +24,7 @@ export class CdOnDirective implements OnDestroy {
         switchMap(
           events => from(events)
             .pipe(
-              mergeMap(event => fromEvent(this.elemRef.nativeElement, event)),
-                tap(console.log)
+              mergeMap(event => fromEvent(this.elemRef.nativeElement, event))
             )
         ),
         tap(_ => this.cd.detectChanges()),

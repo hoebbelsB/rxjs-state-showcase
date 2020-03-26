@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {State} from '@rx-state/rxjs-state';
 import {DEFAULT_STRATEGY_NAME} from '@component';
+import {RxState} from '@rx-state/ngx-state';
 
 export interface CdConfig {
     strategies: string[];
@@ -9,22 +10,19 @@ export interface CdConfig {
 }
 
 @Injectable({providedIn: 'root'})
-export class CdConfigService extends State<CdConfig> {
-    subscription = new Subscription();
-
-    private _state: CdConfig;
+export class CdConfigService extends RxState<CdConfig> {
+    private state: CdConfig;
 
     constructor() {
         super();
-        this.subscription.add(this.subscribe());
-        this.hold(this.select(), state => this._state = state);
+        this.hold(this.select(), state => this.state = state);
         this.setState({
             strategy: DEFAULT_STRATEGY_NAME
         });
     }
 
-    getConfig(prop?: string): CdConfig {
-        return prop ? this._state[prop] : this._state;
+    getConfig(prop?: string): CdConfig | string {
+        return prop ? this.state[prop] : this.state;
     }
 
 }

@@ -1,34 +1,31 @@
-<ng-container *ngIf="viewState$ | ngrxPush as state">
-  <mat-toolbar class="app-toolbar" color="primary">
-    <button (click)="toggleSidenav.next()" mat-icon-button>
-      <mat-icon>menu</mat-icon>
-    </button>
-    <h1 class="mat-title">Angular Performance Tests</h1>
-    <app-config-panel class="config-panel" [appComponentRef]="thisRef"></app-config-panel>
-  </mat-toolbar>
-  <mat-sidenav-container
-    [style.marginTop.px]="state.mobile ? 56 : 0"
-    class="app-sidenav-container">
-    <mat-sidenav [fixedInViewport]="state.mobile"
-                 [mode]="state.mobile ? 'over' : 'side'"
-                 [opened]="state.navOpen"
-                 class="main-sidenav"
-                 fixedTopGap="56">
-      <mat-nav-list>
-        <a *ngFor="let item of state.menuItems" [routerLink]="item.link"
-           mat-list-item
-           routerLinkActive="active">
-          <mat-icon style="margin-right: .5rem;">warning</mat-icon>
-          {{item.label}}
-        </a>
-        <a mat-list-item routerLink="animation" routerLinkActive="active">
-          <mat-icon style="margin-right: .5rem;">invert_colors</mat-icon>
-          Animation
-        </a>
-      </mat-nav-list>
-    </mat-sidenav>
-    <mat-sidenav-content class="main-content">
-      <router-outlet></router-outlet>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-</ng-container>
+<mat-toolbar class="app-toolbar" color="primary">
+  <button mat-icon-button>
+    <mat-icon>menu</mat-icon>
+  </button>
+  <h1 class="mat-title">Angular Performance Tests</h1>
+  <app-config-panel class="config-panel" [appComponentRef]="thisRef"></app-config-panel>
+</mat-toolbar>
+<mat-sidenav-container
+  [style.marginTop.px]="0"
+  class="app-sidenav-container">
+  <mat-sidenav mode='side'
+               opened="true"
+               class="main-sidenav"
+               fixedTopGap="56">
+    <mat-nav-list>
+      <a *ngFor="let item of menuItems" [routerLink]="item.link"
+         mat-list-item
+         routerLinkActive="active">
+        <mat-icon style="margin-right: .5rem;">warning</mat-icon>
+        {{item.label}}
+      </a>
+      <a mat-list-item routerLink="animation" routerLinkActive="active">
+        <mat-icon style="margin-right: .5rem;">invert_colors</mat-icon>
+        Animation
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content class="main-content">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

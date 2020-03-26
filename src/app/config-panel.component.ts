@@ -13,7 +13,7 @@ import {State} from '@rx-state/rxjs-state';
     selector: 'app-config-panel',
     template: `
         <mat-expansion-panel class="mat-background-primary config-panel"
-                             [expanded]="select('expanded') | ngrxPush">
+                             [expanded]="expanded">
             <mat-expansion-panel-header>
                 <mat-panel-title>
                     {{zoneEnv}} - {{engine}} - {{changeDetection}}:
@@ -21,7 +21,7 @@ import {State} from '@rx-state/rxjs-state';
                 <mat-panel-description>
                     <mat-chip-list class="config-display">
                         <mat-chip>{{renderTechnique}}</mat-chip>
-                        <mat-chip>{{strategy$ | ngrxPush}}</mat-chip>
+                        <mat-chip>{{strategy()}}</mat-chip>
                     </mat-chip-list>
                 </mat-panel-description>
             </mat-expansion-panel-header>
@@ -62,8 +62,7 @@ import {State} from '@rx-state/rxjs-state';
 export class ConfigPanelComponent extends State<{
     expanded: boolean
 }> {
-
-    strategy$ = this.coalesceConfigService.select('strategy');
+    expanded = false;
     @Input()
     appComponentRef;
 
@@ -78,9 +77,10 @@ export class ConfigPanelComponent extends State<{
     readonly renderTechnique = (this.engine ? 'ɵ' : 'cdRef.') + getChangeDetectionHandler(this.ngZone, this.cdRef).name;
 
     readonly configForm = this.fb.group({
-        strategy: [undefined]
+        strategy: ['pessimistic1']
     });
     readonly configForm$: Observable<{ strategy: string }> = this.configForm.valueChanges.pipe(startWith(this.configForm.value));
+    strategy = () => this.coalesceConfigService.getConfig('strategy');
 
     constructor(
         private fb: FormBuilder,

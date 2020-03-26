@@ -64,7 +64,7 @@ export class PushPipe<S> implements PipeTransform, OnDestroy {
         private cdRef: ChangeDetectorRef,
         ngZone: NgZone) {
         this.cdAware = createCdAware<S>({
-            component: this,
+            component: (this.cdRef as any).context,
             ngZone,
             cdRef,
             updateViewContextObserver: this.updateViewContextObserver,

@@ -42,21 +42,26 @@ export function createCdAware<U>(cfg: {
 
     const configSubject = new Subject<string>();
     const config$ = configSubject.pipe(
-        distinctUntilChanged(),
         filter(v => !!v),
-        startWith(DEFAULT_STRATEGY_NAME)
+        distinctUntilChanged(),
+        startWith(DEFAULT_STRATEGY_NAME),
     );
     const observablesSubject = new Subject<Observable<U>>();
     const observables$ = observablesSubject.pipe(
         distinctUntilChanged()
     );
+    let prevObs;
     const recomposeTrigger$ = combineLatest(observables$, config$);
     const renderSideEffect$: Observable<any> = recomposeTrigger$.pipe(
         switchMap(([ob$, c]) => {
             const strategy = strategies[c] ? strategies[c] : strategies.idle;
             if (ob$ === undefined || ob$ === null) {
                 cfg.resetContextObserver.next(undefined);
-                strategy.render();
+                // strategy.render();
+                return NEVER;
+            }
+
+            if (ob$ === prevObs) {
                 return NEVER;
             }
 

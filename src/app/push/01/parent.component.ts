@@ -30,7 +30,7 @@ export class Parent01Component implements AfterViewInit {
     value1$: Observable<number>;
 
     get strategy() {
-        return this.coalesceConfigService.getConfig('strategy');
+        return this.coalesceConfigService.getConfig('strategy') as any;
     }
     constructor(
         private coalesceConfigService: CdConfigService
