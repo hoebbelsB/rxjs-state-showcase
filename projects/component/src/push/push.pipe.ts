@@ -52,11 +52,6 @@ import {coalesce, generateFrames} from '@rx-state/rxjs-state';
 export class PushPipe<S> implements PipeTransform, OnDestroy {
     private renderedValue: any | null | undefined;
 
-    private readonly configSubject = new Subject<PushPipeConfig>();
-    private readonly config$ = this.configSubject
-        .asObservable()
-        .pipe(distinctUntilChanged());
-
     private readonly subscription: Unsubscribable;
     private readonly cdAware: CdAware<S | null | undefined>;
     private readonly updateViewContextObserver: PartialObserver<S | null | undefined> = {
@@ -69,25 +64,7 @@ export class PushPipe<S> implements PipeTransform, OnDestroy {
     private readonly configurableBehaviour = <T>(
         o$: Observable<Observable<T>>
     ): Observable<Observable<T>> =>
-        o$.pipe(
-            withLatestFrom(this.config$),
-            map(([value$, config]) => {
-                const durationSelector = () => generateFrames(
-                    (window as any).__zone_symbol__requestAnimationFrame,
-                    (window as any).__zone_symbol__cancelAnimationFrame
-                );
-                // const coalesceConfig = {context: (this.cdRef as EmbeddedViewRef<Type<any>>).context as any};
-                const coalesceConfig = {context: this.cdRef['_lView'] as any};
-                // const coalesceConfig = {context: PushPipe as any};
-                // const coalesceConfig = {context: {} as any};
-                // As discussed with Brandon we keep it here
-                // because in the beta we implement configuration behavior here
-                return config.optimized ?
-                    value$.pipe(
-                        coalesce(durationSelector, coalesceConfig)) :
-                    value$.pipe();
-            })
-        );
+        o$.pipe()
 
     constructor(
         private cdRef: ChangeDetectorRef,
@@ -101,26 +78,26 @@ export class PushPipe<S> implements PipeTransform, OnDestroy {
                 cdRef,
                 context: (cdRef as EmbeddedViewRef<Type<any>>).context,
             }),
-            behaviour: this.configurableBehaviour,
+            // behaviour: this.configurableBehaviour,
             updateViewContextObserver: this.updateViewContextObserver,
             resetContextObserver: this.resetContextObserver,
         });
         this.subscription = this.cdAware.subscribe();
     }
 
-    transform<T>(potentialObservable: null, config?: PushPipeConfig): null;
-    transform<T>(potentialObservable: undefined, config?: PushPipeConfig): undefined;
+    transform<T>(potentialObservable: null, config?: string): null;
+    transform<T>(potentialObservable: undefined, config?: string): undefined;
     transform<T>(
         potentialObservable: Observable<T> | Promise<T>,
-        config?: PushPipeConfig
+        config?: string
     ): T;
     transform<T>(
         potentialObservable: Observable<T> | Promise<T> | null | undefined,
-        config: PushPipeConfig = {optimized: true}
+        config: string
     ): T | null | undefined {
-        this.configSubject.next(config);
-        this.cdAware.nextVale(potentialObservable);
-        return this.renderedValue as T;
+        this.cdAware.nextConfig(config);
+        this.cdAware.nextVale(potentialObservable as any);
+        return this.renderedValue as T | null | undefined;
     }
 
     ngOnDestroy(): void {

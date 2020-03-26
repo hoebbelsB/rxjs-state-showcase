@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, NgZone } from '@angular/core';
 import {getChangeDetectionHandler, Output} from '../utils';
 import {
+    combineLatest, config,
     NextObserver,
     Observable,
     PartialObserver,
@@ -8,7 +9,7 @@ import {
     Subscribable,
     Subscription,
 } from 'rxjs';
-import { distinctUntilChanged, map, switchAll, tap } from 'rxjs/operators';
+import {distinctUntilChanged, filter, map, startWith, switchAll, tap} from 'rxjs/operators';
 import { toObservableValue } from '../projections';
 
 export interface CdConfig {
@@ -17,7 +18,7 @@ export interface CdConfig {
 
 export interface CdAware<U> extends Subscribable<U> {
     nextVale: (value: any) => void;
-    nextConfig: (config: CdConfig) => void;
+    nextConfig: (config: string) => void;
 }
 /**
  * class CdAware
@@ -33,18 +34,24 @@ export function createCdAware<U>(cfg: {
     ngZone: NgZone;
     cdRef: ChangeDetectorRef;
     work: () => void;
-    behaviour: (
+    behaviour?: (
         o: Observable<Observable<U | null | undefined>>
     ) => Observable<Observable<U | null | undefined>>;
     resetContextObserver: NextObserver<unknown>;
     updateViewContextObserver: PartialObserver<U | null | undefined>;
 }): CdAware<U | undefined | null> {
-    const cdConfigSubject = new Subject<CdConfig>();
+    const configSubject = new Subject<string>();
+    const config$ = configSubject.pipe(
+        distinctUntilChanged(),
+        filter(v => !!v),
+        startWith('idle')
+    );
     const observablesSubject = new Subject<Observable<U> | Promise<U> | null | undefined>();
     const observables$ = observablesSubject.pipe(
         distinctUntilChanged(),
         map(v => toObservableValue(v))
         );
+    const recomposeTrigger$ = combineLatest(observables$, config$);
     const renderSideEffect$: Observable<U | undefined | null> = observables$.pipe(
         tap((v) => {
             cfg.resetContextObserver.next(v);
@@ -61,11 +68,11 @@ export function createCdAware<U>(cfg: {
     );
 
     return {
-        nextVale(value: Observable<U> | Promise<U> | null | undefined): void {
+        nextVale(value: any): void {
             observablesSubject.next(value);
         },
-        nextConfig(config: CdConfig): void {
-            cdConfigSubject.next(config);
+        nextConfig(nextConfig: string): void {
+            configSubject.next(nextConfig);
         },
         subscribe(): Subscription {
             return renderSideEffect$.subscribe();
