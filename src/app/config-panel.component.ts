@@ -73,7 +73,7 @@ export class ConfigPanelComponent extends State<{
 
     detectChangeClick$ = defer(() => fromEvent(document.getElementById('btnDetectChanges'), 'click'));
 
-    expanded = false;
+    expanded = true;
     @Input()
     appComponentRef;
 

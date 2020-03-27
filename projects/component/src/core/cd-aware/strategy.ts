@@ -25,13 +25,13 @@ export interface CdStrategy<T> {
 
 export const DEFAULT_STRATEGY_NAME = 'idle';
 
-export function getStrategies(cfg: StrategyFactoryConfig) {
+export function getStrategies<T>(cfg: StrategyFactoryConfig) {
     return {
-        idle: createIdleStrategy(cfg),
-        pessimistic1: createPessimistic1Strategy(cfg),
-        pessimistic2: createPessimistic2Strategy(cfg),
-        optimistic1: createOptimistic1Strategy(cfg),
-        optimistic2: createOptimistic2Strategy(cfg)
+        idle: createIdleStrategy<T>(cfg),
+        pessimistic1: createPessimistic1Strategy<T>(cfg),
+        pessimistic2: createPessimistic2Strategy<T>(cfg),
+        optimistic1: createOptimistic1Strategy<T>(cfg),
+        optimistic2: createOptimistic2Strategy<T>(cfg)
     };
 }
 
@@ -208,7 +208,7 @@ export function createOptimistic1Strategy<T>(cfg: StrategyFactoryConfig): CdStra
     const coalesceConfig = { context: inIvy ? cfg.cdRef['_lView'] : ((cfg.cdRef as any).context) as any};
 
     const behaviour = (o$: Observable<Observable<T>>): Observable<Observable<T>> => {
-        console.log('optimistic1' + inZone ? 'coalesce(cfg)' : '');
+        console.log('optimistic1');
         return inZone ? o$.pipe(coalesce(durationSelector, coalesceConfig)) : o$;
     };
 

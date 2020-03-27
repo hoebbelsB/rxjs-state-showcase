@@ -11,22 +11,15 @@ import {MatTableModule} from '@angular/material/table';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {ReactiveComponentModule} from '../../../projects/component/src';
 import {RouterModule} from '@angular/router';
-import { Cd02Child01Component } from './02/child01.component';
-import { Cd02Child02Component } from './02/child02.component';
-import { RenderParent02Component } from './02/parent.component';
-import {ROUTES as CD_ROUTES} from './render.routes';
+import {ROUTES as CD_ROUTES} from './draft.routes';
 
-import {RenderParent01Component} from './01/parent.component';
-import {Child0101Component} from './01/child01.component';
-
-import {Child0102Component} from './01/child02.component';
-import {RenderOverviewComponent} from './render.overview.component';
+import {DraftParent01Component} from './01/parent.component';
+import {DrfatOverviewComponent} from './drfat.overview.component';
 
 @NgModule({
     declarations: [
-        RenderParent01Component, Child0101Component, Child0102Component,
-        RenderParent02Component, Cd02Child01Component, Cd02Child02Component,
-        RenderOverviewComponent
+        DraftParent01Component,
+        DrfatOverviewComponent
     ],
     imports: [
         CommonModule,
@@ -43,5 +36,5 @@ import {RenderOverviewComponent} from './render.overview.component';
         ReactiveComponentModule
     ]
 })
-export class RenderModule {
+export class DraftModule {
 }

@@ -10,7 +10,7 @@ import {
     Subscription,
 } from 'rxjs';
 import {distinctUntilChanged, filter, map, startWith, switchMap, tap} from 'rxjs/operators';
-import {DEFAULT_STRATEGY_NAME, getStrategies} from './strategy';
+import {CdStrategy, DEFAULT_STRATEGY_NAME, getStrategies} from './strategy';
 
 export interface CdAware<U> extends Subscribable<U> {
     nextVale: (value: any) => void;
@@ -30,30 +30,33 @@ export function createCdAware<U>(cfg: {
     component: any;
     ngZone: NgZone;
     cdRef: ChangeDetectorRef;
-    render?: () => void;
-    behaviour?: (
-        o: Observable<Observable<U | null | undefined>>
-    ) => Observable<Observable<U | null | undefined>>;
     resetContextObserver: NextObserver<unknown>;
     updateViewContextObserver: PartialObserver<any>;
 }): CdAware<U | undefined | null> {
-    const strategies = getStrategies(cfg);
+    const strategies = getStrategies<U>(cfg);
 
     const configSubject = new Subject<string>();
-    const config$ = configSubject.pipe(
+    const config$: Observable<CdStrategy<U>> = configSubject.pipe(
         filter(v => !!v),
         distinctUntilChanged(),
         startWith(DEFAULT_STRATEGY_NAME),
-        map(strategy => strategies[strategy] ? strategies[strategy] : strategies.idle)
-    );
-    const observablesSubject = new Subject<Observable<U>>();
-    const observables$ = observablesSubject.pipe(
-        distinctUntilChanged(),
+        map((strategy: string): CdStrategy<U> => strategies[strategy] ? strategies[strategy] : strategies.idle),
+        tap(strategy => console.log('strategy', strategy.name))
     );
 
-    const recomposeTrigger$ = combineLatest(observables$, config$);
-    const renderSideEffect$: Observable<any> = recomposeTrigger$.pipe(
+    const observablesSubject = new Subject<Observable<U>>();
+    const observables$ = observablesSubject.pipe(
+        distinctUntilChanged()
+    );
+
+    let prevObservable;
+    const renderSideEffect$ = combineLatest(observables$, config$).pipe(
         switchMap(([observable$, strategy]) => {
+            if (prevObservable === observable$) {
+                return NEVER;
+            }
+            prevObservable = observable$;
+
             if (observable$ === undefined || observable$ === null) {
                 cfg.resetContextObserver.next(undefined);
                 strategy.render();
@@ -65,6 +68,7 @@ export function createCdAware<U>(cfg: {
                 tap(cfg.updateViewContextObserver),
                 tap(console.log),
                 strategy.behaviour(),
+                tap(v => console.log('render', v)),
                 tap(() => strategy.render())
             );
         })
