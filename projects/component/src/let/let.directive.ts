@@ -1,8 +1,7 @@
 import {ChangeDetectorRef, Directive, Input, NgZone, OnDestroy, TemplateRef, ViewContainerRef,} from '@angular/core';
 
-import {NextObserver, Observable, PartialObserver, ReplaySubject, Unsubscribable} from 'rxjs';
-import {distinctUntilChanged, filter, startWith} from 'rxjs/operators';
-import {CdAware, createCdAware} from '../core';
+import {NextObserver, Observable, PartialObserver, Unsubscribable} from 'rxjs';
+import {CdAware, createCdAware, getStrategies} from '../core';
 
 export interface LetViewContext<T> {
     // to enable `let` syntax we have to use $implicit (var; let v = var)
@@ -157,9 +156,7 @@ export class LetDirective<U> implements OnDestroy {
         private readonly viewContainerRef: ViewContainerRef
     ) {
         this.cdAware = createCdAware<U>({
-            component: this,
-            cdRef,
-            ngZone,
+            strategies: getStrategies<U>({component: (cdRef as any).context, ngZone, cdRef}),
             resetContextObserver: this.resetContextObserver,
             updateViewContextObserver: this.updateViewContextObserver
         });

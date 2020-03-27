@@ -10,7 +10,7 @@ import {
     Subscription,
 } from 'rxjs';
 import {distinctUntilChanged, filter, map, startWith, switchMap, tap} from 'rxjs/operators';
-import {CdStrategy, DEFAULT_STRATEGY_NAME, getStrategies} from './strategy';
+import {CdStrategy, DEFAULT_STRATEGY_NAME, getStrategies, StrategySelection} from './strategy';
 
 export interface CdAware<U> extends Subscribable<U> {
     nextVale: (value: any) => void;
@@ -27,20 +27,17 @@ export interface CdAware<U> extends Subscribable<U> {
  * Also custom behaviour is something you need to implement in the extending class
  */
 export function createCdAware<U>(cfg: {
-    component: any;
-    ngZone: NgZone;
-    cdRef: ChangeDetectorRef;
+    strategies: StrategySelection<U>;
     resetContextObserver: NextObserver<unknown>;
     updateViewContextObserver: PartialObserver<any>;
 }): CdAware<U | undefined | null> {
-    const strategies = getStrategies<U>(cfg);
 
     const configSubject = new Subject<string>();
     const config$: Observable<CdStrategy<U>> = configSubject.pipe(
         filter(v => !!v),
         distinctUntilChanged(),
         startWith(DEFAULT_STRATEGY_NAME),
-        map((strategy: string): CdStrategy<U> => strategies[strategy] ? strategies[strategy] : strategies.idle),
+        map((strategy: string): CdStrategy<U> => cfg.strategies[strategy] ? cfg.strategies[strategy] : cfg.strategies.idle),
         tap(strategy => console.log('strategy', strategy.name))
     );
 

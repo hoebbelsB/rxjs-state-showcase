@@ -25,7 +25,12 @@ export interface CdStrategy<T> {
 
 export const DEFAULT_STRATEGY_NAME = 'idle';
 
-export function getStrategies<T>(cfg: StrategyFactoryConfig) {
+export interface StrategySelection<U> {
+    idle: CdStrategy<U>;
+    [key: string]: CdStrategy<U>;
+}
+
+export function getStrategies<T>(cfg: StrategyFactoryConfig): StrategySelection<T> {
     return {
         idle: createIdleStrategy<T>(cfg),
         pessimistic1: createPessimistic1Strategy<T>(cfg),

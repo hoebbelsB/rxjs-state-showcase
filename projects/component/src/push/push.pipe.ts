@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, NgZone, OnDestroy, Pipe, PipeTransform} from '@angular/core';
 import {NextObserver, Observable, PartialObserver, Unsubscribable} from 'rxjs';
-import {CdAware, createCdAware} from '../core';
+import {CdAware, createCdAware, getStrategies} from '../core';
 
 /**
  * @Pipe PushPipe
@@ -60,13 +60,9 @@ export class PushPipe<S> implements PipeTransform, OnDestroy {
         next: (value: unknown) => (this.renderedValue = undefined),
     };
 
-    constructor(
-        private cdRef: ChangeDetectorRef,
-        ngZone: NgZone) {
+    constructor(cdRef: ChangeDetectorRef, ngZone: NgZone) {
         this.cdAware = createCdAware<S>({
-            component: (this.cdRef as any).context,
-            ngZone,
-            cdRef,
+            strategies: getStrategies<S>({component: (cdRef as any).context, ngZone, cdRef}),
             updateViewContextObserver: this.updateViewContextObserver,
             resetContextObserver: this.resetContextObserver,
         });
