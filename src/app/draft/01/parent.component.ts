@@ -1,7 +1,7 @@
 import {AfterViewInit, ChangeDetectorRef, Component, NgZone, OnDestroy} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {EMPTY, of, range, Subject, Subscription} from 'rxjs';
-import {createCdAware} from '../../../../projects/component/src/core/cd-aware';
+import {createCdAware, getStrategies} from '../../../../projects/component/src/core/cd-aware';
 import {CdConfigService} from '../../cd-config.service';
 
 @Component({
@@ -42,9 +42,9 @@ export class DraftParent01Component implements AfterViewInit, OnDestroy {
 
     constructor(ngZone: NgZone, cdRef: ChangeDetectorRef,
                 private cfgService: CdConfigService) {
+        const strategies = getStrategies<number>({ngZone, cdRef, component: this});
         this.cdAware = createCdAware<number>({
-            component: this,
-            ngZone, cdRef,
+            strategies,
             resetContextObserver: {
                 next: () => {
                     console.log('[reset]');
