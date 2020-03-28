@@ -1,7 +1,6 @@
 import {coalesce, generateFrames} from '@rx-state/rxjs-state';
 import {MonoTypeOperatorFunction, Observable} from 'rxjs';
-import {ChangeDetectorRef, NgZone, ɵdetectChanges, ɵmarkDirty} from '@angular/core';
-import {getDetectChanges} from '../utils/get-change-detection-handling';
+import {ChangeDetectorRef, NgZone, ɵdetectChanges as detectChanges, ɵmarkDirty as markDirty} from '@angular/core';
 import {hasZone, isIvy} from '../utils';
 
 function getSaveDurationSelector(ngZone: NgZone): () => Observable<number> {
@@ -13,8 +12,8 @@ function getSaveDurationSelector(ngZone: NgZone): () => Observable<number> {
 
 export interface StrategyFactoryConfig {
     component: any;
-    ngZone?: NgZone;
-    cdRef?: ChangeDetectorRef;
+    ngZone: NgZone;
+    cdRef: ChangeDetectorRef;
 }
 
 export interface CdStrategy<T> {
@@ -43,7 +42,8 @@ export function getStrategies<T>(cfg: StrategyFactoryConfig): StrategySelection<
 /**
  * Idle Strategy
  *
- * This strategy is the drop-in replacement for Angular's built-in `async` pipe. This is the only strategy that **does not also work in zone-less environments**.
+ * This strategy is the drop-in replacement for Angular's built-in `async` pipe.
+ * This is the only strategy that **does not also work in zone-less environments**.
  *
  * - \>=ViewEngine
  * |          | Render Method      | Coalescing | Coalesce Scope |
@@ -103,7 +103,7 @@ export function createPessimistic1Strategy<T>(cfg: StrategyFactoryConfig): CdStr
         } else if (!inZone && !inIvy) {
             cfg.cdRef.detectChanges();
         } else {
-            ɵmarkDirty(cfg.component);
+            markDirty(cfg.component);
         }
     }
 
@@ -154,7 +154,7 @@ export function createPessimistic2Strategy<T>(cfg: StrategyFactoryConfig): CdStr
             cfg.cdRef.detectChanges();
         } else {
             console.log('ɵmarkDirty');
-            ɵmarkDirty(cfg.component);
+            markDirty(cfg.component);
         }
     }
 
@@ -197,9 +197,9 @@ export function createOptimistic1Strategy<T>(cfg: StrategyFactoryConfig): CdStra
     function render() {
         if (inIvy) {
             if (inZone) {
-                ɵmarkDirty(cfg.component);
+                markDirty(cfg.component);
             } else {
-                ɵdetectChanges(cfg.component);
+                detectChanges(cfg.component);
             }
         } else {
             if (inZone) {
@@ -210,7 +210,7 @@ export function createOptimistic1Strategy<T>(cfg: StrategyFactoryConfig): CdStra
         }
     }
 
-    const coalesceConfig = { context: inIvy ? cfg.cdRef['_lView'] : ((cfg.cdRef as any).context) as any};
+    const coalesceConfig = { context: inIvy ? (cfg.cdRef as any)._lView : ((cfg.cdRef as any).context) as any};
 
     const behaviour = (o$: Observable<Observable<T>>): Observable<Observable<T>> => {
         console.log('optimistic1');
@@ -245,9 +245,8 @@ export function createOptimistic1Strategy<T>(cfg: StrategyFactoryConfig): CdStra
  */
 export function createOptimistic2Strategy<T>(cfg: StrategyFactoryConfig): CdStrategy<T> {
     const inIvy = isIvy();
-    const detectChanges = getDetectChanges(cfg.ngZone, cfg.cdRef);
     const durationSelector = getSaveDurationSelector(cfg.ngZone);
-    const coalesceConfig = {context: (inIvy ? cfg.cdRef['_lView'] : cfg.component) as any};
+    const coalesceConfig = {context: (inIvy ? (cfg.cdRef as any)._lView : cfg.component) as any};
 
     const behaviour = (o$: Observable<Observable<T>>): Observable<Observable<T>> => {
         console.log('optimistic2');
@@ -256,27 +255,8 @@ export function createOptimistic2Strategy<T>(cfg: StrategyFactoryConfig): CdStra
 
     return {
         behaviour: () => behaviour,
-        render(): void { inIvy ? ɵdetectChanges(cfg.component) : cfg.cdRef.detectChanges(); },
+        render(): void { inIvy ? detectChanges(cfg.component) : cfg.cdRef.detectChanges(); },
         name: 'optimistic2'
-    };
-}
-
-export function createDummyStrategy<T>(cfg: StrategyFactoryConfig): CdStrategy<T> {
-    const zoneFull = hasZone(cfg.ngZone);
-    const detectChanges = getDetectChanges(cfg.ngZone, cfg.cdRef);
-    const durationSelector = getSaveDurationSelector(cfg.ngZone);
-    const coalesceConfig = {context: cfg.cdRef['_lView'] as any};
-
-    const behaviour = (o$: Observable<Observable<T>>): Observable<Observable<T>> => zoneFull ?
-        o$.pipe(coalesce(durationSelector, coalesceConfig)) :
-        o$;
-
-    return {
-        behaviour: () => behaviour,
-        render: (): void => {
-            detectChanges(cfg.component);
-        },
-        name: 'dummy'
     };
 }
 
