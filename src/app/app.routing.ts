@@ -46,5 +46,12 @@ export const ROUTES: Routes = [
             .then(mod => mod.IrrelevantToTestModule),
         canActivate: [],
         canActivateChild: []
+    },
+    {
+        path: '',
+        loadChildren: () => import('./cd-operators/cd-operators.module')
+            .then(mod => mod.CdOperatorsModule),
+        canActivate: [],
+        canActivateChild: []
     }
 ];

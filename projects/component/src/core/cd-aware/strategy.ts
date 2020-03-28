@@ -17,7 +17,7 @@ export interface StrategyFactoryConfig {
 }
 
 export interface CdStrategy<T> {
-    behaviour: (cfg?: any) => MonoTypeOperatorFunction<Observable<T>>;
+    behaviour: (cfg?: any) => MonoTypeOperatorFunction<T>;
     render: () => void;
     name: string;
 }
@@ -58,7 +58,7 @@ export function getStrategies<T>(cfg: StrategyFactoryConfig): StrategySelection<
  * | ZoneFull | cdRef.markForCheck | ❌         | None           |
  * | ZoneLess | cdRef.markForCheck | ❌         | None           |
  */
-export function createIdleStrategy<T>(cfg: StrategyFactoryConfig): CdStrategy<T> {
+export function createIdleStrategy<T>(cfg: Pick<StrategyFactoryConfig, 'cdRef'>): CdStrategy<T> {
     return {
         render: (): void => {
             cfg.cdRef.markForCheck();
@@ -107,7 +107,7 @@ export function createPessimistic1Strategy<T>(cfg: StrategyFactoryConfig): CdStr
         }
     }
 
-    const behaviour = (o$: Observable<Observable<T>>): Observable<Observable<T>> => {
+    const behaviour = (o$: Observable<T>): Observable<T> => {
         console.log('pessimistic1');
         return !inZone && !inIvy ?
             o$.pipe(coalesce(durationSelector)) :
@@ -158,7 +158,7 @@ export function createPessimistic2Strategy<T>(cfg: StrategyFactoryConfig): CdStr
         }
     }
 
-    const behaviour = (o$: Observable<Observable<T>>): Observable<Observable<T>> => {
+    const behaviour = (o$: Observable<T>): Observable<T> => {
         console.log('pessimistic2');
         return !inZone && !inIvy ?
             o$.pipe(coalesce(durationSelector, coalesceConfig)) :
@@ -212,7 +212,7 @@ export function createOptimistic1Strategy<T>(cfg: StrategyFactoryConfig): CdStra
 
     const coalesceConfig = { context: inIvy ? (cfg.cdRef as any)._lView : ((cfg.cdRef as any).context) as any};
 
-    const behaviour = (o$: Observable<Observable<T>>): Observable<Observable<T>> => {
+    const behaviour = (o$: Observable<T>): Observable<T> => {
         console.log('optimistic1');
         return inZone ? o$.pipe(coalesce(durationSelector, coalesceConfig)) : o$;
     };
@@ -248,7 +248,7 @@ export function createOptimistic2Strategy<T>(cfg: StrategyFactoryConfig): CdStra
     const durationSelector = getSaveDurationSelector(cfg.ngZone);
     const coalesceConfig = {context: (inIvy ? (cfg.cdRef as any)._lView : cfg.component) as any};
 
-    const behaviour = (o$: Observable<Observable<T>>): Observable<Observable<T>> => {
+    const behaviour = (o$: Observable<T>): Observable<T> => {
         console.log('optimistic2');
         return o$.pipe(coalesce(durationSelector, coalesceConfig));
     };
