@@ -1,4 +1,5 @@
-import {coalesce, generateFrames} from '@rx-state/rxjs-state';
+import {generateFrames} from '../projections/generateFrames';
+import {coalesce} from '../operators/coalesce';
 import {MonoTypeOperatorFunction, Observable} from 'rxjs';
 import {ChangeDetectorRef, NgZone, ɵdetectChanges as detectChanges, ɵmarkDirty as markDirty} from '@angular/core';
 import {hasZone, isIvy} from '../utils';

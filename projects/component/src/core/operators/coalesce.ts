@@ -1,51 +1,50 @@
 import {
-  MonoTypeOperatorFunction,
-  Observable,
-  Operator,
-  SubscribableOrPromise,
-  Subscriber,
-  Subscription,
-  TeardownLogic,
+    MonoTypeOperatorFunction,
+    Observable,
+    Operator,
+    SubscribableOrPromise,
+    Subscriber,
+    Subscription,
+    TeardownLogic,
 } from 'rxjs';
-import {
-  InnerSubscriber,
-  OuterSubscriber,
-  subscribeToResult,
-} from 'rxjs/internal-compatibility';
-import { generateFrames } from '../projections';
+import {InnerSubscriber, OuterSubscriber, subscribeToResult} from 'rxjs/internal-compatibility';
+import {generateFrames} from '../projections';
+import {createPropertiesWeakMap} from '../utils/properties-weakmap';
 
-export interface CoalescingContext {
-  isCoalescing: boolean;
-}
+
 
 export interface CoalesceConfig {
-  context?: CoalescingContext;
-  leading?: boolean;
-  trailing?: boolean;
+    context?: object;
+    leading?: boolean;
+    trailing?: boolean;
 }
 
-export const defaultCoalesceConfig: Pick<
-  CoalesceConfig,
-  'leading' | 'trailing'
-> & { context: undefined } = {
-  leading: false,
-  trailing: true,
-  context: undefined,
+interface CoalescingContextProps {
+    isCoalescing: boolean;
+}
+const coalescingContextPropertiesMap = createPropertiesWeakMap<object, CoalescingContextProps>((ctx) => ({
+    isCoalescing: false
+}));
+
+export const defaultCoalesceConfig: Pick<CoalesceConfig, 'leading' | 'trailing'> & { context: undefined } = {
+    leading: false,
+    trailing: true,
+    context: undefined,
 };
 
-export function getCoalesceConfig(
-  config: CoalesceConfig = defaultCoalesceConfig
+function getCoalesceConfig(
+    config: CoalesceConfig = defaultCoalesceConfig
 ): Pick<CoalesceConfig, 'leading' | 'trailing'> & {
-  context: { isCoalescing: boolean } | undefined;
+    context: object | undefined;
 } {
-  return {
-    ...defaultCoalesceConfig,
-    ...config,
-  };
+    return {
+        ...defaultCoalesceConfig,
+        ...config,
+    };
 }
 
 export const defaultCoalesceDurationSelector = <T>(value: T) =>
-  generateFrames();
+    generateFrames();
 
 /**
  * Emits a value from the source Observable, then ignores subsequent source
@@ -93,129 +92,131 @@ export const defaultCoalesceDurationSelector = <T>(value: T) =>
  * @name coalesce
  */
 export function coalesce<T>(
-  durationSelector: (
-    value: T
-  ) => SubscribableOrPromise<any> = defaultCoalesceDurationSelector,
-  config?: CoalesceConfig
+    durationSelector: (
+        value: T
+    ) => SubscribableOrPromise<any> = defaultCoalesceDurationSelector,
+    config?: CoalesceConfig
 ): MonoTypeOperatorFunction<T> {
-  return (source: Observable<T>) =>
-    source.lift(new CoalesceOperator(durationSelector, config));
+    return (source: Observable<T>) =>
+        source.lift(new CoalesceOperator(durationSelector, config));
 }
 
 class CoalesceOperator<T> implements Operator<T, T> {
-  constructor(
-    private durationSelector: (value: T) => SubscribableOrPromise<any>,
-    private config?: CoalesceConfig
-  ) {}
+    constructor(
+        private durationSelector: (value: T) => SubscribableOrPromise<any>,
+        private config?: CoalesceConfig
+    ) {
+    }
 
-  call(subscriber: Subscriber<T>, source: any): TeardownLogic {
-    return source.subscribe(
-      new CoalesceSubscriber(subscriber, this.durationSelector, this.config)
-    );
-  }
+    call(subscriber: Subscriber<T>, source: any): TeardownLogic {
+        return source.subscribe(
+            new CoalesceSubscriber(subscriber, this.durationSelector, this.config)
+        );
+    }
 }
 
 class CoalesceSubscriber<T, R> extends OuterSubscriber<T, R> {
-  private _coalesced: Subscription | null | undefined;
-  private _sendValue: T | null = null;
-  private _hasValue = false;
-  private _leading: boolean | undefined;
-  private _trailing: boolean | undefined;
-  private _context: CoalescingContext;
+    // tslint:disable:variable-name
+    private _coalesced: Subscription | null | undefined;
+    private _sendValue: T | null = null;
+    private _hasValue = false;
+    private _leading: boolean | undefined;
+    private _trailing: boolean | undefined;
+    private _context: object;
+    private _contextProps: CoalescingContextProps;
 
-  constructor(
-    protected destination: Subscriber<T>,
-    private durationSelector: (value: T) => SubscribableOrPromise<number>,
-    config?: CoalesceConfig
-  ) {
-    super(destination);
-    const parsedConfig = getCoalesceConfig(config);
-    this._leading = parsedConfig.leading;
-    this._trailing = parsedConfig.trailing;
-    // We create the object for scoping by default per subscription
-    this._context = parsedConfig.context || {
-      isCoalescing: false,
-    };
-  }
-
-  protected _next(value: T): void {
-    this._hasValue = true;
-    this._sendValue = value;
-
-    if (!this._coalesced) {
-      this.send();
+    constructor(
+        protected destination: Subscriber<T>,
+        private durationSelector: (value: T) => SubscribableOrPromise<number>,
+        config?: CoalesceConfig
+    ) {
+        super(destination);
+        const parsedConfig = getCoalesceConfig(config);
+        this._leading = parsedConfig.leading;
+        this._trailing = parsedConfig.trailing;
+        // We create the object for context scoping by default per subscription
+        this._context = parsedConfig.context || {};
+        this._contextProps = coalescingContextPropertiesMap.getProps(this._context);
     }
-  }
 
-  protected _complete(): void {
-    this.coalescingDone();
-    super._complete();
-  }
+    protected _next(value: T): void {
+        this._hasValue = true;
+        this._sendValue = value;
 
-  private send() {
-    const { _hasValue, _sendValue, _leading } = this;
-    if (_hasValue) {
-      if (_leading) {
-        this.destination.next(_sendValue!);
-        this._hasValue = false;
-        this._sendValue = null;
-      }
-      this.startCoalesceDuration(_sendValue!);
+        if (!this._coalesced) {
+            this.send();
+        }
     }
-  }
 
-  private exhaustLastValue() {
-    const { _hasValue, _sendValue } = this;
-    if (_hasValue && _sendValue) {
-      this.destination.next(_sendValue!);
-      this._hasValue = false;
-      this._sendValue = null;
+    protected _complete(): void {
+        this.coalescingDone();
+        super._complete();
     }
-  }
 
-  private startCoalesceDuration(value: T): void {
-    const duration = this.tryDurationSelector(value);
-    if (!!duration) {
-      this.add((this._coalesced = subscribeToResult(this, duration)));
-      this._context.isCoalescing = true;
+    private send() {
+        const {_hasValue, _sendValue, _leading} = this;
+        if (_hasValue) {
+            if (_leading) {
+                this.destination.next(_sendValue!);
+                this._hasValue = false;
+                this._sendValue = null;
+            }
+            this.startCoalesceDuration(_sendValue!);
+        }
     }
-  }
 
-  private coalescingDone() {
-    const { _coalesced, _trailing, _context } = this;
-    if (_coalesced) {
-      _coalesced.unsubscribe();
+    private exhaustLastValue() {
+        const {_hasValue, _sendValue} = this;
+        if (_hasValue && _sendValue) {
+            this.destination.next(_sendValue!);
+            this._hasValue = false;
+            this._sendValue = null;
+        }
     }
-    this._coalesced = null;
 
-    if (_context.isCoalescing) {
-      if (_trailing) {
-        this.exhaustLastValue();
-      }
-      this._context.isCoalescing = false;
+    private startCoalesceDuration(value: T): void {
+        const duration = this.tryDurationSelector(value);
+        if (!!duration) {
+            this.add((this._coalesced = subscribeToResult(this, duration)));
+            coalescingContextPropertiesMap.setProps(this._context, {isCoalescing: true});
+        }
     }
-  }
 
-  private tryDurationSelector(value: T): SubscribableOrPromise<any> | null {
-    try {
-      return this.durationSelector(value);
-    } catch (err) {
-      this.destination.error(err);
-      return null;
+    private coalescingDone() {
+        const {_coalesced, _trailing, _contextProps} = this;
+        if (_coalesced) {
+            _coalesced.unsubscribe();
+        }
+        this._coalesced = null;
+
+        if (_contextProps.isCoalescing) {
+            if (_trailing) {
+                this.exhaustLastValue();
+            }
+            coalescingContextPropertiesMap.setProps(this._context, {isCoalescing: false});
+        }
     }
-  }
 
-  notifyNext(
-    outerValue: T,
-    innerValue: R,
-    outerIndex: number,
-    innerIndex: number,
-    innerSub: InnerSubscriber<T, R>
-  ): void {
-    this.coalescingDone();
-  }
+    private tryDurationSelector(value: T): SubscribableOrPromise<any> | null {
+        try {
+            return this.durationSelector(value);
+        } catch (err) {
+            this.destination.error(err);
+            return null;
+        }
+    }
 
-  notifyComplete(): void {
-    this.coalescingDone();
-  }
+    notifyNext(
+        outerValue: T,
+        innerValue: R,
+        outerIndex: number,
+        innerIndex: number,
+        innerSub: InnerSubscriber<T, R>
+    ): void {
+        this.coalescingDone();
+    }
+
+    notifyComplete(): void {
+        this.coalescingDone();
+    }
 }

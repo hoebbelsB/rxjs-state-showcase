@@ -11,11 +11,11 @@ export function toObservableValue<T>(
 ): Output<T> {
   // Comparing to the literal null value with the == operator covers both null and undefined values.
   if (p === null) {
-    return of(p);
+    return of(p as null);
   }
 
   if (p === undefined) {
-    return of(p);
+    return of(p as undefined);
   }
 
   if (isObservableGuard<T>(p)) {

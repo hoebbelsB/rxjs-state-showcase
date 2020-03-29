@@ -1,4 +1,3 @@
-import {ChangeDetectorRef, NgZone} from '@angular/core';
 import {
     combineLatest,
     NEVER,
@@ -10,7 +9,7 @@ import {
     Subscription,
 } from 'rxjs';
 import {distinctUntilChanged, filter, map, startWith, switchMap, tap} from 'rxjs/operators';
-import {CdStrategy, DEFAULT_STRATEGY_NAME, getStrategies, StrategySelection} from './strategy';
+import {CdStrategy, DEFAULT_STRATEGY_NAME, StrategySelection} from './strategy';
 
 export interface CdAware<U> extends Subscribable<U> {
     nextVale: (value: any) => void;
