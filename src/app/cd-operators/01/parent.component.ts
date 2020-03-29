@@ -3,7 +3,8 @@ import {environment} from '../../../environments/environment';
 import {range, Subject} from 'rxjs';
 import {createIdleStrategy, getStrategies} from '../../../../projects/component/src/core/cd-aware';
 import {renderChanges} from '../../../../projects/component/src/core/operators/renderChanges';
-import {switchMap, tap} from 'rxjs/operators';
+import {map, switchMap, tap, withLatestFrom} from 'rxjs/operators';
+import {CdConfigService} from '../../cd-config.service';
 
 @Component({
     selector: 'app-cd-operators-parent01',
@@ -39,7 +40,7 @@ export class CdOperatorsParent01Component {
         return ++this.numRenderings;
     }
 
-    constructor(private ngZone: NgZone, private cdRef: ChangeDetectorRef) {
+    constructor(private ngZone: NgZone, private cdRef: ChangeDetectorRef, private cfgService: CdConfigService) {
     }
 
 }
