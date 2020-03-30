@@ -1,14 +1,8 @@
-import {
-    AfterViewInit,
-    ChangeDetectionStrategy,
-    Component,
-    ElementRef,
-    OnDestroy,
-    ViewChild,
-    ɵdetectChanges
-} from '@angular/core';
-import {defer} from 'rxjs';
+import {ChangeDetectionStrategy, Component, ɵdetectChanges} from '@angular/core';
 import {fromEvent} from '@zoneless-helpers';
+import {BaseComponent} from '../../base.component.ts/base.component';
+import {tap} from 'rxjs/operators';
+import {defer} from 'rxjs';
 
 @Component({
     selector: 'app-cd-parent01',
@@ -19,36 +13,27 @@ import {fromEvent} from '@zoneless-helpers';
         </h2>
         ChangeDetectionStrategy: Default<br>
         <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b><br>
-        <button id="button">ɵdetectChanges</button>
+        <button id="app-cd-parent01-btn">ɵdetectChanges</button>
         <app-cd01-child01-default></app-cd01-child01-default>
         <app-cd01-child02-push></app-cd01-child02-push>
     `,
     changeDetection: ChangeDetectionStrategy.Default
 })
-export class CdParent01Component implements AfterViewInit, OnDestroy {
+export class CdParent01Component extends BaseComponent {
 
-    sub;
     btnClick$ = defer(() => fromEvent(this.button(), 'click'));
 
-    numRenderings = 0;
+    baseEffects$ = this.btnClick$.pipe(
+        tap(() => this.detectChanges())
+    );
 
-    getNumOfRenderings() {
-        return ++this.numRenderings;
-    }
-    button = () => document.getElementById('button');
-
-    ngAfterViewInit() {
-        this.detectChanges();
-        this.sub = this.btnClick$.subscribe(() => this.detectChanges());
+    button() {
+        return document.getElementById('app-cd-parent01-btn');
     }
 
     detectChanges() {
-        console.log('run ɵdetectChanges');
+        console.log('run ɵdetectChanges', this);
         ɵdetectChanges(this);
-    }
-
-    ngOnDestroy(): void {
-        this.sub.unsubscribe();
     }
 
 }

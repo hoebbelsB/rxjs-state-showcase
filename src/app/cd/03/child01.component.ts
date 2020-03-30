@@ -1,4 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {BaseComponent} from '../../base.component.ts/base.component';
 
 @Component({
     selector: 'app-cd03-child01-default',
@@ -10,11 +11,6 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
     `,
     changeDetection: ChangeDetectionStrategy.Default
 })
-export class Child0301Component {
-    numRenderings = 0;
-
-    getNumOfRenderings() {
-        return ++this.numRenderings;
-    }
+export class Child0301Component  extends BaseComponent {
 
 }

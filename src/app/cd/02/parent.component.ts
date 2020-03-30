@@ -1,12 +1,8 @@
-import {
-    AfterViewInit,
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    ElementRef,
-    ViewChild
-} from '@angular/core';
-import {defer, fromEvent} from 'rxjs';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
+import {defer} from 'rxjs';
+import {BaseComponent} from '../../base.component.ts/base.component';
+import {tap} from 'rxjs/operators';
+import {fromEvent} from '@zoneless-helpers';
 
 @Component({
     selector: 'app-cd-parent02',
@@ -17,31 +13,30 @@ import {defer, fromEvent} from 'rxjs';
         </h2>
         ChangeDetectionStrategy: Default<br>
         <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b>
-        <button #button>ChangeDetectorRef#detectChanges</button>
+        <button id="app-cd-parent02-btn">ChangeDetectorRef#detectChanges</button>
         <app-cd02-child01-default></app-cd02-child01-default>
         <app-cd02-child02-push></app-cd02-child02-push>
     `,
     changeDetection: ChangeDetectionStrategy.Default
 })
-export class CdParent02Component implements AfterViewInit {
-    @ViewChild('button') button: ElementRef<HTMLButtonElement>;
-    btnClick$ = defer(() => fromEvent(this.button.nativeElement, 'click'));
-    numRenderings = 0;
+export class CdParent02Component extends BaseComponent {
 
-    getNumOfRenderings() {
-        return ++this.numRenderings;
+    btnClick$ = defer(() => fromEvent(this.button(), 'click'));
+
+    baseEffects$ = this.btnClick$.pipe(
+        tap(() => this.detectChanges())
+    );
+
+    constructor(private cdRef: ChangeDetectorRef) {
+        super();
+    }
+
+    button() {
+        return document.getElementById('app-cd-parent02-btn');
     }
 
     detectChanges() {
         this.cdRef.detectChanges();
-    }
-
-    constructor(private cdRef: ChangeDetectorRef) {
-
-    }
-
-    ngAfterViewInit() {
-        this.btnClick$.subscribe(() => this.detectChanges());
     }
 
 }

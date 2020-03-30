@@ -1,5 +1,9 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild, ɵmarkDirty} from '@angular/core';
-import {defer, fromEvent} from 'rxjs';
+import {ChangeDetectionStrategy, Component, ɵmarkDirty} from '@angular/core';
+
+import {defer} from 'rxjs';
+import {BaseComponent} from '../../base.component.ts/base.component';
+import {tap} from 'rxjs/operators';
+import {fromEvent} from '@zoneless-helpers';
 
 @Component({
     selector: 'app-cd-parent03',
@@ -10,28 +14,23 @@ import {defer, fromEvent} from 'rxjs';
         </h2>
         ChangeDetectionStrategy: Default<br>
         <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b>
-        <button #button>ɵmarkDirty</button>
+        <button id="app-cd-parent03-btn">ɵmarkDirty</button>
         <app-cd03-child01-default></app-cd03-child01-default>
         <app-cd03-child02-push></app-cd03-child02-push>
     `,
     changeDetection: ChangeDetectionStrategy.Default
 })
-export class CdParent03Component  implements AfterViewInit {
+export class CdParent03Component extends BaseComponent {
 
-    @ViewChild('button') button: ElementRef<HTMLButtonElement>;
-    btnClick$ = defer(() => fromEvent(this.button.nativeElement, 'click'));
-    numRenderings = 0;
+    btnClick$ = defer(() => fromEvent(this.button(), 'click'));
 
-    getNumOfRenderings() {
-        return ++this.numRenderings;
+    baseEffects$ = this.btnClick$.pipe(tap(() => this.markDirty()));
+
+    button() {
+        return document.getElementById('app-cd-parent03-btn');
     }
 
     markDirty() {
         ɵmarkDirty(this);
     }
-
-    ngAfterViewInit() {
-        this.btnClick$.subscribe(() => this.markDirty());
-    }
-
 }

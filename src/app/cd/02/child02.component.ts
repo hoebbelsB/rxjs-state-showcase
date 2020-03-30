@@ -1,4 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {BaseComponent} from '../../base.component.ts/base.component';
 
 @Component({
     selector: 'app-cd02-child02-push',
@@ -9,11 +10,6 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
     `,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Child0202Component {
-    numRenderings = 0;
-
-    getNumOfRenderings() {
-        return ++this.numRenderings;
-    }
+export class Child0202Component extends BaseComponent {
 
 }
