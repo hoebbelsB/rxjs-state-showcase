@@ -1,0 +1,28 @@
+{
+  "name": "@ngrx/component",
+  "version": "0.0.0-PLACEHOLDER",
+  "description": "Reactive Extensions for Angular Components",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ngrx/platform.git"
+  },
+  "keywords": [
+    "Angular",
+    "RxJS",
+    "NgRx",
+    "Components",
+    "Angular CLI"
+  ],
+  "author": "NgRx",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ngrx/platform/issues"
+  },
+  "homepage": "https://github.com/ngrx/platform#readme",
+  "peerDependencies": {
+    "@angular/common": "NG_VERSION",
+    "@angular/core": "NG_VERSION",
+    "rxjs": "RXJS_VERSION"
+  },
+  "sideEffects": false
+}

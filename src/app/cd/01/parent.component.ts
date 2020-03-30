@@ -10,27 +10,29 @@ import {defer, fromEvent} from 'rxjs';
         </h2>
         ChangeDetectionStrategy: Default<br>
         <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b><br>
-        <button #button>ɵdetectChanges</button>
+        <button id="button">ɵdetectChanges</button>
         <app-cd01-child01-default></app-cd01-child01-default>
         <app-cd01-child02-push></app-cd01-child02-push>
     `,
     changeDetection: ChangeDetectionStrategy.Default
 })
 export class CdParent01Component implements AfterViewInit {
-    @ViewChild('button') button: ElementRef<HTMLButtonElement>;
-    btnClick$ = defer(() => fromEvent(this.button.nativeElement, 'click'));
+
+    btnClick$ = defer(() => fromEvent(this.button(), 'click'));
 
     numRenderings = 0;
 
     getNumOfRenderings() {
         return ++this.numRenderings;
     }
+    button = () => document.getElementById('button');
 
     ngAfterViewInit() {
-        this.btnClick$.subscribe(() => this.detectChanges());
+        // this.btnClick$.subscribe(() => this.detectChanges());
     }
 
     detectChanges() {
+        console.log('run ɵdetectChanges');
         ɵdetectChanges(this);
     }
 

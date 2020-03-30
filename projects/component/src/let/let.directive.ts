@@ -132,13 +132,21 @@ export class LetDirective<U> implements OnDestroy {
 
     static ngTemplateContextGuard<U>(
         dir: LetDirective<U>,
-        ctx: unknown
+        ctx: unknown | null | undefined
     ): ctx is LetViewContext<U> {
         return true;
     }
 
-    @Input()
-    set ngrxLet(
+    static ngTemplateGuard_nextVale<U>(
+        dir: LetDirective<U>,
+        expr: unknown | null | undefined
+    ): expr is U {
+        return true;
+    }
+
+
+    @Input('ngrxLet')
+    set nextVale(
         potentialObservable: Observable<U> | Promise<U> | null | undefined
     ) {
         this.cdAware.nextVale(potentialObservable);

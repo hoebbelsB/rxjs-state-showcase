@@ -14,6 +14,7 @@ import {environment} from '../../environments/environment';
             <app-cd-parent06 class="item"></app-cd-parent06>
             <app-cd-parent11 class="item"></app-cd-parent11>
             <app-cd-parent12 class="item"></app-cd-parent12>
+            <app-cd-parent13 class="item"></app-cd-parent13>
         </div>
     `,
     changeDetection: environment.changeDetection,

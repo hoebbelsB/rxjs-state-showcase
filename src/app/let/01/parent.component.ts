@@ -1,8 +1,9 @@
 import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {environment} from '../../../environments/environment';
-import {defer, fromEvent, Observable, Subject} from 'rxjs';
+import {defer, Observable, Subject} from 'rxjs';
 import {scan, startWith} from 'rxjs/operators';
 import {CdConfigService} from '../../cd-config.service';
+import {fromEvent} from '@zoneless-helpers';
 
 @Component({
     selector: 'app-let-parent01',
@@ -12,18 +13,17 @@ import {CdConfigService} from '../../cd-config.service';
         </h2>
         <span>render: </span><b class="num-renders">{{getNumOfRenderings()}}</b><br>: strategy
         <br/>
-        <button #button>increment</button>
+        <button id="button">increment</button>
         <ng-container *ngrxLet="value$ as v">Value: {{v}}</ng-container>
     `,
     changeDetection: environment.changeDetection
 })
-export class LetParent01Component implements AfterViewInit {
-    @ViewChild('button') button: ElementRef<HTMLButtonElement>;
-    btnClick$ = defer(() => fromEvent(this.button.nativeElement, 'click'));
+export class LetParent01Component {
+    btnClick$ = defer(() => fromEvent(this.button(), 'click'));
 
-    btnClick = new Subject<Event>();
-    value$: Observable<number>;
+    value$: Observable<number> = this.btnClick$.pipe(startWith(0), scan((a): any => ++a, 0));
     numRenderings = 0;
+    button = () => document.getElementById('button');
 
     getNumOfRenderings() {
         return ++this.numRenderings;
@@ -39,8 +39,5 @@ export class LetParent01Component implements AfterViewInit {
 
     }
 
-    ngAfterViewInit(): void {
-        this.value$ = this.btnClick$.pipe(startWith(0), scan((a): any => ++a, 0));
-    }
 
 }
