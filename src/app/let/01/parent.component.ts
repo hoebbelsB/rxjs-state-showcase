@@ -1,7 +1,7 @@
-import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {environment} from '../../../environments/environment';
-import {defer, Observable, Subject} from 'rxjs';
-import {scan, startWith} from 'rxjs/operators';
+import {defer, Observable} from 'rxjs';
+import {scan, startWith, tap} from 'rxjs/operators';
 import {CdConfigService} from '../../cd-config.service';
 import {fromEvent} from '@zoneless-helpers';
 
@@ -18,10 +18,13 @@ import {fromEvent} from '@zoneless-helpers';
     `,
     changeDetection: environment.changeDetection
 })
-export class LetParent01Component {
+export class LetParent01Component implements OnInit {
     btnClick$ = defer(() => fromEvent(this.button(), 'click'));
 
-    value$: Observable<number> = this.btnClick$.pipe(startWith(0), scan((a): any => ++a, 0));
+    value$: Observable<number> = this.btnClick$.pipe(
+        tap(console.log),
+        startWith(0), scan((a): any => ++a, 0)
+    );
     numRenderings = 0;
     button = () => document.getElementById('button');
 
@@ -37,6 +40,9 @@ export class LetParent01Component {
         private coalesceConfigService: CdConfigService
     ) {
 
+    }
+
+    ngOnInit(): void {
     }
 
 

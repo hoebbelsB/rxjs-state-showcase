@@ -1,5 +1,14 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild, ɵdetectChanges} from '@angular/core';
-import {defer, fromEvent} from 'rxjs';
+import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    Component,
+    ElementRef,
+    OnDestroy,
+    ViewChild,
+    ɵdetectChanges
+} from '@angular/core';
+import {defer} from 'rxjs';
+import {fromEvent} from '@zoneless-helpers';
 
 @Component({
     selector: 'app-cd-parent01',
@@ -16,8 +25,9 @@ import {defer, fromEvent} from 'rxjs';
     `,
     changeDetection: ChangeDetectionStrategy.Default
 })
-export class CdParent01Component implements AfterViewInit {
+export class CdParent01Component implements AfterViewInit, OnDestroy {
 
+    sub;
     btnClick$ = defer(() => fromEvent(this.button(), 'click'));
 
     numRenderings = 0;
@@ -28,12 +38,17 @@ export class CdParent01Component implements AfterViewInit {
     button = () => document.getElementById('button');
 
     ngAfterViewInit() {
-        // this.btnClick$.subscribe(() => this.detectChanges());
+        this.detectChanges();
+        this.sub = this.btnClick$.subscribe(() => this.detectChanges());
     }
 
     detectChanges() {
         console.log('run ɵdetectChanges');
         ɵdetectChanges(this);
+    }
+
+    ngOnDestroy(): void {
+        this.sub.unsubscribe();
     }
 
 }
